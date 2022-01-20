@@ -1,4 +1,5 @@
 ﻿using OngProject.DataAccess;
+using OngProject.Entities;
 using OngProject.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -8,36 +9,33 @@ using System.Threading.Tasks;
 
 namespace OngProject.Repositories
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class Repository<T> : IRepository<T> where T : EntityBase
     {
         protected DbContext RepositoryContext { get; set; }
         public Repository(DbContext repositoryContext)
         {
             RepositoryContext = repositoryContext;
+            dbSet = repositoryContext.Set<T>();
         }
         public IQueryable<T> FindAll()
         {
-            return this.RepositoryContext.Set<T>().AsNoTracking();
+            return dbSet.AsNoTracking();
         }
         public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression)
         {
-            return this.RepositoryContext.Set<T>().Where(expression).AsNoTracking();
+            return dbSet.Where(expression).AsNoTracking();
         }
         public void Create(T entity)
         {
-            this.RepositoryContext.Set<T>().Add(entity);
+            dbSet.Add(entity);
         }
         public void Update(T entity)
         {
-            this.RepositoryContext.Set<T>().Update(entity);
+            dbSet.Update(entity);
         }
         public void Delete(T entity)
         {
-            this.RepositoryContext.Set<T>().Remove(entity);
-        }
-        public void SaveChanges()
-        {
-            this.RepositoryContext.SaveChanges();
+            dbSet.Remove(entity);
         }
     }
 }
