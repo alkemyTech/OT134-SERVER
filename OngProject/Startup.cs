@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using OngProject.Core.Business;
+using OngProject.Core.Interfaces;
 using OngProject.Repositories;
 using OngProject.Repositories.Interfaces;
 using System;
@@ -36,6 +38,8 @@ namespace OngProject
             });
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.Configure<AuthMessageSenderOptions>(Configuration);
 
         }
 
