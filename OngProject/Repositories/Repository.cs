@@ -29,11 +29,11 @@ namespace OngProject.Repositories
         {
             dbSet.Add(entity);
         }
-        public void Update(T entity)
+        public virtual void Update(T entity)
         {
             dbSet.Update(entity);
         }
-        public void Delete(T entity)
+        public virtual void Delete(T entity)
         {
             dbSet.Remove(entity);
         }

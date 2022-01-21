@@ -11,12 +11,14 @@ namespace OngProject.Repositories
     {
         // Context
         private readonly DbContext _dbContext;
-        
-        // Repositories
 
-        public UnitOfWork(DbContext dbContext)
+        // Repositories
+        private IActivitiesRepository _activitiesRepository;
+
+        public UnitOfWork(DbContext dbContext, IActivitiesRepository activitiesRepository)
         {
             _dbContext = dbContext;
+            _activitiesRepository = activitiesRepository;
         }
 
         public void Save()
