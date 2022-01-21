@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OngProject.Repositories.Interfaces;
+using OngProject.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +13,10 @@ namespace OngProject.Controllers
     [ApiController]
     public class ActivitiesController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
-        public ActivitiesController(IUnitOfWork unitOfWork)
+        private readonly IActivitiesService _activitiesService;
+        public ActivitiesController(IActivitiesService activitiesService)
         {
-            _unitOfWork = unitOfWork;
+            _activitiesService = activitiesService;
         }
 
         // GET: api/<ActivitiesController>

@@ -7,6 +7,8 @@ namespace OngProject.Repositories.Interfaces
 {
     public interface IUnitOfWork
     {
-        public void Save();
+        public void Dispose();
+        public void SaveChanges();
+        public Task SaveChangesAsync();
     }
 }

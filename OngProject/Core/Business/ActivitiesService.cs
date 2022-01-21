@@ -10,10 +10,10 @@ namespace OngProject.Core.Business
 {
     public class ActivitiesService : IActivitiesService
     {
-        private readonly IActivitiesRepository _activitiesRepository;
-        public ActivitiesService(IActivitiesRepository activitiesRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        public ActivitiesService(IUnitOfWork unitOfWork)
         {
-            _activitiesRepository = activitiesRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public IEnumerable<Activities> GetAll()
