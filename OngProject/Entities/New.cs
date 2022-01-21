@@ -11,7 +11,7 @@ namespace OngProject.Entities
         [StringLength(maximumLength: 65535, ErrorMessage = "The Content Is Too Long")]
         public  string Content { get; set; }
         [Required(ErrorMessage = "The Image Is Required")]
-        [StringLength(maximumLength: 255, ErrorMessage = "The Image Is Too Long")]
+        [StringLength(maximumLength: 255, ErrorMessage = "The Name Of The Image Is Too Long")]
         public string Image { get; set; }
     }
 }
