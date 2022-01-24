@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace OngProject.Entities
 {
@@ -13,5 +14,7 @@ namespace OngProject.Entities
         [Required(ErrorMessage = "The Image Is Required")]
         [StringLength(maximumLength: 255, ErrorMessage = "The Name Of The Image Is Too Long")]
         public string Image { get; set; }
+
+        public ICollection<Comment> Comments { get; set; }
     }
 }
