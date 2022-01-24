@@ -1,11 +1,12 @@
-﻿using OngProject.Entities;
+﻿using OngProject.Core.Interfaces;
+using OngProject.Entities;
 using OngProject.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 
 namespace OngProject.Core.Business
 {
-    public class UsersService
+    public class UsersService : IUsersService
     {
         private readonly IUnitOfWork _unitOfWork;
         public UsersService(IUnitOfWork unitOfWork)
