@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OngProject.Core.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -12,42 +11,42 @@ namespace OngProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
-    public class NewsController : ControllerBase
+    public class OrganizationsController : ControllerBase
     {
-        private readonly INewsService _newsService;
-        public NewsController(INewsService newsService)
+        private readonly IOrganizationsService _organizationsService;
+
+        public OrganizationsController(IOrganizationsService organizationsService)
         {
-            _newsService = newsService;
+            _organizationsService = organizationsService;
         }
 
-        // GET: api/<NewsController>
+        // GET: api/<OrganizationsController>
         [HttpGet]
         public IActionResult Get()
         {
             return Ok();
         }
 
-        // GET api/<NewsController>/5
+        // GET api/<OrganizationsController>/5
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
             return Ok();
         }
 
-        // POST api/<NewsController>
+        // POST api/<OrganizationsController>
         [HttpPost]
         public void Post([FromBody] string value)
         {
         }
 
-        // PUT api/<NewsController>/5
+        // PUT api/<OrganizationsController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE api/<NewsController>/5
+        // DELETE api/<OrganizationsController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
