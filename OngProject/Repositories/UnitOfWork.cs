@@ -21,9 +21,11 @@ namespace OngProject.Repositories
         #region Repositories
         private readonly IRepository<Activities> _activitiesRepository;
         private readonly IRepository<New> _newsRepository;
+        private readonly IRepository<User> _userrepository;
 
         public IRepository<Activities> ActivitiesRepository => _activitiesRepository ?? new Repository<Activities>(_dbContext);
         public IRepository<New> NewsRepository => NewsRepository ?? new Repository<New>(_dbContext);
+        public IRepository<User> UserRepository => UserRepository ?? new Repository<User>(_dbContext);
         #endregion
 
         #region Methods
