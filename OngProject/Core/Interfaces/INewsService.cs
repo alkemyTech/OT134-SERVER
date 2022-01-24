@@ -10,8 +10,8 @@ namespace OngProject.Core.Interfaces
     {
         public IEnumerable<New> GetAll();
         public New GetById();
-        public void Insert(New activities);
-        public void Update(New activities);
-        public void Delete(New activities);
+        public void Insert(New news);
+        public void Update(New news);
+        public void Delete(New news);
     }
 }

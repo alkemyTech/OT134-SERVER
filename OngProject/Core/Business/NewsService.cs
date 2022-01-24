@@ -26,17 +26,17 @@ namespace OngProject.Core.Business
             throw new NotImplementedException();
         }
 
-        public void Insert(New activities)
+        public void Insert(New news)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(New activities)
+        public void Update(New news)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(New activities)
+        public void Delete(New news)
         {
             throw new NotImplementedException();
         }
