@@ -25,7 +25,7 @@ namespace OngProject.Core.Business
             throw new NotImplementedException();
         }
 
-        public Activities GetById()
+        public Organizacion GetById()
         {
             throw new NotImplementedException();
         }
