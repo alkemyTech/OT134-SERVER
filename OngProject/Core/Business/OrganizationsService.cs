@@ -6,36 +6,36 @@ using System.Collections.Generic;
 
 namespace OngProject.Core.Business
 {
-    public class OrganizacionService : IOrganizationsService
+    public class OrganizationService : IOrganizationsService
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public OrganizacionService(IUnitOfWork unitOfWork)
+        public OrganizationService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public void Delete(Organizacion organization)
+        public void Delete(Organization organization)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Organizacion> GetAll()
+        public IEnumerable<Organization> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public Organizacion GetById()
+        public Organization GetById()
         {
             throw new NotImplementedException();
         }
 
-        public void Insert(Organizacion organization)
+        public void Insert(Organization organization)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(Organizacion organization)
+        public void Update(Organization organization)
         {
             throw new NotImplementedException();
         }
