@@ -23,5 +23,7 @@ namespace OngProject.Entities
         [Required(ErrorMessage = "The Photo Is Required")]
         [StringLength(maximumLength: 255, ErrorMessage = "The Photo Is Too Long")]
         public string Photo { get; set; }
+
+        public Rol Rol { get; set; }
     }
 }

@@ -5,10 +5,10 @@ namespace OngProject.Core.Interfaces
 {
     public interface IOrganizationsService
     {
-        public IEnumerable<Organizacion> GetAll();
-        public Organizacion GetById();
-        public void Insert(Organizacion organization);
-        public void Update(Organizacion organization);
-        public void Delete(Organizacion organization);
+        public IEnumerable<Organization> GetAll();
+        public Organization GetById();
+        public void Insert(Organization organization);
+        public void Update(Organization organization);
+        public void Delete(Organization organization);
     }
 }

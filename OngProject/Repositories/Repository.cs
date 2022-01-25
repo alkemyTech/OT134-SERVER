@@ -1,4 +1,5 @@
-﻿using OngProject.DataAccess;
+﻿using Microsoft.EntityFrameworkCore;
+using OngProject.DataAccess;
 using OngProject.Entities;
 using OngProject.Repositories.Interfaces;
 using System;
@@ -7,12 +8,14 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
+
 namespace OngProject.Repositories
 {
     public class Repository<T> : IRepository<T> where T : EntityBase
     {
-        protected DbContext RepositoryContext { get; set; }
-        public Repository(DbContext repositoryContext)
+        protected AppDbContext RepositoryContext { get; set; }
+        protected DbSet<T> dbSet;
+        public Repository(AppDbContext repositoryContext)
         {
             RepositoryContext = repositoryContext;
             dbSet = repositoryContext.Set<T>();

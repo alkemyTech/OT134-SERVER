@@ -11,8 +11,8 @@ namespace OngProject.Repositories
     public class UnitOfWork : IUnitOfWork
     {
         #region Constructor and Context
-        private readonly DbContext _dbContext;
-        public UnitOfWork(DbContext dbContext)
+        private readonly AppDbContext _dbContext;
+        public UnitOfWork(AppDbContext dbContext)
         {
             _dbContext = dbContext;
         }
