@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OngProject.Entities
 {
@@ -15,6 +16,8 @@ namespace OngProject.Entities
         [StringLength(maximumLength: 255, ErrorMessage = "The Name Of The Image Is Too Long")]
         public string Image { get; set; }
 
-        public ICollection<Comment> Comments { get; set; }
+        public ICollection<Comment> Comments { get; set; }        
+      
+        public Category Category { get; set; }
     }
 }
