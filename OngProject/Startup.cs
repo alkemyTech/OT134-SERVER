@@ -18,6 +18,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OngProject.DataAccess;
+using Microsoft.EntityFrameworkCore;
 
 namespace OngProject
 {
@@ -60,6 +62,14 @@ namespace OngProject
                     ValidateIssuer = false
                 };
             });
+
+            
+            services.AddDbContext<AppDbContext>((services, options) => {
+                options.UseInternalServiceProvider(services);
+                options.UseSqlServer(this.Configuration["SqlConnectionString"]);
+            });
+
+            services.AddEntityFrameworkSqlServer();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IEmailSender, EmailSender>();
