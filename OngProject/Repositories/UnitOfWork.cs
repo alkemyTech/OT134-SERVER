@@ -23,11 +23,13 @@ namespace OngProject.Repositories
         private readonly IRepository<New> _newsRepository;
         private readonly IRepository<Testimonials> _testimonialsRepository;
         private readonly IRepository<User> _userrepository;
+        private readonly IRepository<Member> _memberRepository;
 
         public IRepository<Activities> ActivitiesRepository => _activitiesRepository ?? new Repository<Activities>(_dbContext);
         public IRepository<New> NewsRepository => NewsRepository ?? new Repository<New>(_dbContext);
         public IRepository<Testimonials> TestimonialsRepository => TestimonialsRepository ?? new Repository<Testimonials>(_dbContext);
         public IRepository<User> UserRepository => UserRepository ?? new Repository<User>(_dbContext);
+        public IRepository<Member> MemberRepository => MemberRepository ?? new Repository<Member>(_dbContext);
 
         #endregion
 
