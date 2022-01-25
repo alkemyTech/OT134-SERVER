@@ -20,6 +20,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OngProject.DataAccess;
 using Microsoft.EntityFrameworkCore;
+using OngProject.Core.Business;
 
 namespace OngProject
 {
@@ -72,7 +73,18 @@ namespace OngProject
             services.AddEntityFrameworkSqlServer();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddScoped<IEmailSender, EmailSender>();
+
+
+            services.AddScoped<IActivitiesService, ActivitiesService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IMemberService, MemberService>();
+            services.AddScoped<INewsService, NewsService>();
+            services.AddScoped<IOrganizationsService, OrganizationService>();
+            services.AddScoped<IRolesService, RolesService>();
+            services.AddScoped<ITestimonialsService, TestimonialsService>();
+            services.AddScoped<IUserService, UsersService>();
+
             services.Configure<AuthMessageSenderOptions>(Configuration);
 
         }
