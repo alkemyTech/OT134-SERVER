@@ -45,7 +45,7 @@ namespace OngProject.DataAccess
 		{
 			for (int i = 1; i < 11; i++)
 			{
-				modelBuilder.Entity<Contacts>().HasData(
+				modelBuilder.Entity<Category>().HasData(
 					new Category
 					{
 						Id = i,
