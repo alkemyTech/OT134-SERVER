@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -6,11 +7,20 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using OngProject.Core.Helper;
+using OngProject.Core.Interfaces;
+using OngProject.Repositories;
+using OngProject.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using OngProject.DataAccess;
+using Microsoft.EntityFrameworkCore;
+using OngProject.Core.Business;
 
 namespace OngProject
 {
@@ -32,6 +42,51 @@ namespace OngProject
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "OngProject", Version = "v1" });
             });
+
+            // JWT Token Generator
+            var key = Encoding.ASCII.GetBytes(Configuration["JWT:Secret"]);
+            services
+            .AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateAudience = false,
+                    ValidateIssuerSigningKey = true,
+                    ValidateIssuer = false
+                };
+            });
+
+            
+            services.AddDbContext<AppDbContext>((services, options) => {
+                options.UseInternalServiceProvider(services);
+                options.UseSqlServer(this.Configuration["SqlConnectionString"]);
+            });
+
+            services.AddEntityFrameworkSqlServer();
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IEmailSender, EmailSender>();
+
+
+            services.AddScoped<IActivitiesService, ActivitiesService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IMemberService, MemberService>();
+            services.AddScoped<INewsService, NewsService>();
+            services.AddScoped<IOrganizationsService, OrganizationService>();
+            services.AddScoped<IRolesService, RolesService>();
+            services.AddScoped<ITestimonialsService, TestimonialsService>();
+            services.AddScoped<IUserService, UsersService>();
+
+            services.Configure<AuthMessageSenderOptions>(Configuration);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
