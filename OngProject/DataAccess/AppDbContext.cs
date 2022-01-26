@@ -34,6 +34,29 @@ namespace OngProject.DataAccess
 		public DbSet<Testimonials> Testimonials { get; set; }
 
 		public DbSet<User> Users { get; set; }
-	}
 
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			this.SeedCategories(modelBuilder);
+		}
+
+		protected void SeedCategories(ModelBuilder modelBuilder)
+		{
+			for (int i = 1; i < 11; i++)
+			{
+				modelBuilder.Entity<Category>().HasData(
+					new Category
+					{
+						Id = i,
+						Name = "Category " + i,
+						Description = "Description for Category" + i,
+						Image = "image_category" + i,
+						LastModified = DateTime.Now
+					}
+				);
+			}
+		}
+
+	}	
 }
