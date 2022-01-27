@@ -35,10 +35,15 @@ namespace OngProject.DataAccess
 
 		public DbSet<User> Users { get; set; }
 
-
+		SeedDataUser DataUser = new SeedDataUser();
+		SeedUserRol RolUser = new SeedUserRol();
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			this.SeedCategories(modelBuilder);
+			this.SeedActivities(modelBuilder);
+			RolUser.SeedRoles(modelBuilder);
+			DataUser.SeedRegularUsers(modelBuilder);
+			DataUser.SeedAdministratorUsers(modelBuilder);
 		}
 
 		protected void SeedCategories(ModelBuilder modelBuilder)
@@ -52,6 +57,23 @@ namespace OngProject.DataAccess
 						Name = "Category " + i,
 						Description = "Description for Category" + i,
 						Image = "image_category" + i,
+						LastModified = DateTime.Now
+					}
+				);
+			}
+		}
+
+		private void SeedActivities(ModelBuilder modelBuilder)
+		{
+			for (int i = 1; i < 11; i++)
+			{
+				modelBuilder.Entity<Activities>().HasData(
+					new Activities
+					{
+						Id = i,
+						Name = "Activity " + i,
+						Content = "Content from activity " + i,
+						Image = "Image from activity " + i,
 						LastModified = DateTime.Now
 					}
 				);
