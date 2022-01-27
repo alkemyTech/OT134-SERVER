@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OngProject.Entities
 {
@@ -23,7 +24,9 @@ namespace OngProject.Entities
         [Required(ErrorMessage = "The Photo Is Required")]
         [StringLength(maximumLength: 255, ErrorMessage = "The Photo Is Too Long")]
         public string Photo { get; set; }
-
+        //clave forane hacia rol
+        [ForeignKey(nameof(Rol))]
+        public int RolId { get; set; }
         public Rol Rol { get; set; }
     }
 }
