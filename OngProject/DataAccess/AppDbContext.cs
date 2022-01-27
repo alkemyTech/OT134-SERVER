@@ -36,12 +36,14 @@ namespace OngProject.DataAccess
 		public DbSet<User> Users { get; set; }
 
 		SeedDataUser DataUser = new SeedDataUser();
+		SeedUserRol RolUser = new SeedUserRol();
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			this.SeedCategories(modelBuilder);
 			this.SeedActivities(modelBuilder);
 			DataUser.SeedRegularUsers(modelBuilder);
 			DataUser.SeedAdministratorUsers(modelBuilder);
+			RolUser.SeedRoles(modelBuilder);
 		}
 
 		protected void SeedCategories(ModelBuilder modelBuilder)
