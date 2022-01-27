@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OngProject.Core.Interfaces;
+using OngProject.Core.Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OngProject.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/organization")]
     [ApiController]
     public class OrganizationsController : ControllerBase
     {
@@ -20,11 +21,28 @@ namespace OngProject.Controllers
             _organizationsService = organizationsService;
         }
 
-        // GET: api/<OrganizationsController>
-        [HttpGet]
-        public IActionResult Get()
+        // GET: api/organization/public
+        [HttpGet, Route("public")]
+        public async Task<IActionResult> Get()
         {
-            return Ok();
+            try
+            {
+                var org = await _organizationsService.GetAll();
+                if (org != null)
+                    return Ok(new OrganizationDTO
+                    {
+                        Name = org.Name,
+                        Image = org.Image,
+                        Address = org.Address,
+                        Phone = org.Phone
+                    });
+                else
+                    return NotFound("No se encontró información sobre la organización");            
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         // GET api/<OrganizationsController>/5

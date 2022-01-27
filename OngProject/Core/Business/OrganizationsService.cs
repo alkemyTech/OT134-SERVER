@@ -2,7 +2,9 @@
 using OngProject.Entities;
 using OngProject.Repositories.Interfaces;
 using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace OngProject.Core.Business
 {
@@ -20,9 +22,9 @@ namespace OngProject.Core.Business
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Organization> GetAll()
+        public async Task<Organization> GetAll()
         {
-            throw new NotImplementedException();
+            return await _unitOfWork.OrganizationRepository.FindAll().FirstOrDefaultAsync();
         }
 
         public Organization GetById()
