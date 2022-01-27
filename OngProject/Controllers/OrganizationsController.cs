@@ -27,15 +27,9 @@ namespace OngProject.Controllers
         {
             try
             {
-                var org = await _organizationsService.GetAll();
-                if (org != null)
-                    return Ok(new OrganizationDTO
-                    {
-                        Name = org.Name,
-                        Image = org.Image,
-                        Address = org.Address,
-                        Phone = org.Phone
-                    });
+                var orgDto = await _organizationsService.GetAll();
+                if (orgDto != null)
+                    return Ok(orgDto);
                 else
                     return NotFound("No se encontró información sobre la organización");            
             }

@@ -20,13 +20,13 @@ namespace OngProject.Repositories
             RepositoryContext = repositoryContext;
             dbSet = repositoryContext.Set<T>();
         }
-        public IQueryable<T> FindAll()
+        public async Task<IEnumerable<T>> FindAllAsync()
         {
-            return dbSet.AsNoTracking();
+            return await dbSet.ToListAsync();
         }
-        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression)
+        public async Task<IEnumerable<T>> FindByConditionAsync(Expression<Func<T, bool>> expression)
         {
-            return dbSet.Where(expression).AsNoTracking();
+            return await dbSet.Where(expression).ToListAsync();
         }
         public void Create(T entity)
         {
