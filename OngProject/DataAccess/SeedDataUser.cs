@@ -4,7 +4,7 @@ using System;
 
 namespace OngProject.DataAccess
 {
-    public class SeedDataUser 
+    public class SeedDataUser
     {
         public void SeedRegularUsers(ModelBuilder modelBuilder)
         {
@@ -13,7 +13,6 @@ namespace OngProject.DataAccess
                 modelBuilder.Entity<User>().HasData(
                     new User
                     {
-                        Id = i,
                         FirstName = "Name User " + i,
                         LastName = "Last Name User" + i,
                         Email = "Email User" + i,
@@ -28,12 +27,11 @@ namespace OngProject.DataAccess
         }
         public void SeedAdministratorUsers(ModelBuilder modelBuilder)
         {
-            for (int i = 1; i < 11; i++)
+            for (int i = 11; i < 21; i++)
             {
                 modelBuilder.Entity<User>().HasData(
                     new User
                     {
-                        Id = i,
                         FirstName = "Name User " + i,
                         LastName = "Last Name User" + i,
                         Email = "Email User" + i,

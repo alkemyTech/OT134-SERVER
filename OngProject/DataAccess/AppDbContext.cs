@@ -41,9 +41,9 @@ namespace OngProject.DataAccess
 		{
 			this.SeedCategories(modelBuilder);
 			this.SeedActivities(modelBuilder);
+			RolUser.SeedRoles(modelBuilder);
 			DataUser.SeedRegularUsers(modelBuilder);
 			DataUser.SeedAdministratorUsers(modelBuilder);
-			RolUser.SeedRoles(modelBuilder);
 		}
 
 		protected void SeedCategories(ModelBuilder modelBuilder)
