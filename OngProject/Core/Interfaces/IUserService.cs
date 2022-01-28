@@ -1,5 +1,7 @@
-﻿using OngProject.Entities;
+﻿using OngProject.Core.Models.DTOs;
+using OngProject.Entities;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace OngProject.Core.Interfaces
 {
@@ -7,7 +9,7 @@ namespace OngProject.Core.Interfaces
     {
         public IEnumerable<User> GetAll();
         public User GetById();
-        public void Insert(User user);
+        public Task<User> Insert(UserRegisterDto dto);
         public void Update(User user);
         public void Delete(User user);
     }

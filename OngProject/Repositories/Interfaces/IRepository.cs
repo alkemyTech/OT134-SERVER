@@ -9,8 +9,8 @@ namespace OngProject.Repositories.Interfaces
     public interface IRepository<T>
     {
         Task<IEnumerable<T>> FindAllAsync();
-        Task<IEnumerable<T>> FindByConditionAsync(Expression<Func<T, bool>> expression);
-        void Create(T entity);
+        Task<ICollection<T>> FindByConditionAsync(Expression<Func<T, bool>> expression);
+        Task Create(T entity);
         void Update(T entity);
         void Delete(T entity);
     }

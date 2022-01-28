@@ -24,15 +24,15 @@ namespace OngProject.Repositories
         {
             return await dbSet.ToListAsync();
         }
-        public async Task<IEnumerable<T>> FindByConditionAsync(Expression<Func<T, bool>> expression)
+        public async Task<ICollection<T>> FindByConditionAsync(Expression<Func<T, bool>> expression)
         {
             return await dbSet.Where(expression).ToListAsync();
         }
-        public void Create(T entity)
+        public async Task Create(T entity)
         {
-            dbSet.Add(entity);
+            await dbSet.AddAsync(entity);
         }
-        public virtual void Update(T entity)
+        public void Update(T entity)
         {
             dbSet.Update(entity);
         }
