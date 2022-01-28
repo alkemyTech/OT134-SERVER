@@ -24,13 +24,19 @@ namespace OngProject.Repositories
         private readonly IRepository<Testimonials> _testimonialsRepository;
         private readonly IRepository<User> _userrepository;
         private readonly IRepository<Member> _memberRepository;
+        private readonly IRepository<Organization> _organizationRepository;
+        private readonly IRepository<Category> _categoryRepository;
+        private readonly IRepository<Rol> _rolRepository;
+
 
         public IRepository<Activities> ActivitiesRepository => _activitiesRepository ?? new Repository<Activities>(_dbContext);
-        public IRepository<New> NewsRepository => NewsRepository ?? new Repository<New>(_dbContext);
-        public IRepository<Testimonials> TestimonialsRepository => TestimonialsRepository ?? new Repository<Testimonials>(_dbContext);
-        public IRepository<User> UserRepository => UserRepository ?? new Repository<User>(_dbContext);
-        public IRepository<Member> MemberRepository => MemberRepository ?? new Repository<Member>(_dbContext);
-
+        public IRepository<New> NewsRepository => _newsRepository ?? new Repository<New>(_dbContext);
+        public IRepository<Testimonials> TestimonialsRepository => _testimonialsRepository ?? new Repository<Testimonials>(_dbContext);
+        public IRepository<User> UserRepository => _userrepository ?? new Repository<User>(_dbContext);
+        public IRepository<Member> MemberRepository => _memberRepository ?? new Repository<Member>(_dbContext);
+        public IRepository<Organization> OrganizationRepository => _organizationRepository ?? new Repository<Organization>(_dbContext);
+        public IRepository<Category> CategoryRepository => _categoryRepository ?? new Repository<Category>(_dbContext);
+        public IRepository<Rol> RolRepository => _rolRepository ?? new Repository<Rol>(_dbContext);
         #endregion
 
         #region Methods
