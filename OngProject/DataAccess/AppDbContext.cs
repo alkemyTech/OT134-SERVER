@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using OngProject.Entities;
 
@@ -11,7 +8,6 @@ namespace OngProject.DataAccess
 	{
 		public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
 		{
-
 		}
 
 		public DbSet<Activities> Activities { get; set; }
@@ -35,15 +31,17 @@ namespace OngProject.DataAccess
 
 		public DbSet<User> Users { get; set; }
 
-		SeedDataUser DataUser = new SeedDataUser();
-		SeedUserRol RolUser = new SeedUserRol();
+		SeedDataUser dataUser = new SeedDataUser();
+		SeedUserRol rolUser = new SeedUserRol();
+		SeedTestimonial seedTestimonial = new SeedTestimonial();
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			this.SeedCategories(modelBuilder);
 			this.SeedActivities(modelBuilder);
-			RolUser.SeedRoles(modelBuilder);
-			DataUser.SeedRegularUsers(modelBuilder);
-			DataUser.SeedAdministratorUsers(modelBuilder);
+			rolUser.SeedRoles(modelBuilder);
+			dataUser.SeedRegularUsers(modelBuilder);
+			dataUser.SeedAdministratorUsers(modelBuilder);
+			seedTestimonial.SeedTestimonials(modelBuilder);
 		}
 
 		protected void SeedCategories(ModelBuilder modelBuilder)
@@ -79,6 +77,5 @@ namespace OngProject.DataAccess
 				);
 			}
 		}
-
 	}	
 }
