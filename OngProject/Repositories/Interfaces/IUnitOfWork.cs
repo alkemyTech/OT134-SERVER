@@ -16,6 +16,7 @@ namespace OngProject.Repositories.Interfaces
         public IRepository<Organization> OrganizationRepository { get; }
         public IRepository<Category> CategoryRepository { get; }
         public IRepository<Rol> RolRepository { get; }
+        public IRepository<Slides> SlideRepository { get; }
         public void Dispose();
         public void SaveChanges();
         public Task SaveChangesAsync();

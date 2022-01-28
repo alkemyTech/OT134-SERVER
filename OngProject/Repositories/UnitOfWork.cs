@@ -27,7 +27,7 @@ namespace OngProject.Repositories
         private readonly IRepository<Organization> _organizationRepository;
         private readonly IRepository<Category> _categoryRepository;
         private readonly IRepository<Rol> _rolRepository;
-
+        private readonly IRepository<Slides> _slideRepository;
 
         public IRepository<Activities> ActivitiesRepository => _activitiesRepository ?? new Repository<Activities>(_dbContext);
         public IRepository<New> NewsRepository => _newsRepository ?? new Repository<New>(_dbContext);
@@ -37,6 +37,8 @@ namespace OngProject.Repositories
         public IRepository<Organization> OrganizationRepository => _organizationRepository ?? new Repository<Organization>(_dbContext);
         public IRepository<Category> CategoryRepository => _categoryRepository ?? new Repository<Category>(_dbContext);
         public IRepository<Rol> RolRepository => _rolRepository ?? new Repository<Rol>(_dbContext);
+        public IRepository<Slides> SlideRepository => _slideRepository ?? new Repository<Slides>(_dbContext);
+
         #endregion
 
         #region Methods
