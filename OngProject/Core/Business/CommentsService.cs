@@ -1,8 +1,9 @@
 ﻿using OngProject.Core.Interfaces;
+using OngProject.Core.Mapper;
+using OngProject.Core.Models.DTOs;
 using OngProject.Entities;
 using OngProject.Repositories.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,15 +12,18 @@ namespace OngProject.Core.Business
     public class CommentsService : ICommentsService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly EntityMapper _mapper;
 
         public CommentsService(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork; 
+            _mapper = new EntityMapper();
         }
 
-        public Task<Comment> GetAll()
+        public async Task<CommentDTO> GetAll()
         {
-            return await _unitOfWork.CommentsRepository.FindAllAsync();
+            var response = await _unitOfWork.CommentsRepository.FindAllAsync();
+            return _mapper.CommentToCommentDTO(response.FirstOrDefault());
         }
 
         public Comment GetById()

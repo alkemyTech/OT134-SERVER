@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OngProject.Core.Interfaces;
-using OngProject.Entities;
-using OngProject.Repositories.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace OngProject.Controllers
@@ -21,9 +17,21 @@ namespace OngProject.Controllers
         }
 
         [HttpGet]
-        public async Task<Comment> Get()
+        public async Task<IActionResult> Get()
         {
-            return await _commentsService.GetAll();
+            try
+            {
+                var commentDTO = await _commentsService.GetAll();
+                if (commentDTO!= null)
+                {
+                    return Ok(commentDTO);
+                }
+                else return NotFound("No se encontró información sobre los comentarios");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
