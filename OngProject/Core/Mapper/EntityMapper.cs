@@ -20,5 +20,14 @@ namespace OngProject.Core.Mapper
             };
             return organizationDto;
         }
+        public SlideDTO SlideToSlideDTO(Slides slides) 
+        {
+            var slideDto = new SlideDTO
+            {
+                order = slides.order,
+                ImageUrl = slides.ImageUrl
+            };
+            return slideDto;
+        }
     }
 }
