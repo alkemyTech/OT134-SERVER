@@ -23,12 +23,13 @@ namespace OngProject.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] UserRegisterDto dto)
         {
-            var result = await _userService.Insert(dto);
-            if (result != null) {
-                return Ok(result);
+            try
+            {
+                return Ok(await _userService.Insert(dto));                
             }
-
-            return BadRequest();
+            catch (Exception e){
+                return BadRequest(e.ToString());
+            }
         }
         
     }

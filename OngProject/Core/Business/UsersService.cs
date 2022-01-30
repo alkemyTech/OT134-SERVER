@@ -7,6 +7,7 @@ using OngProject.Core.Mapper;
 using OngProject.Core.Models.DTOs;
 using System.Threading.Tasks;
 using OngProject.Core.Helper;
+using Microsoft.AspNetCore.Mvc;
 
 namespace OngProject.Core.Business
 {
@@ -38,7 +39,7 @@ namespace OngProject.Core.Business
                 var result = await this._unitOfWork.UserRepository.FindByConditionAsync(x => x.Email == user.Email);
                 if (result != null && result.Count > 0)
                 {
-                    return null;
+                    throw new Exception("Email ya existe en el sistema.");
                 }
 
                 user.Password = EncryptHelper.GetSHA256(user.Password);
@@ -48,9 +49,10 @@ namespace OngProject.Core.Business
 
                 return user;
             }
-            catch { }
-
-            return null;
+            catch(Exception e)
+            {
+                throw new Exception("Usuario no registrado: " + e.ToString());
+            }            
         }
 
         public void Update(User user)
