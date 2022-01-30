@@ -20,5 +20,17 @@ namespace OngProject.Core.Mapper
             };
             return organizationDto;
         }
+
+        public UserDTO UserToUserDto(User user)
+        {
+            var userDto = new UserDTO
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email
+            };
+
+            return userDto;
+        }
     }
 }
