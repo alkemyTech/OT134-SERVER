@@ -29,5 +29,16 @@ namespace OngProject.Core.Mapper
             };
             return slideDto;
         }
+        public ContactDTO ContactToContactDTO(Contacts contacts)
+        {
+            var contactDto = new ContactDTO
+            {
+                Email = contacts.Email,
+                Message = contacts.Message,
+                Name = contacts.Name,
+                Phone = contacts.Phone
+            };
+            return contactDto;
+        }
     }
 }
