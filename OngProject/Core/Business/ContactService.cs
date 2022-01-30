@@ -27,8 +27,8 @@ namespace OngProject.Core.Business
 
         public async Task<ContactDTO> GetAll()
         {
-            var response = await _unitOfWork.SlideRepository.FindAllAsync();
-            return _mapper.SlideToSlideDTO(response.FirstOrDefault());
+            var response = await _unitOfWork.ContactRepository.FindAllAsync();
+            return _mapper.ContactToContactDTO(response.FirstOrDefault());
         }
 
         public Contacts GetById()

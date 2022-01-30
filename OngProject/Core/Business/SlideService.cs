@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OngProject.Core.Business
 {
-    public class SlideService : IContactService
+    public class SlideService : ISlideSerivice
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly EntityMapper _mapper;
@@ -19,28 +19,28 @@ namespace OngProject.Core.Business
             _mapper = new EntityMapper();
         }
 
-        public void Delete(Contacts contacts)
+        public void Delete(Slides slides)
         {
             throw new System.NotImplementedException();
         }
 
-        public async Task<ContactDTO> GetAll()
+        public async Task<SlideDTO> GetAll()
         {
-            var response = await _unitOfWork.ContactRepository.FindAllAsync();
-            return _mapper.ContactToContactDTO(response.FirstOrDefault());
+            var response = await _unitOfWork.SlideRepository.FindAllAsync();
+            return _mapper.SlideToSlideDTO(response.FirstOrDefault());
         }
 
-        public Contacts GetById()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void Insert(Contacts contacts)
+        public Slides GetById()
         {
             throw new System.NotImplementedException();
         }
 
-        public void Update(Contacts contacts)
+        public void Insert(Slides slides)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Update(Slides slides)
         {
             throw new System.NotImplementedException();
         }
