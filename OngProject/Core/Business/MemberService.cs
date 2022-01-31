@@ -23,8 +23,13 @@ namespace OngProject.Core.Business
 
         public async Task<IEnumerable<MemberDTO>> GetAll()
         {
-            var response = await _unitOfWork.MembersRepository.FindAllAsync();
-            return _mapper.MemberToMemberDTO(response.FirstOrDefault());
+            var members = await _unitOfWork.MembersRepository.FindAllAsync();
+
+            var membersDTO = members
+                .Select(member => _mapper.MemberToMemberDTO(member))
+                .ToList();
+
+            return membersDTO;
         }
 
         public Member GetById()

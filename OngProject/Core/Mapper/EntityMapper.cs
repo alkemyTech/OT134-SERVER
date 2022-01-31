@@ -35,7 +35,7 @@ namespace OngProject.Core.Mapper
             };
 
             return userDto;
-
+        }
         public SlideDTO SlideToSlideDTO(Slides slides) 
         {
             var slideDto = new SlideDTO
@@ -56,6 +56,23 @@ namespace OngProject.Core.Mapper
                 Phone = contacts.Phone
             };
             return contactDto;
+        }
+        public CommentDTO CommentToCommentDTO(Comment comment)
+        {
+            var commentDTO = new CommentDTO
+            {
+                Body = comment.Body
+            };
+            return commentDTO;
+        }
+        public MemberDTO MemberToMemberDTO(Member member)
+        {
+            var memberDTO = new MemberDTO
+            {
+                Name = member.Name,
+                Description = member.Description,
+            };
+            return memberDTO;
         }
     }
 }
