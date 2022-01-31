@@ -4,6 +4,7 @@ using OngProject.Core.Models.DTOs;
 using OngProject.Entities;
 using OngProject.Repositories.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,10 +21,15 @@ namespace OngProject.Core.Business
             _mapper = new EntityMapper();
         }
 
-        public async Task<CommentDTO> GetAll()
+        public async Task<IEnumerable<CommentDTO>> GetAll()
         {
-            var response = await _unitOfWork.CommentsRepository.FindAllAsync();
-            return _mapper.CommentToCommentDTO(response.FirstOrDefault());
+            var comments = await _unitOfWork.CommentsRepository.FindAllAsync();
+
+            var commentsDTO = comments
+                .OrderBy(comment => comment.LastModified)
+                .Select(comment => _mapper.CommentToCommentDTO(comment));
+
+            return commentsDTO;
         }
 
         public Comment GetById()
