@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace OngProject.Controllers
 {
-    [Route("api/slides")]
+    [Route("api/contacts")]
     [ApiController]
-    public class SlideController : Controller
+    public class ContactController : Controller
     {
-        private readonly ISlideSerivice _slideSerivice;
+        private readonly IContactService _contactService;
 
-        public SlideController(ISlideSerivice slideSerivice)
+        public ContactController(IContactService contactService)
         {
-            _slideSerivice = slideSerivice;
+            _contactService = contactService;
         }
         [Authorize]
         [HttpGet]
@@ -22,11 +22,11 @@ namespace OngProject.Controllers
         {
             try
             {
-                var slides = await _slideSerivice.GetAll();
-                if (slides != null)
-                    return Ok(slides);
+                var contacts = await _contactService.GetAll();
+                if (contacts != null)
+                    return Ok(contacts);
                 else
-                    return NotFound("No se encontraron Slides");
+                    return NotFound("No se encontraron Contactos");
             }
             catch (Exception ex)
             {
