@@ -1,4 +1,6 @@
 ﻿using OngProject.Core.Interfaces;
+using OngProject.Core.Mapper;
+using OngProject.Core.Models.DTOs;
 using OngProject.Entities;
 using OngProject.Repositories.Interfaces;
 using System;
@@ -11,14 +13,24 @@ namespace OngProject.Core.Business
 {
     public class CategoryService : ICategoryService
     {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly EntityMapper _entityMapper;
+
+        public CategoryService(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+            _entityMapper = new EntityMapper();
+        }
         public void Delete(Category category)
         {
             throw new System.NotImplementedException();
         }
 
-        public System.Collections.Generic.IEnumerable<Category> GetAll()
+        public async Task<CategoryDTO> GetAll()
         {
-            throw new System.NotImplementedException();
+            var response = await _unitOfWork.CategoryRepository.FindAllAsync();
+
+            return _entityMapper.CategoryToCategoryDTO(response.FirstOrDefault());
         }
 
         public Category GetById()
