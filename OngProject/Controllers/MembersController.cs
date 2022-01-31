@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using OngProject.Repositories.Interfaces;
+using OngProject.Core.Interfaces;
 
 namespace OngProject.Controllers
 {
@@ -12,16 +9,29 @@ namespace OngProject.Controllers
     [ApiController]
     public class MembersController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
-        public MembersController(IUnitOfWork unitOfWork)
+        private readonly IMemberService _membersService;
+
+        public MembersController(IMemberService memberService)
         {
-            _unitOfWork = unitOfWork;
+            _membersService = memberService;
         }
         
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            return Ok();
+            try
+            {
+                var memberDTO = await _membersService.GetAll();
+                if (memberDTO != null)
+                {
+                    return Ok(memberDTO);
+                }
+                else return NotFound("No se encontró información sobre los miembros");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
         
         [HttpGet("{id}")]
