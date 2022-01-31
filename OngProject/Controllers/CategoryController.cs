@@ -1,20 +1,34 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OngProject.Core.Interfaces;
+using System;
+using System.Threading.Tasks;
 
 namespace OngProject.Controllers
 {
     public class CategoryController : ControllerBase
     {
-        private readonly ICategoryService _activitiesService;
+        private readonly ICategoryService _categoryService;
         public CategoryController(ICategoryService categoryService)
         {
-            _activitiesService = categoryService;
+            _categoryService = categoryService;
         }
         [HttpGet]
-        public IActionResult GetAllCategories()
+        public async Task<IActionResult> GetAllCategories()
         {
-            return Ok();
+            try
+            {
+                var categoriesDto = await _categoryService.GetAll();
+                if (categoriesDto != null)
+                    return Ok(categoriesDto);
+                else
+                    return NotFound("Categorias vacias");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
         }
         [HttpGet("{id}")]
         public IActionResult GetCategoryById(int id)
