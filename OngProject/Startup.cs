@@ -71,6 +71,7 @@ namespace OngProject
 
             services.AddScoped<IActivitiesService, ActivitiesService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICommentsService, CommentsService>();
             services.AddScoped<IMemberService, MemberService>();
             services.AddScoped<INewsService, NewsService>();
             services.AddScoped<IOrganizationsService, OrganizationService>();
