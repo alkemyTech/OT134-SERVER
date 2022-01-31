@@ -23,6 +23,19 @@ namespace OngProject.Core.Mapper
             };
             return organizationDto;
         }
+
+
+        public UserDTO UserToUserDto(User user)
+        {
+            var userDto = new UserDTO
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email
+            };
+
+            return userDto;
+
         public SlideDTO SlideToSlideDTO(Slides slides) 
         {
             var slideDto = new SlideDTO
@@ -31,6 +44,7 @@ namespace OngProject.Core.Mapper
                 ImageUrl = slides.ImageUrl
             };
             return slideDto;
+
         }
     }
 }

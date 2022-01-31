@@ -1,22 +1,29 @@
 ﻿using OngProject.Core.Interfaces;
+using OngProject.Core.Mapper;
+using OngProject.Core.Models.DTOs;
 using OngProject.Entities;
 using OngProject.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace OngProject.Core.Business
 {
     public class UsersService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly EntityMapper _mapper;
         public UsersService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+            _mapper = new EntityMapper();
         }
 
-        public IEnumerable<User> GetAll()
+        public async Task<UserDTO> GetAll()
         {
-            throw new NotImplementedException();
+            var response = await _unitOfWork.UserRepository.FindAllAsync();
+            return _mapper.UserToUserDto(response.FirstOrDefault());
         }
 
         public User GetById()
