@@ -2,26 +2,28 @@ using OngProject.Core.Interfaces;
 using OngProject.Entities;
 using OngProject.Repositories.Interfaces;
 using System;
-using System.Collections.Generic;
 using OngProject.Core.Mapper;
 using OngProject.Core.Models.DTOs;
 using System.Threading.Tasks;
 using OngProject.Core.Helper;
-using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace OngProject.Core.Business
 {
     public class UsersService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly EntityMapper _mapper;
         public UsersService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+            _mapper = new EntityMapper();
         }
 
-        public IEnumerable<User> GetAll()
+        public async Task<UserDTO> GetAll()
         {
-            throw new NotImplementedException();
+            var response = await _unitOfWork.UserRepository.FindAllAsync();
+            return _mapper.UserToUserDto(response.FirstOrDefault());
         }
 
         public User GetById()
@@ -65,54 +67,4 @@ namespace OngProject.Core.Business
             throw new NotImplementedException();
         }
     }
-
-using OngProject.Core.Interfaces;
-using OngProject.Core.Mapper;
-using OngProject.Core.Models.DTOs;
-using OngProject.Entities;
-using OngProject.Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace OngProject.Core.Business
-{
-    public class UsersService : IUserService
-    {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly EntityMapper _mapper;
-        public UsersService(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = new EntityMapper();
-        }
-
-        public async Task<UserDTO> GetAll()
-        {
-            var response = await _unitOfWork.UserRepository.FindAllAsync();
-            return _mapper.UserToUserDto(response.FirstOrDefault());
-        }
-
-        public User GetById()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Insert(User user)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(User user)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(User user)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
 }
