@@ -1,14 +1,13 @@
 ﻿using OngProject.Entities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using OngProject.Core.Models.DTOs;
 
 namespace OngProject.Core.Interfaces
 {
     public interface IMemberService
     {
-        public IEnumerable<Member> GetAll();
+        Task<IEnumerable<MemberDTO>> GetAll();
         public Member GetById();
         public void Insert(Member member);
         public void Update(Member member);

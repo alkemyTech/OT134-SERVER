@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OngProject.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/users")]
     [ApiController]
     [Authorize]
     public class UserController : ControllerBase
@@ -22,9 +22,21 @@ namespace OngProject.Controllers
 
         // GET: api/<UserController>
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            return Ok();
+            try
+            {
+                var userDto = await _userService.GetAll();
+
+                if (userDto != null)
+                    return Ok(userDto);
+                else
+                    return NotFound("Empty users charged");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         // GET api/<UserController>/5

@@ -28,7 +28,7 @@ namespace OngProject.Repositories
         private readonly IRepository<Category> _categoryRepository;
         private readonly IRepository<Rol> _rolRepository;
         private readonly IRepository<Slides> _slideRepository;
-
+        private readonly IRepository<Contacts> _contactRepository;
         public IRepository<Activities> ActivitiesRepository => _activitiesRepository ?? new Repository<Activities>(_dbContext);
         public IRepository<New> NewsRepository => _newsRepository ?? new Repository<New>(_dbContext);
         public IRepository<Testimonials> TestimonialsRepository => _testimonialsRepository ?? new Repository<Testimonials>(_dbContext);
@@ -38,8 +38,8 @@ namespace OngProject.Repositories
         public IRepository<Category> CategoryRepository => _categoryRepository ?? new Repository<Category>(_dbContext);
         public IRepository<Rol> RolRepository => _rolRepository ?? new Repository<Rol>(_dbContext);
         public IRepository<Slides> SlideRepository => _slideRepository ?? new Repository<Slides>(_dbContext);
-
-        #endregion
+        public IRepository<Contacts> ContactRepository => _contactRepository ?? new Repository<Contacts>(_dbContext);   
+         #endregion
 
         #region Methods
         public void Dispose()

@@ -16,10 +16,26 @@ namespace OngProject.Core.Mapper
                 Name = organization.Name,
                 Image = organization.Image,
                 Phone = organization.Phone,
-                Address = organization.Address
+                Address = organization.Address,
+                FacebookUrl = organization.FacebookUrl,
+                InstagramUrl = organization.InstagramUrl,
+                LinkedinUrl = organization.LinkedinUrl
             };
             return organizationDto;
         }
+
+
+        public UserDTO UserToUserDto(User user)
+        {
+            var userDto = new UserDTO
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email
+            };
+
+            return userDto;
+
         public SlideDTO SlideToSlideDTO(Slides slides) 
         {
             var slideDto = new SlideDTO
@@ -28,6 +44,18 @@ namespace OngProject.Core.Mapper
                 ImageUrl = slides.ImageUrl
             };
             return slideDto;
+
+        }
+        public ContactDTO ContactToContactDTO(Contacts contacts)
+        {
+            var contactDto = new ContactDTO
+            {
+                Email = contacts.Email,
+                Message = contacts.Message,
+                Name = contacts.Name,
+                Phone = contacts.Phone
+            };
+            return contactDto;
         }
     }
 }
