@@ -18,5 +18,14 @@ namespace OngProject.Core.Models.DTOs
         public string Address { get; set; }
         [StringLength(maximumLength: 20, ErrorMessage = "The Phone Number Is Too Long")]
         public int? Phone { get; set; }
+        [Url]
+        [Required(ErrorMessage = "The Facebook Url Is Required")]
+        public string FacebookUrl { get; set; }
+        [Url]
+        [Required(ErrorMessage = "The Instagram Url Is Required")]
+        public string InstagramUrl { get; set; }
+        [Url]
+        [Required(ErrorMessage = "The Linkedin Url Is Required")]
+        public string LinkedinUrl { get; set; }
     }
 }
