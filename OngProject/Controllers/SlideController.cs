@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OngProject.Controllers
 {
-    [Route("api/slides")]
+    [Route("slides")]
     [ApiController]
     public class SlideController : Controller
     {
@@ -16,7 +16,7 @@ namespace OngProject.Controllers
         {
             _slideSerivice = slideSerivice;
         }
-        [Authorize]
+        //[Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllSlides()
         {
