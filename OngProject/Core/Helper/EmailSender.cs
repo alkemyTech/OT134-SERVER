@@ -25,7 +25,7 @@ namespace OngProject.Core.Helper
             template = template.Replace(_config["MailParams:ReplaceMailTitle"], mailTitle);
             template = template.Replace(_config["MailParams:ReplaceMailBody"], mailBody);
             template = template.Replace(_config["MailParams:ReplaceMailContact"], mailContact);
-            await SendEmailAsync(ToEmail, template, mailTitle);
+            await SendEmailAsync(ToEmail, mailTitle, template);
         }
 
         public Task SendEmailAsync(string email, string subject, string message)

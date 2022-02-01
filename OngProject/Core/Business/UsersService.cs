@@ -48,6 +48,8 @@ namespace OngProject.Core.Business
                 }
 
                 user.Password = EncryptHelper.GetSHA256(user.Password);
+                user.LastModified = DateTime.Today;
+                user.SoftDelete = false;
 
                 await this._unitOfWork.UserRepository.Create(user);
                 await this._unitOfWork.SaveChangesAsync();
