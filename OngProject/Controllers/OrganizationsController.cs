@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OngProject.Controllers
 {
-    [Route("api/organization")]
+    [Route("organizations")]
     [ApiController]
     public class OrganizationsController : ControllerBase
     {

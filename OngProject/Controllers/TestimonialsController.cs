@@ -8,7 +8,7 @@ using OngProject.Repositories.Interfaces;
 
 namespace OngProject.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("testimonials")]
     [ApiController]
     public class TestimonialsController : ControllerBase
     {
