@@ -35,50 +35,18 @@ namespace OngProject.DataAccess
 		SeedUserRol rolUser = new SeedUserRol();
 		SeedTestimonial seedTestimonial = new SeedTestimonial();
 		SeedNew seedNew = new SeedNew();
+		SeedCategory seedCategory = new SeedCategory();
+		SeedActivity seedActivity = new SeedActivity();
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			this.SeedCategories(modelBuilder);
-			seedNew.SeedNews(modelBuilder);
-			this.SeedActivities(modelBuilder);
+			seedCategory.SeedCategories(modelBuilder);
+			seedActivity.SeedActivities(modelBuilder);
 			rolUser.SeedRoles(modelBuilder);
 			dataUser.SeedRegularUsers(modelBuilder);
 			dataUser.SeedAdministratorUsers(modelBuilder);
 			seedTestimonial.SeedTestimonials(modelBuilder);
-		}
-
-		protected void SeedCategories(ModelBuilder modelBuilder)
-		{
-			for (int i = 1; i < 11; i++)
-			{
-				modelBuilder.Entity<Category>().HasData(
-					new Category
-					{
-						Id = i,
-						Name = "Category " + i,
-						Description = "Description for Category" + i,
-						Image = "image_category" + i,
-						LastModified = DateTime.Now
-					}
-				);
-			}
-		}
-
-		private void SeedActivities(ModelBuilder modelBuilder)
-		{
-			for (int i = 1; i < 11; i++)
-			{
-				modelBuilder.Entity<Activities>().HasData(
-					new Activities
-					{
-						Id = i,
-						Name = "Activity " + i,
-						Content = "Content from activity " + i,
-						Image = "Image from activity " + i,
-						LastModified = DateTime.Now
-					}
-				);
-			}
+			seedNew.SeedNews(modelBuilder);
 		}
 	}	
 }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace OngProject.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("comments")]
     [ApiController]
     public class CommentsController : ControllerBase
     {

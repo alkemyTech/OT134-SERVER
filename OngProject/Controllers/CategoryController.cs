@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace OngProject.Controllers
 {
+    [Route("categories")]
+    [ApiController]
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
@@ -44,9 +46,9 @@ namespace OngProject.Controllers
         public void UpdateCategory()
         {
         }
-        [HttpPut("{id}")]
-        public void DeleteCategory(int id)
-        {
-        }
+        //[HttpPut("{id}")]
+        //public void DeleteCategory(int id)
+        //{
+        //}
     }
 }

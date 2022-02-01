@@ -18,6 +18,9 @@ namespace OngProject.Entities
 
         public ICollection<Comment> Comments { get; set; }        
       
+        //clave forane hacia rol
+        [ForeignKey(nameof(Category))]
+        public int CategoryId { get; set; }
         public Category Category { get; set; }
     }
 }

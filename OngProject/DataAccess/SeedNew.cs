@@ -18,7 +18,7 @@ namespace OngProject.DataAccess
                         Content = "Content for New " + i,
                         Image = "image_new " + i,
                         LastModified = DateTime.Now,
-                        Category = new Category { Id = i }
+                        CategoryId = i,
                     }
                 );
             }
