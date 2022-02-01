@@ -25,10 +25,22 @@ namespace OngProject.Core.Business
             throw new System.NotImplementedException();
         }
 
-        public async Task<ContactDTO> GetAll()
+        public async Task<ICollection<ContactDTO>> GetAll()
         {
             var response = await _unitOfWork.ContactRepository.FindAllAsync();
-            return _mapper.ContactToContactDTO(response.FirstOrDefault());
+            if (response.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                List<ContactDTO> dto = new List<ContactDTO>();
+                foreach (var item in response)
+                {
+                    dto.Add(_mapper.ContactToContactDTO(item));
+                }
+                return dto;
+            }
         }
 
         public Contacts GetById()
