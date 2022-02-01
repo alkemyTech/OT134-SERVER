@@ -13,6 +13,7 @@ namespace OngProject.DataAccess
                 modelBuilder.Entity<Testimonials>().HasData(
                     new Testimonials
                     {
+                        Id = i,
                         Name = "Name testimonial " + i,
                         Content = "Content testimonial" + i,
                         Image = "Image testimonial " + i,

@@ -13,6 +13,7 @@ namespace OngProject.DataAccess
                 modelBuilder.Entity<User>().HasData(
                     new User
                     {
+                        Id = i,
                         FirstName = "Name User " + i,
                         LastName = "Last Name User" + i,
                         Email = "Email User" + i,
@@ -32,6 +33,7 @@ namespace OngProject.DataAccess
                 modelBuilder.Entity<User>().HasData(
                     new User
                     {
+                        Id = i,
                         FirstName = "Name User " + i,
                         LastName = "Last Name User" + i,
                         Email = "Email User" + i,
