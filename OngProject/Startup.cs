@@ -14,6 +14,7 @@ using System.Text;
 using OngProject.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using OngProject.Core.Business;
+using Amazon.S3;
 
 namespace OngProject
 {
@@ -29,7 +30,7 @@ namespace OngProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddAWSService<IAmazonS3>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
