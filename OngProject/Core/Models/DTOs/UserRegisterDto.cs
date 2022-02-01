@@ -24,11 +24,13 @@ namespace OngProject.Core.Models.DTOs
         public string Email { get; set; }
 
         [Required(ErrorMessage = "The Password Is Required")]
-        [StringLength(maximumLength: 20, ErrorMessage = "The Password Is Too Long")]
+        [StringLength(maximumLength: 255, ErrorMessage = "The Password Is Too Long")]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "The photo is required")]
         [StringLength(maximumLength: 255, ErrorMessage = "The photo is too long")]
         public string Photo { get; set; }
+
+        public int RolId { get; set; }
     }
 }
