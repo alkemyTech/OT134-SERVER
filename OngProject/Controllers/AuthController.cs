@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using OngProject.Core.Models.DTOs;
 using OngProject.Core.Interfaces;
-using Microsoft.AspNetCore.Http;
 
 namespace OngProject.Controllers
 {
@@ -17,6 +14,23 @@ namespace OngProject.Controllers
         public AuthController(IUserService userService)
         {
             this._userService = userService;
+        }
+
+        [HttpPost]
+        [Route("login")]
+        public async Task<IActionResult> Login([FromBody] UserLoginDTO userLoginDto)
+        {
+
+            try
+            {
+                var result = await _userService.LoginAsync(userLoginDto);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpPost]
