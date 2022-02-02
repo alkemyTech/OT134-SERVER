@@ -34,9 +34,9 @@ namespace OngProject.Core.Business
             throw new NotImplementedException();
         }
 
-        public async Task<User> Insert(UserRegisterDto dto)
+        public async Task<UserDetailDto> Insert(UserRegisterDto dto)
         {
-            var user = UserMapper.mapUserRegisterDtoToUser(dto);
+            var user = _mapper.UserRegisterDtoToUser(dto);
 
             try
             {
@@ -61,11 +61,11 @@ namespace OngProject.Core.Business
                 
                 await emailSender.SendEmailWithTemplateAsync(user.Email, _config["MailParams:WelcomeMailTitle"], emailBody, emailContact);
 
-                return user;
+                return _mapper.UseToUserDetailDto(user);
             }
             catch(Exception e)
             {
-                throw new Exception("Usuario no registrado: " + e.ToString());
+                throw new Exception("Usuario no registrado: " + e.Message);
             }            
         }
 

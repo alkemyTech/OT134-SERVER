@@ -1,9 +1,5 @@
 ﻿using OngProject.Core.Models.DTOs;
 using OngProject.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OngProject.Core.Mapper
 {
@@ -36,6 +32,33 @@ namespace OngProject.Core.Mapper
 
             return userDto;
         }
+
+        public UserDetailDto UseToUserDetailDto(User user)
+        {
+            return new UserDetailDto
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,                
+                Photo = user.Photo,
+                RolId = user.RolId
+            };
+        }
+
+        public User UserRegisterDtoToUser(UserRegisterDto dto)
+        {
+            return new User
+            {
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                Email = dto.Email,
+                Password = dto.Password,
+                Photo = dto.Photo,
+                RolId = dto.RolId
+            };
+        }
+
         public SlideDTO SlideToSlideDTO(Slides slides) 
         {
             var slideDto = new SlideDTO
