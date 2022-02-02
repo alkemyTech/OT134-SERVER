@@ -7,6 +7,7 @@ using OngProject.Core.Models.DTOs;
 using System.Threading.Tasks;
 using OngProject.Core.Helper;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 
 namespace OngProject.Core.Business
 {
@@ -14,10 +15,12 @@ namespace OngProject.Core.Business
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly EntityMapper _mapper;
-        public UsersService(IUnitOfWork unitOfWork)
+        private readonly IConfiguration _config;
+        public UsersService(IUnitOfWork unitOfWork, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
             _mapper = new EntityMapper();
+            _config = configuration;
         }
 
         public async Task<UserDTO> GetAll()
@@ -31,9 +34,9 @@ namespace OngProject.Core.Business
             throw new NotImplementedException();
         }
 
-        public async Task<User> Insert(UserRegisterDto dto)
+        public async Task<UserDetailDto> Insert(UserRegisterDto dto)
         {
-            var user = UserMapper.mapUserRegisterDtoToUser(dto);
+            var user = _mapper.UserRegisterDtoToUser(dto);
 
             try
             {
@@ -45,15 +48,24 @@ namespace OngProject.Core.Business
                 }
 
                 user.Password = EncryptHelper.GetSHA256(user.Password);
+                user.LastModified = DateTime.Today;
+                user.SoftDelete = false;
 
                 await this._unitOfWork.UserRepository.Create(user);
                 await this._unitOfWork.SaveChangesAsync();
 
-                return user;
+                //se envia mail de bienvenida
+                var emailSender = new EmailSender(_config);
+                var emailBody = $"<h4>Hola {user.FirstName} {user.LastName}</h4>{_config["MailParams:WelcomeMailBody"]}";
+                var emailContact = string.Format("<a href='mailto:{0}'>{0}</a>", _config["MailParams:WelcomeMailContact"]);
+                
+                await emailSender.SendEmailWithTemplateAsync(user.Email, _config["MailParams:WelcomeMailTitle"], emailBody, emailContact);
+
+                return _mapper.UseToUserDetailDto(user);
             }
             catch(Exception e)
             {
-                throw new Exception("Usuario no registrado: " + e.ToString());
+                throw new Exception("Usuario no registrado: " + e.Message);
             }            
         }
 

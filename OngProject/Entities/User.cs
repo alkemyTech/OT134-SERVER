@@ -19,7 +19,7 @@ namespace OngProject.Entities
         [StringLength(maximumLength: 320, ErrorMessage = "The Email Is Too Long")]
         public string Email { get; set; }
         [Required(ErrorMessage = "The Password Is Required")]
-        [StringLength(maximumLength: 20, ErrorMessage = "The Password Is Too Long")]
+        [StringLength(maximumLength: 255, ErrorMessage = "The Password Is Too Long")]
         public string Password { get; set; }
         [Required(ErrorMessage = "The Photo Is Required")]
         [StringLength(maximumLength: 255, ErrorMessage = "The Photo Is Too Long")]

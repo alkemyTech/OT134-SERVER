@@ -20,7 +20,7 @@ namespace OngProject.Repositories
             RepositoryContext = repositoryContext;
             dbSet = repositoryContext.Set<T>();
         }
-        public async Task<IEnumerable<T>> FindAllAsync()
+        public async Task<ICollection<T>> FindAllAsync()
         {
             return await dbSet.ToListAsync();
         }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OngProject.Controllers
 {
-    [Route("api/contacts")]
+    [Route("contacts")]
     [ApiController]
     public class ContactController : Controller
     {

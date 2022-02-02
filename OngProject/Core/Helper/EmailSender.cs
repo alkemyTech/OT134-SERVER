@@ -1,9 +1,11 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using OngProject.Core.Interfaces;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,16 +13,24 @@ namespace OngProject.Core.Helper
 {
     public class EmailSender : IEmailSender
     {
-        public EmailSender(IOptions<AuthMessageSenderOptions> optionsAccessor)
+        public EmailSender(IConfiguration configuration)
         {
-            Options = optionsAccessor.Value;
+            _config = configuration;
         }
+        public IConfiguration _config;
 
-        public AuthMessageSenderOptions Options { get; } //set only via Secret Manager
+        public async Task SendEmailWithTemplateAsync(string ToEmail, string mailTitle, string mailBody, string mailContact)
+        {
+            string template = File.ReadAllText(_config["MailParams:PathTemplate"]);
+            template = template.Replace(_config["MailParams:ReplaceMailTitle"], mailTitle);
+            template = template.Replace(_config["MailParams:ReplaceMailBody"], mailBody);
+            template = template.Replace(_config["MailParams:ReplaceMailContact"], mailContact);
+            await SendEmailAsync(ToEmail, mailTitle, template);
+        }
 
         public Task SendEmailAsync(string email, string subject, string message)
         {
-            return Execute(Options.SendGridKey, subject, message, email);
+            return Execute(_config["MailParams:SendGridKey"], subject, message, email);
         }
 
         public Task Execute(string apiKey, string subject, string message, string email)

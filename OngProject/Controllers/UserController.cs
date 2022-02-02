@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OngProject.Controllers
 {
-    [Route("api/users")]
+    [Route("users")]
     [ApiController]
     [Authorize]
     public class UserController : ControllerBase

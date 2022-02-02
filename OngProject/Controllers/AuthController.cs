@@ -28,7 +28,7 @@ namespace OngProject.Controllers
                 return Ok(await _userService.Insert(dto));                
             }
             catch (Exception e){
-                return BadRequest(e.ToString());
+                return BadRequest(e.Message);
             }
         }
         

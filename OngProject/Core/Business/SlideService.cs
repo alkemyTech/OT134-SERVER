@@ -3,6 +3,7 @@ using OngProject.Core.Mapper;
 using OngProject.Core.Models.DTOs;
 using OngProject.Entities;
 using OngProject.Repositories.Interfaces;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,10 +25,22 @@ namespace OngProject.Core.Business
             throw new System.NotImplementedException();
         }
 
-        public async Task<SlideDTO> GetAll()
+        public async Task<ICollection<SlideDTO>> GetAll()
         {
             var response = await _unitOfWork.SlideRepository.FindAllAsync();
-            return _mapper.SlideToSlideDTO(response.FirstOrDefault());
+            if (response.Count == 0)
+            {
+                return null;
+            }
+            else 
+            {
+                List<SlideDTO> dto = new List<SlideDTO>();
+                foreach (var item in response)
+                {
+                    dto.Add(_mapper.SlideToSlideDTO(item));
+                }
+                return dto;
+            }
         }
 
         public Slides GetById()

@@ -5,7 +5,7 @@ using OngProject.Core.Interfaces;
 
 namespace OngProject.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("members")]
     [ApiController]
     public class MembersController : ControllerBase
     {
