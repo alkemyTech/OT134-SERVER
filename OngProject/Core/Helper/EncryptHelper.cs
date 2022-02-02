@@ -21,5 +21,10 @@ namespace OngProject.Core.Helper
 
             return sb.ToString();
         }
+        public static bool Verify(string password, string hash)
+        {
+            var newHash = GetSHA256(password);
+            return (newHash == hash);
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OngProject.Core.Helper;
 using OngProject.Entities;
 using System;
 
@@ -16,8 +17,8 @@ namespace OngProject.DataAccess
                         Id = i,
                         FirstName = "Name User " + i,
                         LastName = "Last Name User" + i,
-                        Email = "Email User" + i,
-                        Password = "Password" + i,
+                        Email = "User"+ i+"@ong.com",
+                        Password = EncryptHelper.GetSHA256("Password" + i),
                         Photo = "Photo" + i,
                         SoftDelete = false,
                         RolId = 1,
@@ -36,8 +37,8 @@ namespace OngProject.DataAccess
                         Id = i,
                         FirstName = "Name User " + i,
                         LastName = "Last Name User" + i,
-                        Email = "Email User" + i,
-                        Password = "Password" + i,
+                        Email = "User" + i + "@ong.com",
+                        Password = EncryptHelper.GetSHA256("Password" + i),
                         Photo = "Photo" + i,
                         SoftDelete = false,
                         RolId = 2,

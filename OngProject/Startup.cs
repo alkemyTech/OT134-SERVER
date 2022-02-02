@@ -37,6 +37,33 @@ namespace OngProject
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "OngProject", Version = "v1" });
             });
 
+            services.AddDbContext<AppDbContext>((services, options) => {
+                options.UseInternalServiceProvider(services);
+                options.UseSqlServer(this.Configuration["SqlConnectionString"]);
+            });
+
+            services.AddEntityFrameworkSqlServer();
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IEmailSender, EmailSender>();
+            services.AddScoped<IImageService, ImageService>();
+
+
+            services.AddScoped<IActivitiesService, ActivitiesService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICommentsService, CommentsService>();
+            services.AddScoped<IMemberService, MemberService>();
+            services.AddScoped<INewsService, NewsService>();
+            services.AddScoped<IOrganizationsService, OrganizationService>();
+            services.AddScoped<IRolesService, RolesService>();
+            services.AddScoped<ITestimonialsService, TestimonialsService>();
+            services.AddScoped<IUserService, UsersService>();
+            services.AddScoped<ISlideSerivice, SlideService>();
+            services.AddScoped<IContactService, ContactService>();
+            services.Configure<AuthMessageSenderOptions>(Configuration);
+            services.AddScoped<JwtHelper>();
+
+
             // JWT Token Generator
             var key = Encoding.ASCII.GetBytes(Configuration["JWT:Secret"]);
             services
@@ -58,31 +85,6 @@ namespace OngProject
                 };
             });
 
-            
-            services.AddDbContext<AppDbContext>((services, options) => {
-                options.UseInternalServiceProvider(services);
-                options.UseSqlServer(this.Configuration["SqlConnectionString"]);
-            });
-
-            services.AddEntityFrameworkSqlServer();
-
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IEmailSender, EmailSender>();
-
-
-            services.AddScoped<IActivitiesService, ActivitiesService>();
-            services.AddScoped<ICategoryService, CategoryService>();
-            services.AddScoped<ICommentsService, CommentsService>();
-            services.AddScoped<IMemberService, MemberService>();
-            services.AddScoped<INewsService, NewsService>();
-            services.AddScoped<IOrganizationsService, OrganizationService>();
-            services.AddScoped<IRolesService, RolesService>();
-            services.AddScoped<ITestimonialsService, TestimonialsService>();
-            services.AddScoped<IUserService, UsersService>();
-            services.AddScoped<ISlideSerivice, SlideService>();
-            services.AddScoped<IContactService, ContactService>();
-            services.Configure<AuthMessageSenderOptions>(Configuration);
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -99,9 +101,11 @@ namespace OngProject
 
             app.UseRouting();
 
-            app.UseAuthorization();
 
             app.UseAuthentication();
+
+            app.UseAuthorization();
+
 
             app.UseEndpoints(endpoints =>
             {
