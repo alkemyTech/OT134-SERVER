@@ -14,7 +14,7 @@ namespace OngProject.Core.Interfaces
     {
         public Task<UserDTO> GetAll();
         public User GetById();
-        public Task<User> Insert(UserRegisterDto dto);
+        public Task<UserDetailDto> Insert(UserRegisterDto dto);
         public void Update(User user);
         public void Delete(User user);
     }
