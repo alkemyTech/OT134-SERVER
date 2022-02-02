@@ -1,10 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using OngProject.Entities;
 
 namespace OngProject.DataAccess
 {
-	public class AppDbContext : DbContext
+    public class AppDbContext : DbContext
 	{
 		public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
 		{
@@ -37,6 +36,11 @@ namespace OngProject.DataAccess
 		SeedNew seedNew = new SeedNew();
 		SeedCategory seedCategory = new SeedCategory();
 		SeedActivity seedActivity = new SeedActivity();
+		SeedMember seedMember = new SeedMember();
+		SeedContact seedContact = new SeedContact();
+		SeedComment seedComment = new SeedComment();
+		SeedOrganization seedOrganization = new SeedOrganization();
+		SeedSlide seedSlide = new SeedSlide();
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -47,6 +51,11 @@ namespace OngProject.DataAccess
 			dataUser.SeedAdministratorUsers(modelBuilder);
 			seedTestimonial.SeedTestimonials(modelBuilder);
 			seedNew.SeedNews(modelBuilder);
+			seedMember.SeedMembers(modelBuilder);
+			seedComment.SeedComments(modelBuilder);
+			seedContact.SeedContacts(modelBuilder);
+			seedOrganization.SeedOrganizations(modelBuilder);
+			seedSlide.SeedSlides(modelBuilder);
 		}
 	}	
 }
