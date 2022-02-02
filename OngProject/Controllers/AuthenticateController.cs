@@ -21,50 +21,26 @@ namespace OngProject.Controllers
     [AllowAnonymous]
     public class AuthenticateController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IConfiguration _configuration;
-        public AuthenticateController(UserManager<ApplicationUser> userManager, IConfiguration configuration)
+        private readonly IUserService _userService;
+        public AuthenticateController(IUserService userService)
         {
-            _userManager = userManager;
-            _configuration = configuration;
+            _userService = userService;
             
         }
-        [HttpPost]
-        [HttpPost("auth/login")]
-        public async Task<ActionResult> Login([FromBody] UserLoginDTO userLoginDto)
+        [HttpPost("/login")]
+        public async Task<IActionResult> Login([FromBody] UserLoginDTO userLoginDto)
         {
 
             try
             {
-                var currentUser = await _userManager.FindByEmailAsync(userLoginDto.Email);
-                if (currentUser != null && await _userManager.CheckPasswordAsync(currentUser, userLoginDto.Password))
+                var result = await _userService.LoginAsync(userLoginDto);
 
-                {
-
-                    var key = Encoding.ASCII.GetBytes(_configuration["JWT:Secret"]);
-                    var authClaims = new List<Claim>
-                    {new Claim(ClaimTypes.Email, currentUser.Email),
-                      new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())};
-                    var authorizationSigninKey = new SymmetricSecurityKey(key);
-                    var token = new JwtSecurityToken(
-                        issuer: _configuration["JWT:ValidIssuer"],
-                        audience: _configuration["JWT:ValidAudience"],
-                        expires: DateTime.Now.AddHours(4),
-                        claims: authClaims,
-                        signingCredentials: new SigningCredentials(authorizationSigninKey, SecurityAlgorithms.HmacSha256)
-                        );
-                    return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token), expiration = token.ValidTo });
-                }
-                return Unauthorized();
+                return Ok(result);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return StatusCode(500, ex.Message);
+                return BadRequest(e.Message);
             }
-
-
         }
-
-
     }
 }
