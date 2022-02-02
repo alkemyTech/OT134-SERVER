@@ -80,7 +80,7 @@ namespace OngProject
             services.AddScoped<ITestimonialsService, TestimonialsService>();
             services.AddScoped<IUserService, UsersService>();
             services.AddScoped<ISlideSerivice, SlideService>();
-
+            services.AddScoped<IContactService, ContactService>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
 
         }
