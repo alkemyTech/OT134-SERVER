@@ -16,7 +16,7 @@ namespace OngProject.Controllers
         {
             _contactService = contactService;
         }
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllSlides()
         {
