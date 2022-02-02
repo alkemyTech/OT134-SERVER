@@ -8,7 +8,7 @@ namespace OngProject.Core.Interfaces
 {
     public interface ICategoryService
     {
-        public Task<CategoryDTO> GetAll();
+        public Task<IEnumerable<CategoryDTO>> GetAll();
         public Category GetById();
         public void Insert(Category category);
         public void Update(Category category);

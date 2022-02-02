@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OngProject.Core.Interfaces;
 using System;
@@ -8,6 +8,7 @@ namespace OngProject.Controllers
 {
     [Route("categories")]
     [ApiController]
+    [Authorize]
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
@@ -46,9 +47,9 @@ namespace OngProject.Controllers
         public void UpdateCategory()
         {
         }
-        //[HttpPut("{id}")]
-        //public void DeleteCategory(int id)
-        //{
-        //}
+        [HttpDelete("{id}")]
+        public void DeleteCategory(int id)
+        {
+        }
     }
 }
