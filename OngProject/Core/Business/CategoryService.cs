@@ -26,11 +26,14 @@ namespace OngProject.Core.Business
             throw new System.NotImplementedException();
         }
 
-        public async Task<CategoryDTO> GetAll()
+        public async Task<IEnumerable<CategoryDTO>> GetAll()
         {
-            var response = await _unitOfWork.CategoryRepository.FindAllAsync();
+            var categories = await _unitOfWork.CategoryRepository.FindAllAsync();
 
-            return _entityMapper.CategoryToCategoryDTO(response.FirstOrDefault());
+            var categoriesDTO = categories              
+                .Select(category => _entityMapper.CategoryToCategoryDTO(category));
+
+            return categoriesDTO;
         }
 
         public Category GetById()
