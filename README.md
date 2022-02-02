@@ -3,8 +3,8 @@ Repositorio base para Caso ONG de C#
 
 Datos de Usuarios sin Permisos de Administrador : 
 
-![Captura de pantalla (258)](https://user-images.githubusercontent.com/57721403/152168800-2b098bae-cfb4-4ed0-ab95-2587da09bade.png)
+![Captura de pantalla (260)](https://user-images.githubusercontent.com/57721403/152171542-00724ea6-92f3-4300-8d91-d2c5e96f82df.png)
 
 Datos de Usuarios con Permisos de Administrador : 
 
-![Captura de pantalla (259)](https://user-images.githubusercontent.com/57721403/152168856-445c476f-09e9-47c4-933f-0afa783b72e7.png)
+![Captura de pantalla (262)](https://user-images.githubusercontent.com/57721403/152171773-e6df8abe-9e8d-49fc-b959-7f2dbc20c607.png)
