@@ -9,8 +9,12 @@ using OngProject.Core.Helper;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+
 using OngProject.Core.Models;
 using System.IdentityModel.Tokens.Jwt;
+
+using System.Collections.Generic;
+
 
 namespace OngProject.Core.Business
 {
@@ -28,10 +32,14 @@ namespace OngProject.Core.Business
             _config = configuration;
         }
 
-        public async Task<UserDTO> GetAll()
+        public async Task<IEnumerable<UserDTO>> GetAll()
         {
-            var response = await _unitOfWork.UserRepository.FindAllAsync();
-            return _mapper.UserToUserDto(response.FirstOrDefault());
+            var users = await _unitOfWork.UserRepository.FindAllAsync();
+
+            var usersDTO = users
+                .Select(user => _mapper.UserToUserDto(user));
+
+            return usersDTO;
         }
 
         public User GetById()
