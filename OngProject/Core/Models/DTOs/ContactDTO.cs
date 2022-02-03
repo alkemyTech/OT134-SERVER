@@ -13,6 +13,7 @@ namespace OngProject.Core.Models.DTOs
         public string Phone { get; set; }
 
         [StringLength(320)]
+        [EmailAddress]
         public string Email { get; set; }
 
         [Display(Name = "Mensaje")]
