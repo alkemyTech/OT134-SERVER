@@ -79,6 +79,7 @@ namespace OngProject.Core.Business
             // Se Guarda el Contacto en la DB
             try
             {
+                contacts.LastModified = DateTime.Now;
                 await _unitOfWork.ContactRepository.Create(contacts);
                 await _unitOfWork.SaveChangesAsync();
 
