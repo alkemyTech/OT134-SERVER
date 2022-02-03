@@ -80,6 +80,17 @@ namespace OngProject.Core.Mapper
             };
             return contactDto;
         }
+        public Contacts ContactDTOToContact(ContactDTO contactsDto)
+        {
+            var contacts = new Contacts
+            {
+                Email = contactsDto.Email,
+                Message = contactsDto.Message,
+                Name = contactsDto.Name,
+                Phone = contactsDto.Phone
+            };
+            return contacts;
+        }
         public CommentDTO CommentToCommentDTO(Comment comment)
         {
             var commentDTO = new CommentDTO
