@@ -7,12 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using OngProject.Core.Interfaces;
 using OngProject.Entities;
 
 
 namespace OngProject.Core.Helper
 {
-    public class JwtHelper
+    public class JwtHelper : IJwtHelper
     {
         private readonly IConfiguration _configuration;
         public JwtHelper(IConfiguration _configuration)
@@ -27,7 +28,7 @@ namespace OngProject.Core.Helper
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Role, user.Rol?.Name)
+                    //new Claim(ClaimTypes.Role, user.Rol?.Name)
                 };
             var authSigningKey = new SymmetricSecurityKey(key);
             var token = new JwtSecurityToken(

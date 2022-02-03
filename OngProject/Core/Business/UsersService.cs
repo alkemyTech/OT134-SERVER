@@ -7,12 +7,7 @@ using OngProject.Core.Models.DTOs;
 using System.Threading.Tasks;
 using OngProject.Core.Helper;
 using System.Linq;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-
-using OngProject.Core.Models;
-using System.IdentityModel.Tokens.Jwt;
-
 using System.Collections.Generic;
 
 
@@ -23,8 +18,8 @@ namespace OngProject.Core.Business
         private readonly IConfiguration _config;
         private readonly IUnitOfWork _unitOfWork;
         private readonly EntityMapper _mapper;
-        private readonly JwtHelper _jwtHelper;
-        public UsersService(IUnitOfWork unitOfWork,  IConfiguration configuration, JwtHelper jwtHelper)
+        private readonly IJwtHelper _jwtHelper;
+        public UsersService(IUnitOfWork unitOfWork,  IConfiguration configuration, IJwtHelper jwtHelper)
         {
             _unitOfWork = unitOfWork;
             _mapper = new EntityMapper();
@@ -84,7 +79,7 @@ namespace OngProject.Core.Business
         }
  
 
-        public async Task<UserDetailDto> LoginAsync(UserLoginDTO userLoginDto)
+        public async Task<string> LoginAsync(UserLoginDTO userLoginDto)
         {
             try
             {
@@ -105,9 +100,9 @@ namespace OngProject.Core.Business
                     }
 
                     //No esta devolviendo el token
-                    //var jwtSecurityToken = _jwtHelper.GenerateJwtToken(currentUser);
+                    var jwtSecurityToken = _jwtHelper.GenerateJwtToken(currentUser);
 
-                    return _mapper.UseToUserDetailDto(currentUser);
+                    return jwtSecurityToken;
                 }
                 else
                 {
