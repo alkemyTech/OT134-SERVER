@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OngProject.Core.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace OngProject.Controllers
@@ -56,12 +53,22 @@ namespace OngProject.Controllers
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
-        }
-
+        }        
+        
         // DELETE api/<UserController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> Delete(int id)
         {
+            try
+            {                
+                return Ok(await this._userService.Delete(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }
+

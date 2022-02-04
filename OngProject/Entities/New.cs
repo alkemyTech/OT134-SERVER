@@ -16,11 +16,11 @@ namespace OngProject.Entities
         [StringLength(maximumLength: 255, ErrorMessage = "The Name Of The Image Is Too Long")]
         public string Image { get; set; }
 
-        public ICollection<Comment> Comments { get; set; }        
+        public virtual ICollection<Comment> Comments { get; set; }        
       
         //clave forane hacia rol
         [ForeignKey(nameof(Category))]
         public int CategoryId { get; set; }
-        public Category Category { get; set; }
+        public virtual Category Category { get; set; }
     }
 }

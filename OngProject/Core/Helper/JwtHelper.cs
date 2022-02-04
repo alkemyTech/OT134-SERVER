@@ -28,7 +28,7 @@ namespace OngProject.Core.Helper
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Email, user.Email),
-                    //new Claim(ClaimTypes.Role, user.Rol?.Name)
+                    new Claim(ClaimTypes.Role, user.Rol?.Name)
                 };
             var authSigningKey = new SymmetricSecurityKey(key);
             var token = new JwtSecurityToken(

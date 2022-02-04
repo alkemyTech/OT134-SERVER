@@ -40,9 +40,11 @@ namespace OngProject
             services.AddDbContext<AppDbContext>((services, options) => {
                 options.UseInternalServiceProvider(services);
                 options.UseSqlServer(this.Configuration["SqlConnectionString"]);
+                options.UseLazyLoadingProxies();
             });
 
-            services.AddEntityFrameworkSqlServer();
+            services.AddEntityFrameworkProxies();
+            services.AddEntityFrameworkSqlServer();            
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IEmailSender, EmailSender>();
