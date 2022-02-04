@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OngProject.Core.Interfaces;
 using OngProject.Core.Models.DTOs;
+using OngProject.Core.Models.Response;
 using System;
 using System.Threading.Tasks;
 
@@ -38,10 +39,9 @@ namespace OngProject.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Post(ContactDTO contactDto)
+        public async Task<Result> Post(ContactDTO contactDto)
         {
-            var response = await _contactService.Insert(contactDto);
-            return StatusCode(response.StatusCode, response.Message);
+            return await _contactService.Insert(contactDto);
         }
     }
 }
