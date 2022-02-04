@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OngProject.Core.Interfaces;
+using OngProject.Core.Models.DTOs;
 using System;
 using System.Threading.Tasks;
 
@@ -41,8 +42,18 @@ namespace OngProject.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] CommentDTO commentDTO)
         {
+            try
+            {
+                var comment = await _commentsService.Insert(commentDTO);
+                return Ok(comment);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500,ex.Message);
+            }
         }
 
         [HttpPut("{id}")]

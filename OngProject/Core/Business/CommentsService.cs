@@ -25,7 +25,7 @@ namespace OngProject.Core.Business
         {
             var comments = await _unitOfWork.CommentsRepository.FindAllAsync();
 
-            var commentsDTO = comments
+            var commentsDTO = comments 
                 .OrderBy(comment => comment.LastModified)
                 .Select(comment => _mapper.CommentToCommentDTO(comment));
 
@@ -37,10 +37,6 @@ namespace OngProject.Core.Business
             throw new NotImplementedException();
         }
 
-        public void Insert(Comment comment)
-        {
-            throw new NotImplementedException();
-        }
 
         public void Update(Comment comment)
         {
@@ -50,6 +46,35 @@ namespace OngProject.Core.Business
         public void Delete(Comment comment)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<CommentDTO> Insert(CommentDTO commentDTO)
+        {
+
+            try
+            {
+                if (commentDTO.IdUser == 0)
+                {
+                    throw new Exception("Se debe Agregar un usuario para agregar un comentario");
+                }
+                else if (commentDTO.NewId == 0)
+                {
+                    throw new Exception("Se debe seleccionar una noticia para agregar un comentario");
+                }
+                else 
+                {
+                    var comment = _mapper.CommentDTOToComment(commentDTO);
+
+                    await _unitOfWork.CommentsRepository.Create(comment);
+                    await _unitOfWork.SaveChangesAsync();
+
+                    return commentDTO;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Comentario no registrado: " + ex.Message);
+            }
         }
     }
 }

@@ -107,5 +107,15 @@ namespace OngProject.Core.Mapper
 
             return categoryDto;
         }
+        public Comment CommentDTOToComment(CommentDTO commentDTO)
+        {
+            var comment = new Comment
+            {
+                Body = commentDTO.Body,
+                UserId = commentDTO.IdUser,
+                NewId = commentDTO.NewId
+            };
+            return comment;
+        }
     }
 }
