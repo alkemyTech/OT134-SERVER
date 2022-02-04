@@ -27,6 +27,6 @@ namespace OngProject.Entities
         //clave forane hacia rol
         [ForeignKey(nameof(Rol))]
         public int RolId { get; set; }
-        public Rol Rol { get; set; }
+        public virtual Rol Rol { get; set; }
     }
 }
