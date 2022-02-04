@@ -28,6 +28,12 @@ namespace OngProject.Repositories
         {
             return await dbSet.Where(expression).ToListAsync();
         }
+
+        public async Task<T> GetByIdAsync(int id)
+        {
+            return await this.dbSet.FindAsync(id);
+        }
+
         public async Task Create(T entity)
         {
             await dbSet.AddAsync(entity);

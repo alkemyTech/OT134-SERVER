@@ -10,6 +10,7 @@ namespace OngProject.Repositories.Interfaces
     {
         Task<ICollection<T>> FindAllAsync();
         Task<ICollection<T>> FindByConditionAsync(Expression<Func<T, bool>> expression);
+        Task<T> GetByIdAsync(int id);
         Task Create(T entity);
         void Update(T entity);
         void Delete(T entity);
