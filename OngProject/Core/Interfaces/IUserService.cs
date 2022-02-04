@@ -18,7 +18,7 @@ namespace OngProject.Core.Interfaces
         Task<UserDetailDto> Insert(UserRegisterDto dto);
         Task<string> LoginAsync(UserLoginDTO userLoginDto);
         void Update(User user);
-        void Delete(User user);
+        Task<string> Delete(int id);
 
     }
 }

@@ -98,11 +98,9 @@ namespace OngProject.Core.Business
                     {
                         throw new Exception("No se pudo iniciar sesion, usuario o contrasena invalidos");
                     }
-
-                    //No esta devolviendo el token
-                    var jwtSecurityToken = _jwtHelper.GenerateJwtToken(currentUser);
-
-                    return jwtSecurityToken;
+                    
+                    
+                    return _jwtHelper.GenerateJwtToken(currentUser);
                 }
                 else
                 {
@@ -122,9 +120,30 @@ namespace OngProject.Core.Business
             throw new NotImplementedException();
         }
 
-        public void Delete(User user)
+        public async Task<string> Delete(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var user = await this._unitOfWork.UserRepository.GetByIdAsync(id);
+                if(user != null)
+                {
+                    if (user.SoftDelete) 
+                    {                        
+                        throw new Exception($"id({user.Id}) ya eliminado del sistema.");
+                    }
+                    user.SoftDelete = true;
+                    user.LastModified = DateTime.Today;
+                    await this._unitOfWork.SaveChangesAsync();
+
+                    return $"Usuario({user.Id}) eliminado exitosamente.";
+                }
+
+                throw new Exception("id inexistente.");
+            }
+            catch(Exception e)
+            {
+                throw new Exception($"Usuario no eliminado: {e.Message}");
+            }
         }
     }
 }
