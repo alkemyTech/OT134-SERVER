@@ -38,15 +38,22 @@ namespace OngProject.Core.Business
 
             try
             {
-                var response = await _unitOfWork.CommentsRepository.FindAllAsync();
-                var ListComments = response.Where(x => x.NewId == IdNew).OrderBy(x => x.LastModified)
-                                           .Select(x => _mapper.CommentToCommentDTO(x));
-                List<CommentDTO> dto = new List<CommentDTO>();
-                foreach (var item in ListComments)
+                if (IdNew == 0)
                 {
-                    dto.Add(item);
+                    return Result.FailureResult("Debe seleccionar una novedad");
                 }
-                return Result<ICollection<CommentDTO>>.SuccessResult(dto);
+                else 
+                {
+                    var response = await _unitOfWork.CommentsRepository.FindAllAsync();
+                    var ListComments = response.Where(x => x.NewId == IdNew).OrderBy(x => x.LastModified)
+                                               .Select(x => _mapper.CommentToCommentDTO(x));
+                    List<CommentDTO> dto = new List<CommentDTO>();
+                    foreach (var item in ListComments)
+                    {
+                        dto.Add(item);
+                    }
+                    return Result<ICollection<CommentDTO>>.SuccessResult(dto);
+                }
             }
             catch (Exception ex)
             {

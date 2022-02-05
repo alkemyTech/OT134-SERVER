@@ -34,8 +34,8 @@ namespace OngProject.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-       
-        [HttpGet("{id}")]
+        [Route("/news/:id/comments")]
+        [HttpGet]
         public async Task<Result> Get(int id)
         {
             try
