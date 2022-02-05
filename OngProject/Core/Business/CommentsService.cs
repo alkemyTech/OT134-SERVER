@@ -1,6 +1,7 @@
 ﻿using OngProject.Core.Interfaces;
 using OngProject.Core.Mapper;
 using OngProject.Core.Models.DTOs;
+using OngProject.Core.Models.Response;
 using OngProject.Entities;
 using OngProject.Repositories.Interfaces;
 using System;
@@ -32,9 +33,27 @@ namespace OngProject.Core.Business
             return commentsDTO;
         }
 
-        public Comment GetById()
+        public async Task<Result> GetById(int IdNew)
         {
-            throw new NotImplementedException();
+
+            try
+            {
+                var response = await _unitOfWork.CommentsRepository.FindAllAsync();
+                var ListComments = response.Where(x => x.NewId == IdNew).OrderBy(x => x.LastModified)
+                                           .Select(x => _mapper.CommentToCommentDTO(x));
+                List<CommentDTO> dto = new List<CommentDTO>();
+                foreach (var item in ListComments)
+                {
+                    dto.Add(item);
+                }
+                return Result<ICollection<CommentDTO>>.SuccessResult(dto);
+            }
+            catch (Exception ex)
+            {
+
+                return Result.FailureResult("Ocurrio un Probelma al listar los resultados : " + ex.ToString());
+            }
+
         }
 
         public void Insert(Comment comment)
@@ -51,5 +70,6 @@ namespace OngProject.Core.Business
         {
             throw new NotImplementedException();
         }
+
     }
 }

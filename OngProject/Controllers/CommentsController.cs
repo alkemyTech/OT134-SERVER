@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OngProject.Core.Interfaces;
+using OngProject.Core.Models.Response;
 using System;
 using System.Threading.Tasks;
 
@@ -33,11 +34,20 @@ namespace OngProject.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-
+       
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<Result> Get(int id)
         {
-            return Ok();
+            try
+            {
+                var response = await _commentsService.GetById(id);
+                return (Result)response;
+            }
+            catch (Exception ex)
+            {
+
+                return Result.FailureResult("Ocurrio un Problema" + ex.ToString());
+            }
         }
 
         [HttpPost]
