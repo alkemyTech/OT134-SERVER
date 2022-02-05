@@ -57,7 +57,7 @@ namespace OngProject.Core.Business
                 else
                 {
                     var result = _mapper.CommentDTOToComment(commentDTO);
-
+                    result.LastModified = DateTime.Today;
                     await _unitOfWork.CommentsRepository.Create(result);
                     await _unitOfWork.SaveChangesAsync();
 
