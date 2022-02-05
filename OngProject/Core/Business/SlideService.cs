@@ -6,7 +6,6 @@ using OngProject.Entities;
 using OngProject.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace OngProject.Core.Business
@@ -56,9 +55,9 @@ namespace OngProject.Core.Business
                 else
                 {
                     if (slide == null)
-                        return Result.FailureResult("No hay ningun Slide cargado con Id ingresado");
+                        return Result.FailureResult("No se encontro ningun Slide con Id ingresado");
                     else
-                        return Result.FailureResult("Slide con Id ingresado a sido eliminado previamente");
+                        return Result.FailureResult("Slide con Id ingresado ha sido eliminado previamente");
                 }
             }
             catch(Exception ex)
