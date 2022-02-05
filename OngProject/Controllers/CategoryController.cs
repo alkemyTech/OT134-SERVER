@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OngProject.Core.Interfaces;
+using OngProject.Core.Models.DTOs;
+using OngProject.Core.Models.Response;
 using System;
 using System.Threading.Tasks;
 
@@ -33,6 +35,7 @@ namespace OngProject.Controllers
             }
 
         }
+        
         [HttpGet("{id}")]
         public IActionResult GetCategoryById(int id)
         {
@@ -48,8 +51,9 @@ namespace OngProject.Controllers
         {
         }
         [HttpDelete("{id}")]
-        public void DeleteCategory(int id)
+        public async Task<Result> Delete(int id)
         {
+            return await _categoryService.Delete(id);
         }
     }
 }

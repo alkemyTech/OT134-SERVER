@@ -1,6 +1,7 @@
 ﻿using OngProject.Core.Interfaces;
 using OngProject.Core.Mapper;
 using OngProject.Core.Models.DTOs;
+using OngProject.Core.Models.Response;
 using OngProject.Entities;
 using OngProject.Repositories.Interfaces;
 using System;
@@ -21,9 +22,31 @@ namespace OngProject.Core.Business
             _unitOfWork = unitOfWork;
             _entityMapper = new EntityMapper();
         }
-        public void Delete(Category category)
+        public async Task<Result> Delete(int id)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                var category = await _unitOfWork.CategoryRepository.GetByIdAsync(id);
+                if (category == null)
+                {
+                    return Result.FailureResult("La categoria seleccionada no existe");
+                }
+
+                if (category.SoftDelete)
+                {
+                    return Result.FailureResult("La categoria seleccionada ya fue eliminada");
+                }
+
+                category.SoftDelete = true;
+                category.LastModified = DateTime.Now;
+                await _unitOfWork.SaveChangesAsync();
+
+                return Result<Category>.SuccessResult(category);
+            }
+            catch (Exception e)
+            {
+                return Result.FailureResult("Error al eliminar la categoria: " + e.Message);
+            }
         }
 
         public async Task<IEnumerable<CategoryDTO>> GetAll()
