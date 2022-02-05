@@ -68,16 +68,21 @@ namespace OngProject.Core.Business
                 user.SoftDelete = false;
 
                 await this._unitOfWork.UserRepository.Create(user);
-                await this._unitOfWork.SaveChangesAsync();
+                await this._unitOfWork.SaveChangesAsync();                
+
+                if (user.Rol == null)
+                {
+                    user.Rol =  await this._unitOfWork.RolRepository.GetByIdAsync(user.RolId);
+                }
 
                 //se envia mail de bienvenida
                 var emailSender = new EmailSender(_config);
                 var emailBody = $"<h4>Hola {user.FirstName} {user.LastName}</h4>{_config["MailParams:WelcomeMailBody"]}";
                 var emailContact = string.Format("<a href='mailto:{0}'>{0}</a>", _config["MailParams:WelcomeMailContact"]);
-                
+
                 await emailSender.SendEmailWithTemplateAsync(user.Email, _config["MailParams:WelcomeMailTitle"], emailBody, emailContact);
 
-                return Result<UserDetailDto>.SuccessResult(_mapper.UseToUserDetailDto(user));
+                return Result<string>.SuccessResult(_jwtHelper.GenerateJwtToken(user));
             }
             catch(Exception e)
             {
