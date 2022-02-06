@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OngProject.Core.Interfaces;
+using OngProject.Core.Models.Response;
 using System;
 using System.Threading.Tasks;
 
@@ -34,9 +35,26 @@ namespace OngProject.Controllers
 
         }
         [HttpGet("{id}")]
-        public IActionResult GetCategoryById(int id)
+        public async Task<Result> GetCategoryById(int id)
         {
-            return Ok();
+            try
+            {
+                var response = await _categoryService.GetById(id);
+
+                if (response == null)
+                {
+                    return Result.FailureResult("Error 404");                    
+                }
+
+                return response;
+
+            }
+
+            catch (Exception e)
+            {
+
+                return Result.FailureResult("Error 404. Ocurrio un error: " + e.Message);
+            }
         }
 
         [HttpPost]

@@ -114,6 +114,8 @@ namespace OngProject.Core.Mapper
             var categoryDto = new CategoryDTO
             {
                 Name = category.Name,
+                Description = category.Description,
+                Image = category.Image,
             };
 
             return categoryDto;
