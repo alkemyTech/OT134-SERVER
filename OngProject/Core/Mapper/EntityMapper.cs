@@ -34,7 +34,7 @@ namespace OngProject.Core.Mapper
             return userDto;
         }
 
-        public UserDetailDto UseToUserDetailDto(User user)
+        public UserDetailDto UserToUserDetailDto(User user)
         {
             return new UserDetailDto
             {
