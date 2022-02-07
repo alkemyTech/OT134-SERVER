@@ -1,9 +1,7 @@
 ﻿using OngProject.Core.Interfaces;
-using OngProject.Core.Mapper;
 using OngProject.Core.Models.DTOs;
 using OngProject.Entities;
 using OngProject.Repositories.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,12 +12,12 @@ namespace OngProject.Core.Business
     public class CategoryService : ICategoryService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly EntityMapper _entityMapper;
+        private readonly IEntityMapper _entityMapper;
 
-        public CategoryService(IUnitOfWork unitOfWork)
+        public CategoryService(IUnitOfWork unitOfWork, IEntityMapper mapper)
         {
             _unitOfWork = unitOfWork;
-            _entityMapper = new EntityMapper();
+            _entityMapper = mapper;
         }
         public void Delete(Category category)
         {

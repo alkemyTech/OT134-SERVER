@@ -1,5 +1,4 @@
 ﻿using OngProject.Core.Interfaces;
-using OngProject.Core.Mapper;
 using OngProject.Core.Models.DTOs;
 using OngProject.Core.Models.Response;
 using OngProject.Entities;
@@ -14,12 +13,12 @@ namespace OngProject.Core.Business
     public class CommentsService : ICommentsService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly EntityMapper _mapper;
+        private readonly IEntityMapper _mapper;
 
-        public CommentsService(IUnitOfWork unitOfWork)
+        public CommentsService(IUnitOfWork unitOfWork, IEntityMapper mapper)
         {
             _unitOfWork = unitOfWork; 
-            _mapper = new EntityMapper();
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<CommentDTO>> GetAll()
@@ -47,7 +46,7 @@ namespace OngProject.Core.Business
                     var response = await _unitOfWork.CommentsRepository.FindAllAsync();
                     var ListComments = response.Where(x => x.NewId == IdNew).OrderBy(x => x.LastModified)
                                                .Select(x => _mapper.CommentToCommentDTO(x));
-                    List<CommentDTO> dto = new List<CommentDTO>();
+                    List<CommentDTO> dto = new();
                     foreach (var item in ListComments)
                     {
                         dto.Add(item);
