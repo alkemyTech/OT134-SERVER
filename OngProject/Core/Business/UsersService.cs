@@ -18,12 +18,14 @@ namespace OngProject.Core.Business
         private readonly IUnitOfWork _unitOfWork;
         private readonly IEntityMapper _mapper;
         private readonly IJwtHelper _jwtHelper;
-        public UsersService(IUnitOfWork unitOfWork,  IConfiguration configuration, IJwtHelper jwtHelper, IEntityMapper mapper)
+        private readonly IImageService _imageService;
+        public UsersService(IUnitOfWork unitOfWork,  IConfiguration configuration, IJwtHelper jwtHelper, IImageService imageService, IEntityMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _jwtHelper = jwtHelper;
             _config = configuration;
+            _imageService = imageService;
         }
 
         public async Task<Result> GetAll()
@@ -64,13 +66,14 @@ namespace OngProject.Core.Business
         public async Task<Result> Insert(UserRegisterDto dto)
 
         {
+            var errorList = new List<string>();
             var user = _mapper.UserRegisterDtoToUser(dto);
 
             try
             {
                 // verifico que no exista Email en sistema
-                var result = await this._unitOfWork.UserRepository.FindByConditionAsync(x => x.Email == user.Email);
-                if (result != null && result.Count > 0)
+                var existUser = await this._unitOfWork.UserRepository.FindByConditionAsync(x => x.Email == user.Email);
+                if (existUser != null && existUser.Count > 0)
                 {
                     return Result.FailureResult("Email ya existe en el sistema.");
                 }
@@ -78,6 +81,8 @@ namespace OngProject.Core.Business
                 user.Password = EncryptHelper.GetSHA256(user.Password);
                 user.LastModified = DateTime.Today;
                 user.SoftDelete = false;
+                    
+                user.Photo = await _imageService.UploadFile($"{Guid.NewGuid()}_{dto.Photo.FileName}", dto.Photo);                
 
                 await this._unitOfWork.UserRepository.Create(user);
                 await this._unitOfWork.SaveChangesAsync();                
@@ -85,21 +90,32 @@ namespace OngProject.Core.Business
                 if (user.Rol == null)
                 {
                     user.Rol =  await this._unitOfWork.RolRepository.GetByIdAsync(user.RolId);
+                }                
+
+                try
+                {
+                    //se envia mail de bienvenida
+                    var emailSender = new EmailSender(_config);
+                    var emailBody = $"<h4>Hola {user.FirstName} {user.LastName}</h4>{_config["MailParams:WelcomeMailBody"]}";
+                    var emailContact = string.Format("<a href='mailto:{0}'>{0}</a>", _config["MailParams:WelcomeMailContact"]);
+
+                    await emailSender.SendEmailWithTemplateAsync(user.Email, _config["MailParams:WelcomeMailTitle"], emailBody, emailContact);
+                }
+                catch(Exception e)
+                {
+                    errorList.Add($"No se envio email de bienvenida: { e.Message }");
                 }
 
-                //se envia mail de bienvenida
-                var emailSender = new EmailSender(_config);
-                var emailBody = $"<h4>Hola {user.FirstName} {user.LastName}</h4>{_config["MailParams:WelcomeMailBody"]}";
-                var emailContact = string.Format("<a href='mailto:{0}'>{0}</a>", _config["MailParams:WelcomeMailContact"]);
-
-                await emailSender.SendEmailWithTemplateAsync(user.Email, _config["MailParams:WelcomeMailTitle"], emailBody, emailContact);
+                var result = Result<string>.SuccessResult(_jwtHelper.GenerateJwtToken(user));
+                result.ErrorList = errorList; // adjunto lista de posibles errores a la respuesta
 
 
                 return Result<string>.SuccessResult(_jwtHelper.GenerateJwtToken(user));
             }
             catch(Exception e)
             {
-                return Result.ErrorResult(new List<string> { e.Message });
+                errorList.Add(e.Message);
+                return Result.ErrorResult(errorList);
             }            
         }
  

@@ -54,7 +54,6 @@ namespace OngProject.Core.Mapper
                 LastName = dto.LastName,
                 Email = dto.Email,
                 Password = dto.Password,
-                Photo = dto.Photo,
                 RolId = dto.RolId
             };
         }

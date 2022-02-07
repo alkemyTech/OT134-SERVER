@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 namespace OngProject.Core.Models.DTOs
 {
@@ -27,9 +28,8 @@ namespace OngProject.Core.Models.DTOs
         [StringLength(maximumLength: 255, ErrorMessage = "The Password Is Too Long")]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "The photo is required")]
-        [StringLength(maximumLength: 255, ErrorMessage = "The photo is too long")]
-        public string Photo { get; set; }
+        [Required(ErrorMessage = "The Image is required")]        
+        public IFormFile Photo { get; set; }
 
         public int RolId { get; set; }
     }
