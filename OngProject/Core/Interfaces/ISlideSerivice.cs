@@ -1,4 +1,5 @@
 ﻿using OngProject.Core.Models.DTOs;
+using OngProject.Core.Models.Response;
 using OngProject.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,10 +8,10 @@ namespace OngProject.Core.Interfaces
 {
     public interface ISlideSerivice
     {
-        public Task<ICollection<SlideDTO>>GetAll();
-        public Slides GetById();
-        public void Insert(Slides slides);
-        public void Update(Slides slides);
-        public void Delete(Slides slides);
+        Task<ICollection<SlideDTO>>GetAll();
+        Task<Result> GetById(int id);
+        void Insert(Slides slides);
+        void Update(Slides slides);
+        void Delete(Slides slides);
     }
 }
