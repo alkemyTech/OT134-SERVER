@@ -74,5 +74,23 @@ namespace OngProject.Core.Business
         {
             throw new System.NotImplementedException();
         }
+
+        public async Task<ICollection<SlideDTO>> GetAllByOrganization(int idOrganization)
+        {
+            var response = await _unitOfWork.SlideRepository.FindByConditionAsync(x => x.OrganizationId == idOrganization);
+            if (response.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                List<SlideDTO> dto = new();
+                foreach (var item in response)
+                {
+                    dto.Add(_mapper.SlideToSlideDTO(item));
+                }
+                return dto;
+            }
+        }
     }
 }

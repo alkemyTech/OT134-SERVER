@@ -7,6 +7,7 @@ using OngProject.Entities;
 using OngProject.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace OngProject.Core.Business
 {
@@ -51,11 +52,12 @@ namespace OngProject.Core.Business
                 var resultContent = await this._unitOfWork.ActivitiesRepository.FindByConditionAsync(x => x.Content == activities.Content);
                 if (resultName.Count > 0)
                 {
-                    throw new Exception("El Nombre ya existe en el sistema, intente uno diferente al ingresado.");
+                    //throw new Exception("El Nombre ya existe en el sistema, intente uno diferente al ingresado.");
+                    return Result.FailureResult("El Nombre ya existe en el sistema, intente uno diferente al ingresado.");
                 }
                 else if (resultContent.Count > 0)
                 {
-                    throw new Exception("El Contenido ya existe en el sistema, intente uno diferente al ingresado.");
+                    return Result.FailureResult("El Nombre ya existe en el sistema, intente uno diferente al ingresado.");
                 }
                 else
                 {
@@ -76,7 +78,8 @@ namespace OngProject.Core.Business
             }
             catch (Exception ex)
             {
-                throw new Exception("Actividad no registrada: " + ex.Message);
+                //throw new Exception("Actividad no registrada: " + ex.Message);
+                return Result.FailureResult($"Actividad no registrada: {ex.Message}");
             }
         }
     }
