@@ -6,7 +6,7 @@ namespace OngProject.Core.Models.Response
     {
         public bool Success { get; protected set; }
         public string FailureMessage { get; protected set; }
-        public List<string> ErrorList { get; protected set; }
+        public List<string> ErrorList { get; set; }
 
         protected Result()
         {
