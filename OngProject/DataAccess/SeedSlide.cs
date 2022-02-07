@@ -16,7 +16,7 @@ namespace OngProject.DataAccess
                         Id = i,                        
                         ImageUrl = "Image " + i,
                         Text = "Text " + i,
-                        order = "Order " +i,
+                        Order = i,
                         OrganizationId=i,
                         SoftDelete = false,
                         LastModified = DateTime.Now
