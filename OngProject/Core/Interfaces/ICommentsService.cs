@@ -9,6 +9,8 @@ namespace OngProject.Core.Interfaces
     public interface ICommentsService
     {
         Task<IEnumerable<CommentDTO>> GetAll();
+        Task<Result> GetById(int id);
+        void Insert(Comment comment);
         Comment GetById();
         Task<Result> Insert(CommentDTO commentDTO);
         void Update(Comment comment);

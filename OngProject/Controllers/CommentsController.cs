@@ -35,11 +35,20 @@ namespace OngProject.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        [Route("/news/:id/comments")]
+        [HttpGet]
+        public async Task<Result> Get(int id)
         {
-            return Ok();
+            try
+            {
+                var response = await _commentsService.GetById(id);
+                return (Result)response;
+            }
+            catch (Exception ex)
+            {
+
+                return Result.FailureResult("Ocurrio un Problema" + ex.ToString());
+            }
         }
 
         [HttpPost]

@@ -33,9 +33,34 @@ namespace OngProject.Core.Business
             return commentsDTO;
         }
 
-        public Comment GetById()
+        public async Task<Result> GetById(int IdNew)
         {
-            throw new NotImplementedException();
+
+            try
+            {
+                if (IdNew == 0)
+                {
+                    return Result.FailureResult("Debe seleccionar una novedad");
+                }
+                else 
+                {
+                    var response = await _unitOfWork.CommentsRepository.FindAllAsync();
+                    var ListComments = response.Where(x => x.NewId == IdNew).OrderBy(x => x.LastModified)
+                                               .Select(x => _mapper.CommentToCommentDTO(x));
+                    List<CommentDTO> dto = new List<CommentDTO>();
+                    foreach (var item in ListComments)
+                    {
+                        dto.Add(item);
+                    }
+                    return Result<ICollection<CommentDTO>>.SuccessResult(dto);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return Result.FailureResult("Ocurrio un Probelma al listar los resultados : " + ex.ToString());
+            }
+
         }
 
         public async Task<Result> Insert(CommentDTO commentDTO)
@@ -81,5 +106,6 @@ namespace OngProject.Core.Business
         {
             throw new NotImplementedException();
         }
+
     }
 }
