@@ -30,8 +30,8 @@ namespace OngProject.Controllers
             {
                 return Ok(result);
             }
-            
-            return BadRequest(result);            
+
+            return StatusCode(result.isError() ? 500 : 400, result);
         }
 
         [HttpPost]
@@ -43,8 +43,8 @@ namespace OngProject.Controllers
             {
                 return Ok(result);                
             }
-            
-            return BadRequest(result);
+
+            return StatusCode(result.isError() ? 500 : 400, result);
         }
 
         [HttpGet]
@@ -65,7 +65,7 @@ namespace OngProject.Controllers
                     return Ok(result);
                 }
 
-                return BadRequest(result);
+                return StatusCode(result.isError()? 500 : 400, result);
                 
             }catch(Exception e)
             {
