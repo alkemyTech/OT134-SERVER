@@ -7,12 +7,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using OngProject.Core.Models.DTOs;
 using OngProject.Core.Mapper;
+using OngProject.Core.Models.Response;
 
 namespace OngProject.Core.Business
 {
     public class MemberService : IMemberService
     {
-        private readonly IUnitOfWork _unitOfWork; 
+        private readonly IUnitOfWork _unitOfWork;
         private readonly EntityMapper _mapper;
 
         public MemberService(IUnitOfWork unitOfWork)
@@ -47,9 +48,29 @@ namespace OngProject.Core.Business
             throw new NotImplementedException();
         }
 
-        public void Delete(Member member)
+        public async Task<Result> Delete(int id)
         {
-            throw new NotImplementedException();
-        }       
+            try
+            {
+                var member = await _unitOfWork.MembersRepository.GetByIdAsync(id);
+
+                if (member != null)
+                {
+                    if (member.SoftDelete)
+                        return Result.FailureResult("El miembro ya se encuentra eliminado del sistema");
+
+                    member.SoftDelete = true;
+                    member.LastModified = DateTime.Now;
+                    await _unitOfWork.SaveChangesAsync();
+
+                    return Result<Member>.SuccessResult(member);
+                }
+                return Result.FailureResult("No existe un miembro con ese Id");
+            }
+            catch (Exception ex)
+            {
+                return Result.FailureResult($"Error al eliminar al miembro: {ex.Message}");
+            }
+        }
     }
 }
