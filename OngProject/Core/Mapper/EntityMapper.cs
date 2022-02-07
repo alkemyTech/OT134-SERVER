@@ -1,4 +1,5 @@
 ﻿using OngProject.Core.Models.DTOs;
+using OngProject.Core.Models.Response;
 using OngProject.Entities;
 
 namespace OngProject.Core.Mapper
@@ -118,5 +119,15 @@ namespace OngProject.Core.Mapper
 
             return categoryDto;
         }
-    }
+        public Comment CommentDTOToComment(CommentDTO dto)
+        {
+            var commetn = new Comment
+            {
+                Body = dto.Body,
+                NewId = dto.NewId,
+                UserId = dto.UserId
+            };
+            return commetn;
+        }
+}
 }

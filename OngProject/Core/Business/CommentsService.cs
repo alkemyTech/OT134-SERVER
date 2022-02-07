@@ -1,6 +1,7 @@
 ﻿using OngProject.Core.Interfaces;
 using OngProject.Core.Mapper;
 using OngProject.Core.Models.DTOs;
+using OngProject.Core.Models.Response;
 using OngProject.Entities;
 using OngProject.Repositories.Interfaces;
 using System;
@@ -37,9 +38,38 @@ namespace OngProject.Core.Business
             throw new NotImplementedException();
         }
 
-        public void Insert(Comment comment)
+        public async Task<Result> Insert(CommentDTO commentDTO)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (commentDTO.UserId == 0)
+                {
+                    return Result.FailureResult("Se debe agregar un usuario");
+                }
+                else if (commentDTO.NewId == 0)
+                {
+                    return Result.FailureResult("Se debe agregar una noticia");
+                }
+                else if (commentDTO.Body.Equals(""))
+                {
+                    return Result.FailureResult("Se debe agregar un Comentario");
+                }
+                else
+                {
+                    var result = _mapper.CommentDTOToComment(commentDTO);
+                    result.LastModified = DateTime.Today;
+                    await _unitOfWork.CommentsRepository.Create(result);
+                    await _unitOfWork.SaveChangesAsync();
+
+                    return Result<CommentDTO>.SuccessResult(commentDTO);
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                return Result.FailureResult("Ocurrio un problema al momento de agregar un Comentario : " + ex.ToString());
+            }
         }
 
         public void Update(Comment comment)
