@@ -137,5 +137,37 @@ namespace OngProject.Core.Mapper
             };
             return activity;
         }
+
+        public Member MemberDTOToMember(MemberDTO memberDTO)
+        {
+            var member = new Member
+            {
+                Name = memberDTO.Name,
+                Description = memberDTO.Description,
+                Image = memberDTO.File.FileName,
+            };
+            return member;
+        }
+
+        public Testimonials TestimonialDTOToTestimonial(TestimonialDTO testimonialDTO)
+        {
+            var testimonial = new Testimonials
+            {
+                Name = testimonialDTO.Name,
+                Content = testimonialDTO.Content,
+                Image = testimonialDTO.File.FileName,
+            };
+            return testimonial;
+        }
+
+        public TestimonialDTO TestimonialToTestimonialDTO(Testimonials testimonial)
+        {
+            var testimonialDTO = new TestimonialDTO
+            {
+                Name = testimonial.Name,
+                Content = testimonial.Content,
+            };
+            return testimonialDTO;
+        }
     }
 }
