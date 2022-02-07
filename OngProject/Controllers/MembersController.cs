@@ -2,11 +2,14 @@
 using System;
 using System.Threading.Tasks;
 using OngProject.Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using OngProject.Core.Models.Response;
 
 namespace OngProject.Controllers
 {
     [Route("members")]
     [ApiController]
+    [Authorize]
     public class MembersController : ControllerBase
     {
         private readonly IMemberService _membersService;
@@ -51,8 +54,9 @@ namespace OngProject.Controllers
         }
         
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<Result> Delete(int id)
         {
+            return await _membersService.Delete(id);    
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using OngProject.Core.Interfaces;
 using OngProject.Core.Mapper;
 using OngProject.Core.Models.DTOs;
+using OngProject.Core.Models.Response;
 using OngProject.Entities;
 using OngProject.Repositories.Interfaces;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace OngProject.Core.Business
@@ -27,7 +28,7 @@ namespace OngProject.Core.Business
 
         public async Task<ICollection<SlideDTO>> GetAll()
         {
-            var response = await _unitOfWork.SlideRepository.FindAllAsync();
+            var response = await _unitOfWork.SlideRepository.FindByConditionAsync(x => x.SoftDelete == false);
             if (response.Count == 0)
             {
                 return null;
@@ -43,9 +44,26 @@ namespace OngProject.Core.Business
             }
         }
 
-        public Slides GetById()
+        public async Task<Result> GetById(int id)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                Slides slide = await _unitOfWork.SlideRepository.GetByIdAsync(id);
+
+                if (slide != null && !slide.SoftDelete)
+                    return Result<Slides>.SuccessResult(slide);
+                else
+                {
+                    if (slide == null)
+                        return Result.FailureResult("No se encontro ningun Slide con Id ingresado");
+                    else
+                        return Result.FailureResult("Slide con Id ingresado ha sido eliminado previamente");
+                }
+            }
+            catch(Exception ex)
+            {
+                return Result.FailureResult(ex.Message);
+            }
         }
 
         public void Insert(Slides slides)

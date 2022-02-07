@@ -19,31 +19,27 @@ namespace OngProject.Controllers
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDTO userLoginDto)
-        {
-
-            try
+        {            
+            var result = await _userService.LoginAsync(userLoginDto);
+            if (result.Success)
             {
-                var result = await _userService.LoginAsync(userLoginDto);
-
                 return Ok(result);
             }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            
+            return BadRequest(result);            
         }
 
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] UserRegisterDto dto)
         {
-            try
+            var result = await _userService.Insert(dto);
+            if (result.Success)
             {
-                return Ok(await _userService.Insert(dto));                
+                return Ok(result);                
             }
-            catch (Exception e){
-                return BadRequest(e.Message);
-            }
+            
+            return BadRequest(result);
         }
         
     }

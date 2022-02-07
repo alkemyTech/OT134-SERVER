@@ -9,7 +9,7 @@ using OngProject.Core.Helper;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
-
+using OngProject.Core.Models.Response;
 
 namespace OngProject.Core.Business
 {
@@ -27,14 +27,21 @@ namespace OngProject.Core.Business
             _config = configuration;
         }
 
-        public async Task<IEnumerable<UserDTO>> GetAll()
+        public async Task<Result> GetAll()
         {
-            var users = await _unitOfWork.UserRepository.FindAllAsync();
+            try
+            {
+                var users = await _unitOfWork.UserRepository.FindAllAsync();
 
-            var usersDTO = users
-                .Select(user => _mapper.UserToUserDto(user));
+                var usersDTO = users
+                        .Select(user => _mapper.UserToUserDto(user));
 
-            return usersDTO;
+                return Result<IEnumerable<UserDTO>>.SuccessResult(usersDTO);
+            }
+            catch(Exception e)
+            {
+                return Result.ErrorResult(new List<string> { e.Message });
+            }    
         }
 
         public User GetById()
@@ -42,7 +49,7 @@ namespace OngProject.Core.Business
             throw new NotImplementedException();
         }
 
-        public async Task<UserDetailDto> Insert(UserRegisterDto dto)
+        public async Task<Result> Insert(UserRegisterDto dto)
 
         {
             var user = _mapper.UserRegisterDtoToUser(dto);
@@ -53,7 +60,7 @@ namespace OngProject.Core.Business
                 var result = await this._unitOfWork.UserRepository.FindByConditionAsync(x => x.Email == user.Email);
                 if (result != null && result.Count > 0)
                 {
-                    throw new Exception("Email ya existe en el sistema.");
+                    return Result.FailureResult("Email ya existe en el sistema.");
                 }
 
                 user.Password = EncryptHelper.GetSHA256(user.Password);
@@ -61,25 +68,30 @@ namespace OngProject.Core.Business
                 user.SoftDelete = false;
 
                 await this._unitOfWork.UserRepository.Create(user);
-                await this._unitOfWork.SaveChangesAsync();
+                await this._unitOfWork.SaveChangesAsync();                
+
+                if (user.Rol == null)
+                {
+                    user.Rol =  await this._unitOfWork.RolRepository.GetByIdAsync(user.RolId);
+                }
 
                 //se envia mail de bienvenida
                 var emailSender = new EmailSender(_config);
                 var emailBody = $"<h4>Hola {user.FirstName} {user.LastName}</h4>{_config["MailParams:WelcomeMailBody"]}";
                 var emailContact = string.Format("<a href='mailto:{0}'>{0}</a>", _config["MailParams:WelcomeMailContact"]);
-                
+
                 await emailSender.SendEmailWithTemplateAsync(user.Email, _config["MailParams:WelcomeMailTitle"], emailBody, emailContact);
 
-                return _mapper.UseToUserDetailDto(user);
+                return Result<string>.SuccessResult(_jwtHelper.GenerateJwtToken(user));
             }
             catch(Exception e)
             {
-                throw new Exception("Usuario no registrado: " + e.Message);
+                return Result.ErrorResult(new List<string> { e.Message });
             }            
         }
  
 
-        public async Task<string> LoginAsync(UserLoginDTO userLoginDto)
+        public async Task<Result> LoginAsync(UserLoginDTO userLoginDto)
         {
             try
             {
@@ -88,39 +100,30 @@ namespace OngProject.Core.Business
                 if (result.Count > 0)
                 {
                     var currentUser = result.FirstOrDefault();
-                    if (currentUser == null)
+                    if (currentUser != null)
                     {
-                        throw new Exception("No se pudo iniciar sesion, usuario o contrasena invalidos");
-                    }
-                    var resultPassword = EncryptHelper.Verify(userLoginDto.Password, currentUser.Password);
+                        var resultPassword = EncryptHelper.Verify(userLoginDto.Password, currentUser.Password);
+                        if (resultPassword)
+                        {
+                            return Result<string>.SuccessResult(_jwtHelper.GenerateJwtToken(currentUser));
+                        }                        
+                    }                    
+                }
 
-                    if (!resultPassword)
-                    {
-                        throw new Exception("No se pudo iniciar sesion, usuario o contrasena invalidos");
-                    }
-                    
-                    
-                    return _jwtHelper.GenerateJwtToken(currentUser);
-                }
-                else
-                {
-                    throw new Exception("Error al iniciar sesion");
-                }
+                return Result.FailureResult("No se pudo iniciar sesion, usuario o contrasena invalidos");
             } 
             catch (Exception e)
             {
-
-                throw new Exception(e.Message);
+                return Result.ErrorResult(new List<string> { e.Message });
             }
         }
-
 
         public void Update(User user)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<string> Delete(int id)
+        public async Task<Result> Delete(int id)
         {
             try
             {
@@ -129,20 +132,20 @@ namespace OngProject.Core.Business
                 {
                     if (user.SoftDelete) 
                     {                        
-                        throw new Exception($"id({user.Id}) ya eliminado del sistema.");
+                        return Result.FailureResult($"id({user.Id}) ya eliminado del sistema.");
                     }
                     user.SoftDelete = true;
                     user.LastModified = DateTime.Today;
                     await this._unitOfWork.SaveChangesAsync();
 
-                    return $"Usuario({user.Id}) eliminado exitosamente.";
+                    return Result<string>.SuccessResult($"Usuario({user.Id}) eliminado exitosamente.");
                 }
 
-                throw new Exception("id inexistente.");
+                return Result.FailureResult("id de usuario inexistente.");
             }
             catch(Exception e)
-            {
-                throw new Exception($"Usuario no eliminado: {e.Message}");
+            {                
+                return Result.ErrorResult(new List<string> { e.Message });
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OngProject.Core.Interfaces;
+using OngProject.Core.Models.DTOs;
 using OngProject.Core.Models.Response;
 using System;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace OngProject.Controllers
             try
             {
                 var commentDTO = await _commentsService.GetAll();
-                if (commentDTO!= null)
+                if (commentDTO != null)
                 {
                     return Ok(commentDTO);
                 }
@@ -51,8 +52,18 @@ namespace OngProject.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<Result> Post([FromBody] CommentDTO dto)
         {
+            try
+            {
+                var response = await _commentsService.Insert(dto);
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+                return Result.FailureResult("Ocurrio un Problema : " + ex.ToString());
+            }
         }
 
         [HttpPut("{id}")]
