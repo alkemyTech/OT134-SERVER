@@ -43,7 +43,7 @@ namespace OngProject.Core.Helper
                     Message = "File upload successfully",
                     Code = (int)result.HttpStatusCode,
                     NameImage = file.FileName,
-                    Url = "",
+                    Url = $"https://cohorte-enero-835eb560.s3.amazonaws.com/{key}",
                 };
                 return response;
             }
