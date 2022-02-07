@@ -30,7 +30,6 @@ namespace OngProject.Core.Mapper
                 LastName = user.LastName,
                 Email = user.Email
             };
-
             return userDto;
         }
 
@@ -41,7 +40,7 @@ namespace OngProject.Core.Mapper
                 Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Email = user.Email,                
+                Email = user.Email,
                 Photo = user.Photo,
                 RolId = user.RolId
             };
@@ -60,7 +59,7 @@ namespace OngProject.Core.Mapper
             };
         }
 
-        public SlideDTO SlideToSlideDTO(Slides slides) 
+        public SlideDTO SlideToSlideDTO(Slides slides)
         {
             var slideDto = new SlideDTO
             {
@@ -68,7 +67,6 @@ namespace OngProject.Core.Mapper
                 ImageUrl = slides.ImageUrl
             };
             return slideDto;
-
         }
         public ContactDTO ContactToContactDTO(Contacts contacts)
         {
@@ -129,5 +127,16 @@ namespace OngProject.Core.Mapper
             };
             return commetn;
         }
-}
+
+        public Activities ActivityDTOToActivity(ActivityDTO dto)
+        {
+            var activity = new Activities
+            {
+                Image = dto.file.FileName,
+                Content = dto.Content,
+                Name = dto.Name,
+            };
+            return activity;
+        }
+    }
 }

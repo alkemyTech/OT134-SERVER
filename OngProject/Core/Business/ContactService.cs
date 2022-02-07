@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using OngProject.Core.Helper;
 using OngProject.Core.Interfaces;
-using OngProject.Core.Mapper;
 using OngProject.Core.Models.DTOs;
 using OngProject.Core.Models.Response;
 using OngProject.Entities;
@@ -17,13 +16,13 @@ namespace OngProject.Core.Business
     {
         private readonly IConfiguration _config;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly EntityMapper _mapper;
+        private readonly IEntityMapper _mapper;
 
-        public ContactService(IConfiguration configuration, IUnitOfWork unitOfWork)
+        public ContactService(IConfiguration configuration, IUnitOfWork unitOfWork, IEntityMapper mapper)
         {
             _config = configuration;
             _unitOfWork = unitOfWork;
-            _mapper = new EntityMapper();
+            _mapper = mapper;
         }
 
         public void Delete(Contacts contacts)
@@ -40,7 +39,7 @@ namespace OngProject.Core.Business
             }
             else
             {
-                List<ContactDTO> dto = new List<ContactDTO>();
+                List<ContactDTO> dto = new();
                 foreach (var item in response)
                 {
                     dto.Add(_mapper.ContactToContactDTO(item));

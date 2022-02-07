@@ -1,5 +1,4 @@
 ﻿using OngProject.Core.Interfaces;
-using OngProject.Core.Mapper;
 using OngProject.Core.Models.DTOs;
 using OngProject.Core.Models.Response;
 using OngProject.Entities;
@@ -13,12 +12,12 @@ namespace OngProject.Core.Business
     public class SlideService : ISlideSerivice
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly EntityMapper _mapper;
+        private readonly IEntityMapper _mapper;
 
-        public SlideService(IUnitOfWork unitOfWork)
+        public SlideService(IUnitOfWork unitOfWork, IEntityMapper mapper)
         {
             _unitOfWork = unitOfWork;
-            _mapper = new EntityMapper();
+            _mapper = mapper;
         }
 
         public async Task<Result> Delete(int id)

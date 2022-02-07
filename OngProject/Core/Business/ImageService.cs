@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OngProject.Core.Helper;
 using OngProject.Core.Interfaces;
 using OngProject.Repositories.Interfaces;
 using System.Threading.Tasks;
@@ -10,9 +11,9 @@ namespace OngProject.Core.Business
     {
         private readonly IS3AwsHelper _s3AwsHelper;
         private readonly IUnitOfWork _unitOfWork;
-        public ImageService(IS3AwsHelper s3AwsHelper, IUnitOfWork unitOfWork)
+        public ImageService(IUnitOfWork unitOfWork)
         {
-            this._s3AwsHelper = s3AwsHelper;
+            this._s3AwsHelper = new S3AwsHelper();
             _unitOfWork = unitOfWork;
         }
         public async Task<string> UploadFile(string key, IFormFile file)

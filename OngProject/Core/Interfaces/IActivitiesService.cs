@@ -1,17 +1,18 @@
-﻿using OngProject.Entities;
-using System;
+﻿using Microsoft.AspNetCore.Http;
+using OngProject.Core.Models.DTOs;
+using OngProject.Core.Models.Response;
+using OngProject.Entities;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace OngProject.Core.Interfaces
 {
     public interface IActivitiesService
     {
-        public IEnumerable<Activities> GetAll();
-        public Activities GetById();
-        public void Insert(Activities activities);
-        public void Update(Activities activities);
-        public void Delete(Activities activities);
+        IEnumerable<Activities> GetAll();
+        Activities GetById();
+        Task<Result> Insert(ActivityDTO activities);
+        void Update(Activities activities);
+        void Delete(Activities activities);
     }
 }
