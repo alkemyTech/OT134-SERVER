@@ -50,7 +50,10 @@ namespace OngProject.Controllers
         public void UpdateCategory()
         {
         }
+
+        
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<Result> Delete(int id)
         {
             return await _categoryService.Delete(id);
