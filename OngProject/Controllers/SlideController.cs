@@ -41,5 +41,11 @@ namespace OngProject.Controllers
         {
             return await _slideSerivice.GetById(slideId);    
         }
+
+        [HttpDelete(":id")]
+        public async Task<Result> DeleteSlide(int slideId)
+        {
+            return await _slideSerivice.Delete(slideId);
+        }
     }
 }
