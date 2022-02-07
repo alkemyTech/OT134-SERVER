@@ -2,7 +2,6 @@ using OngProject.Core.Interfaces;
 using OngProject.Entities;
 using OngProject.Repositories.Interfaces;
 using System;
-using OngProject.Core.Mapper;
 using OngProject.Core.Models.DTOs;
 using System.Threading.Tasks;
 using OngProject.Core.Helper;
@@ -17,12 +16,12 @@ namespace OngProject.Core.Business
     {
         private readonly IConfiguration _config;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly EntityMapper _mapper;
+        private readonly IEntityMapper _mapper;
         private readonly IJwtHelper _jwtHelper;
-        public UsersService(IUnitOfWork unitOfWork,  IConfiguration configuration, IJwtHelper jwtHelper)
+        public UsersService(IUnitOfWork unitOfWork,  IConfiguration configuration, IJwtHelper jwtHelper, IEntityMapper mapper)
         {
             _unitOfWork = unitOfWork;
-            _mapper = new EntityMapper();
+            _mapper = mapper;
             _jwtHelper = jwtHelper;
             _config = configuration;
         }

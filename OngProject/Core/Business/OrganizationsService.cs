@@ -3,10 +3,7 @@ using OngProject.Entities;
 using OngProject.Repositories.Interfaces;
 using System;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using OngProject.Core.Mapper;
 using OngProject.Core.Models.DTOs;
 
 namespace OngProject.Core.Business
@@ -14,12 +11,12 @@ namespace OngProject.Core.Business
     public class OrganizationService : IOrganizationsService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly EntityMapper _mapper;
+        private readonly IEntityMapper _mapper;
 
-        public OrganizationService(IUnitOfWork unitOfWork)
+        public OrganizationService(IUnitOfWork unitOfWork, IEntityMapper mapper)
         {
             _unitOfWork = unitOfWork;
-            _mapper = new EntityMapper();
+            _mapper = mapper;
         }
 
         public void Delete(Organization organization)
