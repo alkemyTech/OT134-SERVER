@@ -1,10 +1,10 @@
-﻿using OngProject.Core.Models.DTOs;
-using OngProject.Core.Models.Response;
+﻿using OngProject.Core.Interfaces;
+using OngProject.Core.Models.DTOs;
 using OngProject.Entities;
 
 namespace OngProject.Core.Mapper
 {
-    public class EntityMapper
+    public class EntityMapper : IEntityMapper
     {
         public OrganizationDTO OrganizationToOrganizationDto(Organization organization)
         {
@@ -34,7 +34,7 @@ namespace OngProject.Core.Mapper
             return userDto;
         }
 
-        public UserDetailDto UseToUserDetailDto(User user)
+        public UserDetailDto UserToUserDetailDto(User user)
         {
             return new UserDetailDto
             {

@@ -39,6 +39,11 @@ namespace OngProject.Core.Models.Response
         {
             return new Result(errorList);
         }
+
+        public bool isError()
+        {
+            return ErrorList != null && ErrorList.Count > 0;
+        }
     }
 
     public class Result<T> : Result
