@@ -15,6 +15,8 @@ using OngProject.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using OngProject.Core.Business;
 using Amazon.S3;
+using OngProject.Core.Mapper;
+using System.Collections.Generic;
 
 namespace OngProject
 {
@@ -35,6 +37,30 @@ namespace OngProject
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "OngProject", Version = "v1" });
+                c.AddSecurityDefinition("Bearer",
+                    new OpenApiSecurityScheme
+                    {
+                        Name = "Authorization",
+                        Type = SecuritySchemeType.ApiKey,
+                        Scheme = "Bearer",
+                        BearerFormat = "JWT",
+                        In = ParameterLocation.Header,
+                        Description = "Ingrese Bearer [Token] para autentificarse en la aplicacion"
+                    });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new List<string>()
+                    }
+                });
             });
 
             services.AddDbContext<AppDbContext>((services, options) => {
@@ -45,12 +71,9 @@ namespace OngProject
 
             services.AddEntityFrameworkProxies();
             services.AddEntityFrameworkSqlServer();            
-
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<IImageService, ImageService>();
-
-
             services.AddScoped<IActivitiesService, ActivitiesService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICommentsService, CommentsService>();
@@ -61,11 +84,11 @@ namespace OngProject
             services.AddScoped<ITestimonialsService, TestimonialsService>();
             services.AddScoped<IUserService, UsersService>();
             services.AddScoped<ISlideSerivice, SlideService>();
-            services.AddScoped<IImageService, ImageService>();
             services.AddScoped<IS3AwsHelper, S3AwsHelper>();
             services.AddScoped<IContactService, ContactService>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
             services.AddScoped<IJwtHelper, JwtHelper>();
+            services.AddScoped<IEntityMapper, EntityMapper>();
 
 
             // JWT Token Generator
