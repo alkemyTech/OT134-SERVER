@@ -12,6 +12,6 @@ namespace OngProject.Core.Interfaces
         Task<Result> GetById(int id);
         void Insert(Slides slides);
         void Update(Slides slides);
-        void Delete(Slides slides);
+        Task<Result> Delete(int id);
     }
 }
