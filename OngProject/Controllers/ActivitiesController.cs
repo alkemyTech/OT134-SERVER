@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OngProject.Core.Interfaces;
+using OngProject.Core.Models.DTOs;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,7 +12,7 @@ namespace OngProject.Controllers
 {
     [Route("activities")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ActivitiesController : ControllerBase
     {
         private readonly IActivitiesService _activitiesService;
@@ -34,11 +34,21 @@ namespace OngProject.Controllers
         {
             return Ok();
         }
-
-        // POST api/<ActivitiesController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromForm] ActivityDTO dto)
         {
+            try
+            {
+                
+                var result = await _activitiesService.Insert(dto);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
         }
 
         // PUT api/<ActivitiesController>/5

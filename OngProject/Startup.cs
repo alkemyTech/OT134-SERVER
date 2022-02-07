@@ -61,8 +61,6 @@ namespace OngProject
             services.AddScoped<ITestimonialsService, TestimonialsService>();
             services.AddScoped<IUserService, UsersService>();
             services.AddScoped<ISlideSerivice, SlideService>();
-            services.AddScoped<IImageService, ImageService>();
-            services.AddScoped<IS3AwsHelper, S3AwsHelper>();
             services.AddScoped<IContactService, ContactService>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
             services.AddScoped<IJwtHelper, JwtHelper>();

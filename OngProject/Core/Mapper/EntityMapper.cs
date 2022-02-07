@@ -129,5 +129,15 @@ namespace OngProject.Core.Mapper
             };
             return commetn;
         }
-}
+        public Activities ActivityDTOToActivity(ActivityDTO dto)
+        {
+            var activity = new Activities
+            {
+                Image = dto.file.FileName,
+                Content = dto.Content,
+                Name = dto.Name,
+            };
+            return activity;
+        }
+    }
 }
