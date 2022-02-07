@@ -1,4 +1,5 @@
-﻿using OngProject.Core.Models.Response;
+﻿using OngProject.Core.Models.DTOs;
+using OngProject.Core.Models.Response;
 using OngProject.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,10 +8,10 @@ namespace OngProject.Core.Interfaces
 {
     public interface ITestimonialsService
     {
-        public IEnumerable<Testimonials> GetAll();
-        public Testimonials GetById();
-        public void Insert(Testimonials testimonials);
-        public void Update(Testimonials testimonials);
-        public Task<Result> Delete(int id);
+        IEnumerable<Testimonials> GetAll();
+        Testimonials GetById();
+        Task<Result> Insert(TestimonialDTO testimonialDTO);
+        void Update(Testimonials testimonials);
+        Task<Result> Delete(int id);
     }
 }
