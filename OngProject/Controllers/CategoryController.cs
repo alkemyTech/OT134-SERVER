@@ -9,7 +9,7 @@ namespace OngProject.Controllers
 {
     [Route("categories")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
@@ -41,11 +41,6 @@ namespace OngProject.Controllers
             {
                 var response = await _categoryService.GetById(id);
 
-                if (response == null)
-                {
-                    return Result.FailureResult("Error 404");                    
-                }
-
                 return response;
 
             }
@@ -53,7 +48,7 @@ namespace OngProject.Controllers
             catch (Exception e)
             {
 
-                return Result.FailureResult("Error 404. Ocurrio un error: " + e.Message);
+                return Result.FailureResult("Ocurrio un error: " + e.Message);
             }
         }
 

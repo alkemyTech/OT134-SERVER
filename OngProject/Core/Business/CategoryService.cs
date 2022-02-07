@@ -43,8 +43,17 @@ namespace OngProject.Core.Business
             try
             {
                 var category = await _unitOfWork.CategoryRepository.GetByIdAsync(id);
-                var categoryDto = _entityMapper.CategoryToCategoryDTO(category);
-                return Result<CategoryDTO>.SuccessResult(categoryDto);
+                if (category != null)
+                {
+                    var categoryDto = _entityMapper.CategoryToCategoryDTO(category);
+                    return Result<CategoryDTO>.SuccessResult(categoryDto);
+                }
+                else
+                {
+                    return Result.FailureResult("Error 404");
+                }
+                
+                
 
             }
             catch (Exception)
