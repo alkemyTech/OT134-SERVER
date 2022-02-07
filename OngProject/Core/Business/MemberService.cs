@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using OngProject.Core.Models.DTOs;
-using OngProject.Core.Mapper;
 using OngProject.Core.Models.Response;
 
 namespace OngProject.Core.Business
@@ -14,12 +13,12 @@ namespace OngProject.Core.Business
     public class MemberService : IMemberService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly EntityMapper _mapper;
+        private readonly IEntityMapper _mapper;
 
-        public MemberService(IUnitOfWork unitOfWork)
+        public MemberService(IUnitOfWork unitOfWork, IEntityMapper mapper)
         {
             _unitOfWork = unitOfWork;
-            _mapper = new EntityMapper();
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<MemberDTO>> GetAll()

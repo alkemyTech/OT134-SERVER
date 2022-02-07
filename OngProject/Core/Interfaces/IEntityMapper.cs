@@ -7,7 +7,7 @@ namespace OngProject.Core.Interfaces
     {
         OrganizationDTO OrganizationToOrganizationDto(Organization organization);
         UserDTO UserToUserDto(User user);
-        UserDetailDto UseToUserDetailDto(User user);
+        UserDetailDto UserToUserDetailDto(User user);
         User UserRegisterDtoToUser(UserRegisterDto dto);
         SlideDTO SlideToSlideDTO(Slides slides);
         ContactDTO ContactToContactDTO(Contacts contacts);
@@ -15,5 +15,6 @@ namespace OngProject.Core.Interfaces
         CommentDTO CommentToCommentDTO(Comment comment);
         MemberDTO MemberToMemberDTO(Member member);
         CategoryDTO CategoryToCategoryDTO(Category category);
+        Comment CommentDTOToComment(CommentDTO dto);
     }
 }
