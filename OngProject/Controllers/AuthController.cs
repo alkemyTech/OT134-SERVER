@@ -36,7 +36,7 @@ namespace OngProject.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register([FromBody] UserRegisterDto dto)
+        public async Task<IActionResult> Register([FromForm] UserRegisterDto dto)
         {
             var result = await _userService.Insert(dto);
             if (result.Success)
