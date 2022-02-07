@@ -10,8 +10,6 @@ namespace OngProject.Core.Interfaces
     {
         Task<IEnumerable<CommentDTO>> GetAll();
         Task<Result> GetById(int id);
-        void Insert(Comment comment);
-        Comment GetById();
         Task<Result> Insert(CommentDTO commentDTO);
         void Update(Comment comment);
         void Delete(Comment comment);
