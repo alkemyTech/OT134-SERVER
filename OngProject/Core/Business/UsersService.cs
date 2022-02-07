@@ -44,9 +44,22 @@ namespace OngProject.Core.Business
             }    
         }
 
-        public User GetById()
+        public async Task<Result> GetById(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var user = await this._unitOfWork.UserRepository.GetByIdAsync(id);
+                if(user != null)
+                {
+                    return Result<UserDetailDto>.SuccessResult(_mapper.UserToUserDetailDto(user));
+                }
+
+                return Result.FailureResult("Usuario inexistente.");
+            }
+            catch(Exception e)
+            {
+                return Result.ErrorResult(new List<string> { e.Message });
+            }
         }
 
         public async Task<Result> Insert(UserRegisterDto dto)
@@ -81,6 +94,7 @@ namespace OngProject.Core.Business
                 var emailContact = string.Format("<a href='mailto:{0}'>{0}</a>", _config["MailParams:WelcomeMailContact"]);
 
                 await emailSender.SendEmailWithTemplateAsync(user.Email, _config["MailParams:WelcomeMailTitle"], emailBody, emailContact);
+
 
                 return Result<string>.SuccessResult(_jwtHelper.GenerateJwtToken(user));
             }
