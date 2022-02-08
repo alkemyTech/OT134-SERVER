@@ -8,11 +8,11 @@ namespace OngProject.Core.Interfaces
 {
     public interface ISlideSerivice
     {
-        Task<ICollection<SlideDTO>>GetAll();
+        Task<ICollection<SlideDtoForDisplay>>GetAll();
         Task<Result> GetById(int id);
-        Task<Result> Insert(SlideDTO slideDto);
+        Task<Result> Insert(SlideDtoForUpload slideDto);
         void Update(Slides slides);
-        Task<ICollection<SlideDTO>> GetAllByOrganization(int idOrganization);
+        Task<ICollection<SlideDtoForDisplay>> GetAllByOrganization(int idOrganization);
         Task<Result> Delete(int id);
     }
 }

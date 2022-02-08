@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 namespace OngProject.Core.Models.DTOs
 {
-    public class SlideDTO
+    public class SlideDtoForUpload
     {
         [Display(Name = "UrlDeImagen")]
         public string ImageUrl { get; set; }

@@ -29,6 +29,6 @@ namespace OngProject.Core.Models.DTOs
         [Required(ErrorMessage = "The Linkedin Url Is Required")]
         public string LinkedinUrl { get; set; }
 
-        public ICollection<SlideDTO> Slides { get; set; }
+        public ICollection<SlideDtoForDisplay> Slides { get; set; }
     }
 }
