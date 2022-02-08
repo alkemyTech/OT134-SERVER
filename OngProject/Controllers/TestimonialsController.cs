@@ -53,9 +53,12 @@ namespace OngProject.Controllers
         
         [HttpDelete("{id}")]
         [Authorize(Roles = "Administrator")]
-        public async Task<Result> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return await _testimonialsService.Delete(id);
+            var response = await _testimonialsService.Delete(id);
+            if (response.Success)
+                return Ok(response);
+            return StatusCode(response.isError() ? 500 : 404, response);
         }
     }
 }

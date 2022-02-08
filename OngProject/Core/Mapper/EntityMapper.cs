@@ -208,6 +208,17 @@ namespace OngProject.Core.Mapper
             };
             return testimonialDTO;
         }
+
+        public TestimonialDTODisplay TestimonialDTOToTestimonialDisplay(TestimonialDTO testimonalDTO)
+        {
+            var testimonialDTODisplay = new TestimonialDTODisplay
+            {
+                Name = testimonalDTO.Name,
+                Content = testimonalDTO.Content
+            };
+            return testimonialDTODisplay;
+        }
+
         public MemberDTORegister MemberToMemberDTO(Member member)
         {
             var memberDTO = new MemberDTORegister
