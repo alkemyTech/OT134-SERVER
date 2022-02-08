@@ -37,9 +37,26 @@ namespace OngProject.Core.Business
                 return listOfnewDtoForDisplays;
             }
         }
-        public New GetById()
+        public async Task<Result> GetById(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var newEntity = await this._unitOfWork.NewsRepository.GetByIdAsync(id);
+                if (newEntity != null)
+                {
+                    if (newEntity.SoftDelete)
+                    {
+                        return Result.FailureResult($"id({newEntity.Id}) se encuentra eliminada del sistema.");
+                    }
+                    var newToNewDtoForDisplay = _mapper.NewtoNewDtoForDisplay(newEntity);
+                    return Result<NewDtoForDisplay>.SuccessResult(newToNewDtoForDisplay);
+                }
+                return Result.FailureResult("id de noticia inexistente.");
+            }
+            catch (Exception e)
+            {
+                return Result.ErrorResult(new List<string> { e.Message });
+            }
         }
         public async Task<Result> Insert(NewDtoForUpload newDtoForUpload)
         {
