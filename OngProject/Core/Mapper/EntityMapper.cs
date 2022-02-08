@@ -137,17 +137,25 @@ namespace OngProject.Core.Mapper
             return commetn;
         }
 
-        public Activities ActivityDTOToActivity(ActivityDTO dto)
+        public ActivityDTOForDisplay ActivityForActivityDTODisplay(Activities dto)
         {
-            var activity = new Activities
+            var activityDisplay = new ActivityDTOForDisplay
             {
-                Image = dto.file.FileName,
-                Content = dto.Content,
-                Name = dto.Name,
+                 Name=dto.Name,
+                 Content = dto.Content,
+                 Image = dto.Image
             };
-            return activity;
+            return activityDisplay;
         }
-    
+        public Activities ActivityDTOForRegister(ActivityDTOForRegister dto)
+        {
+            var activityRegister = new Activities
+            {
+                Name = dto.Name,
+                Content = dto.Content
+            };
+            return activityRegister;
+        }
         public New NewDtoForUploadtoNew(NewDtoForUpload newDtoForUpload)
         {
             New newEntity = new()
@@ -168,6 +176,16 @@ namespace OngProject.Core.Mapper
                 Category = newEntity.CategoryId
             };
             return newEntityForDisplay;
+        }
+        public Member MemberDTOToMember(MemberDTO memberDTO)
+        {
+            var member = new Member
+            {
+                Name = memberDTO.Name,
+                Description = memberDTO.Description,
+                Image = memberDTO.File.FileName,
+            };
+            return member;
         }
         public Testimonials TestimonialDTOToTestimonial(TestimonialDTO testimonialDTO)
         {

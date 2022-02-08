@@ -34,7 +34,7 @@ namespace OngProject.Controllers
             return Ok();
         }
         [HttpPost]
-        public async Task<IActionResult> Post([FromForm] ActivityDTO dto)
+        public async Task<IActionResult> Post([FromForm] ActivityDTOForRegister dto)
         {
             try
             {

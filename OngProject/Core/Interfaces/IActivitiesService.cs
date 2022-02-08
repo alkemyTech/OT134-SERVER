@@ -11,7 +11,7 @@ namespace OngProject.Core.Interfaces
     {
         IEnumerable<Activities> GetAll();
         Activities GetById();
-        Task<Result> Insert(ActivityDTO activities);
+        Task<Result> Insert(ActivityDTOForRegister activities);
         void Update(Activities activities);
         void Delete(Activities activities);
     }
