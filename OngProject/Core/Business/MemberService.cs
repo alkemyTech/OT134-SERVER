@@ -44,7 +44,7 @@ namespace OngProject.Core.Business
         {
             try
             {
-                var member = _mapper.MemberDTOToMember(memberDTO);
+                var member = _mapper.MemberDTORegisterToMember(memberDTO);
 
                 var resultName = await _unitOfWork.MembersRepository.FindByConditionAsync(x => x.Name == memberDTO.Name);
 
