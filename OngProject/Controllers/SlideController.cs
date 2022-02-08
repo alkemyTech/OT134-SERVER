@@ -37,22 +37,31 @@ namespace OngProject.Controllers
             }
         }
 
-        [HttpGet(":id")]
-        public async Task<Result> GetSlide(int slideId)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetSlide(int id)
         {
-            return await _slideSerivice.GetById(slideId);    
+            var result = await _slideSerivice.GetById(id);
+            if (result.Success)
+                return Ok(result);
+            return StatusCode(result.isError()? 500 : 404,result);
         }
 
-        [HttpDelete(":id")]
-        public async Task<Result> DeleteSlide(int slideId)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteSlide(int id)
         {
-            return await _slideSerivice.Delete(slideId);
+            var result = await _slideSerivice.Delete(id);
+            if (result.Success)
+                return Ok(result);
+            return StatusCode(result.isError() ? 500 : 400, result);
         }
 
         [HttpPost]
-        public async Task<Result> PostSlide(SlideDTO slideDto)
+        public async Task<IActionResult> PostSlide(SlideDTO slideDto)
         {
-            return await _slideSerivice.Insert(slideDto);
+            var result = await _slideSerivice.Insert(slideDto);
+            if (result.Success)
+                return Ok(result);
+            return StatusCode(result.isError() ? 500 : 400, result);
         }
     }
 }
