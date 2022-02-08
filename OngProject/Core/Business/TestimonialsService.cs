@@ -45,20 +45,19 @@ namespace OngProject.Core.Business
                 if (resultName.Count == 0)
                 {
                     var aws = new S3AwsHelper();
-                    var result = await _imageService.UploadFile($"{Guid.NewGuid()}_{testimonialDTO.File.FileName}", testimonialDTO.File);
+                    var result = await _imageService.UploadFile($"{Guid.NewGuid()}{testimonialDTO.File.FileName}", testimonialDTO.File);
 
+                    testimonial.Image = result;
                     testimonial.SoftDelete = false;
                     testimonial.LastModified = DateTime.Now;
 
                     await _unitOfWork.TestimonialsRepository.Create(testimonial);
                     await _unitOfWork.SaveChangesAsync();
 
-                    var testimonialCalss = new Testimonials
-                    {
-                        Name = result,
-                        Content = testimonialDTO.Content,
-                    };
-                    return Result<Testimonials>.SuccessResult(testimonialCalss);                  
+                    var testimonialDisplay = _mapper.TestimonialDTOToTestimonialDisplay(testimonialDTO);
+                    testimonialDisplay.Image = result;
+
+                    return Result<TestimonialDTODisplay>.SuccessResult(testimonialDisplay);
                 }
                 else
                 {
@@ -92,14 +91,14 @@ namespace OngProject.Core.Business
 
                     var testimonialDTO = _mapper.TestimonialToTestimonialDTO(testimonial);
 
-                    return Result<TestimonialDTO>.SuccessResult(testimonialDTO);
+                    return Result<string>.SuccessResult("Testimonio eliminado.");
                 }
 
                 return Result.FailureResult("No existe un testimonio con ese Id");
             }
             catch (Exception ex)
             {
-                return Result.FailureResult($"Error al eliminar el testimonio: {ex.Message}");
+                return Result.ErrorResult(new List<string> { ex.Message });
             }
         }
     }

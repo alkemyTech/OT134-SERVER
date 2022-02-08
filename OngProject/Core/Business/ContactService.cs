@@ -86,7 +86,7 @@ namespace OngProject.Core.Business
             }
             catch(Exception ex)
             {
-                return Result.FailureResult($"Error al guardar tu consult: {ex.Message}");
+                return Result.ErrorResult(new List<string> { ex.Message });
             }
         }
 
