@@ -56,26 +56,26 @@ namespace OngProject.Core.Mapper
                 RolId = dto.RolId
             };
         }
-        //public SlideDtoForDisplay SlideToSlideDtoForDisplay(Slides slides)
-        //{
-        //    var slideDto = new SlideDtoForDisplay
-        //    {
-        //        Order = slides.Order,
-        //        ImageUrl = slides.ImageUrl,
-        //    };
-        //    return slideDto;
-        //}
+        public SlideDtoForDisplay SlideToSlideDtoForDisplay(Slides slides)
+        {
+            var slideDto = new SlideDtoForDisplay
+            {
+                Order = slides.Order,
+                ImageUrl = slides.ImageUrl,
+            };
+            return slideDto;
+        }
 
-        //public Slides SlideDtoForUploadToSlide(SlideDtoForUpload slideDto)
-        //{
-        //    var slide = new Slides
-        //    {
-        //        Order = slideDto.Order,
-        //        Text = slideDto.Text,
-        //        OrganizationId = slideDto.OrganizationId
-        //    };
-        //    return slide;
-        //}
+        public Slides SlideDtoForUploadToSlide(SlideDtoForUpload slideDto)
+        {
+            var slide = new Slides
+            {
+                Order = slideDto.Order,
+                Text = slideDto.Text,
+                OrganizationId = slideDto.OrganizationId
+            };
+            return slide;
+        }
 
 
         public ContactDTO ContactToContactDTO(Contacts contacts)
@@ -177,16 +177,16 @@ namespace OngProject.Core.Mapper
             };
             return newEntityForDisplay;
         }
-        //public Member MemberDTOToMember(MemberDTO memberDTO)
-        //{
-        //    var member = new Member
-        //    {
-        //        Name = memberDTO.Name,
-        //        Description = memberDTO.Description,
-        //        Image = memberDTO.File.FileName,
-        //    };
-        //    return member;
-        //}
+        public Member MemberDTOToMember(MemberDTO memberDTO)
+        {
+            var member = new Member
+            {
+                Name = memberDTO.Name,
+                Description = memberDTO.Description,
+                Image = memberDTO.File.FileName,
+            };
+            return member;
+        }
         public Testimonials TestimonialDTOToTestimonial(TestimonialDTO testimonialDTO)
         {
             var testimonial = new Testimonials
