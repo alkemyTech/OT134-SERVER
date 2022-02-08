@@ -63,15 +63,16 @@ namespace OngProject.Core.Business
                 {
                     var aws = new S3AwsHelper();
                     var result = await _imageService.UploadFile($"{Guid.NewGuid()}_{activities.file.FileName}", activities.file);
-                    activity.SoftDelete = false;
                     activity.LastModified = DateTime.Today;
+                    activity.Image = result;
                     await _unitOfWork.ActivitiesRepository.Create(activity);
                     await _unitOfWork.SaveChangesAsync();
 
                     var activityCalss = new Activities
                     {
-                        Name = result,
+                        Name = activities.Name,
                         Content = activities.Content,
+                        Image = result 
                     };
                     return Result<Activities>.SuccessResult(activityCalss);
                 }
