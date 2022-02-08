@@ -9,19 +9,21 @@ namespace OngProject.Core.Interfaces
         UserDTO UserToUserDto(User user);
         UserDetailDto UserToUserDetailDto(User user);
         User UserRegisterDtoToUser(UserRegisterDto dto);
-        SlideDTO SlideToSlideDTO(Slides slides);
-        Slides SlideDTOToSlide(SlideDTO slideDto);
+        SlideDtoForDisplay SlideToSlideDtoForDisplay(Slides slides);
+        Slides SlideDtoForUploadToSlide(SlideDtoForUpload slideDto);
         ContactDTO ContactToContactDTO(Contacts contacts);
         Contacts ContactDTOToContact(ContactDTO contactsDto);
         CommentDTO CommentToCommentDTO(Comment comment);
-        MemberDTO MemberToMemberDTO(Member member);
-        CategoryDTO CategoryToCategoryDTO(Category category);
+        CategoryDtoForDisplay CategoryToCategoryDtoForDisplay(Category category);
+        Category CategoryDtoForRegisterToCategory(CategoryDTOForRegister category);
         Comment CommentDTOToComment(CommentDTO dto);
         New NewDtoForUploadtoNew(NewDtoForUpload newDTO);
         NewDtoForDisplay NewtoNewDtoForDisplay(New newvar);
         Activities ActivityDTOToActivity(ActivityDTO dto);
-        Member MemberDTOToMember(MemberDTO memberDTO); 
         TestimonialDTO TestimonialToTestimonialDTO(Testimonials testimonial);
         Testimonials TestimonialDTOToTestimonial(TestimonialDTO testimonialDTO);
+        MemberDTORegister MemberToMemberDTO(Member member);
+        MemberDTODisplay MemberToMemberDTODisplay(Member member);
+        Member MemberDTORegisterToMember(MemberDTORegister memberDTO);
     }
 }
