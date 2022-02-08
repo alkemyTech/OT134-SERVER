@@ -8,9 +8,9 @@ namespace OngProject.Core.Interfaces
 {
     public interface IMemberService
     {
-        Task<IEnumerable<MemberDTO>> GetAll();
+        Task<IEnumerable<MemberDTODisplay>> GetAll();
         Member GetById();
-        Task<Result> Insert(MemberDTO memberDTO);
+        Task<Result> Insert(MemberDTORegister memberDTO);
         void Update(Member member);
         Task<Result> Delete(int id);
     }
