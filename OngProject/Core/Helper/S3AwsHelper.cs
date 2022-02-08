@@ -35,6 +35,7 @@ namespace OngProject.Core.Helper
                     Key = file.FileName,
                     InputStream = file.OpenReadStream(),
                     ContentType = file.ContentType,
+                    CannedACL = S3CannedACL.PublicRead
                 };
                 var result = await this._amazonS3.PutObjectAsync(putRequest);
                 var response = new AwsManagerResponse
@@ -42,7 +43,7 @@ namespace OngProject.Core.Helper
                     Message = "File upload successfully",
                     Code = (int)result.HttpStatusCode,
                     NameImage = file.FileName,
-                    Url = "",
+                    Url = $"https://cohorte-enero-835eb560.s3.amazonaws.com/{key}",
                 };
                 return response;
             }

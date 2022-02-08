@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OngProject.Core.Interfaces;
+using OngProject.Core.Models.Response;
 using System;
 using System.Threading.Tasks;
 
 namespace OngProject.Controllers
 {
-    [Route("slides")]
+    [Route("/Slides/")]
     [ApiController]
+    //[Authorize]
     public class SlideController : Controller
     {
         private readonly ISlideSerivice _slideSerivice;
@@ -16,7 +18,7 @@ namespace OngProject.Controllers
         {
             _slideSerivice = slideSerivice;
         }
-        //[Authorize]
+
         [HttpGet]
         public async Task<IActionResult> GetAllSlides()
         {
@@ -32,6 +34,18 @@ namespace OngProject.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
+        }
+
+        [HttpGet(":id")]
+        public async Task<Result> GetSlide(int slideId)
+        {
+            return await _slideSerivice.GetById(slideId);    
+        }
+
+        [HttpDelete(":id")]
+        public async Task<Result> DeleteSlide(int slideId)
+        {
+            return await _slideSerivice.Delete(slideId);
         }
     }
 }

@@ -1,21 +1,22 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using OngProject.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using OngProject.Core.Interfaces;
+using OngProject.Core.Models.Response;
+using OngProject.Core.Models.DTOs;
+using System;
 
 namespace OngProject.Controllers
 {
     [Route("testimonials")]
     [ApiController]
+    [Authorize]
     public class TestimonialsController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
-        public TestimonialsController(IUnitOfWork unitOfWork)
+        private readonly ITestimonialsService _testimonialsService;
+        public TestimonialsController(ITestimonialsService testimonialsService)
         {
-            _unitOfWork = unitOfWork;
+            _testimonialsService = testimonialsService;
         }
         
         [HttpGet]
@@ -31,8 +32,18 @@ namespace OngProject.Controllers
         }
         
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromForm] TestimonialDTO testimonialDTO)
         {
+            try
+            {
+                var result = await _testimonialsService.Insert(testimonialDTO);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         
         [HttpPut("{id}")]
@@ -41,8 +52,10 @@ namespace OngProject.Controllers
         }
         
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        [Authorize(Roles = "Administrator")]
+        public async Task<Result> Delete(int id)
         {
+            return await _testimonialsService.Delete(id);
         }
     }
 }

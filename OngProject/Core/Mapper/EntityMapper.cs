@@ -1,9 +1,10 @@
-﻿using OngProject.Core.Models.DTOs;
+﻿using OngProject.Core.Interfaces;
+using OngProject.Core.Models.DTOs;
 using OngProject.Entities;
 
 namespace OngProject.Core.Mapper
 {
-    public class EntityMapper
+    public class EntityMapper : IEntityMapper
     {
         public OrganizationDTO OrganizationToOrganizationDto(Organization organization)
         {
@@ -29,18 +30,17 @@ namespace OngProject.Core.Mapper
                 LastName = user.LastName,
                 Email = user.Email
             };
-
             return userDto;
         }
 
-        public UserDetailDto UseToUserDetailDto(User user)
+        public UserDetailDto UserToUserDetailDto(User user)
         {
             return new UserDetailDto
             {
                 Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Email = user.Email,                
+                Email = user.Email,
                 Photo = user.Photo,
                 RolId = user.RolId
             };
@@ -54,20 +54,20 @@ namespace OngProject.Core.Mapper
                 LastName = dto.LastName,
                 Email = dto.Email,
                 Password = dto.Password,
-                Photo = dto.Photo,
                 RolId = dto.RolId
             };
         }
 
-        public SlideDTO SlideToSlideDTO(Slides slides) 
+        public SlideDTO SlideToSlideDTO(Slides slides)
         {
             var slideDto = new SlideDTO
             {
-                order = slides.order,
-                ImageUrl = slides.ImageUrl
+                Order = slides.Order,
+                Text = slides.Text,
+                ImageUrl = slides.ImageUrl,
+                OrganizationId = slides.OrganizationId
             };
             return slideDto;
-
         }
         public ContactDTO ContactToContactDTO(Contacts contacts)
         {
@@ -117,6 +117,59 @@ namespace OngProject.Core.Mapper
             };
 
             return categoryDto;
+        }
+        public Comment CommentDTOToComment(CommentDTO dto)
+        {
+            var commetn = new Comment
+            {
+                Body = dto.Body,
+                NewId = dto.NewId,
+                UserId = dto.UserId
+            };
+            return commetn;
+        }
+
+        public Activities ActivityDTOToActivity(ActivityDTO dto)
+        {
+            var activity = new Activities
+            {
+                Image = dto.file.FileName,
+                Content = dto.Content,
+                Name = dto.Name,
+            };
+            return activity;
+        }
+
+        public Member MemberDTOToMember(MemberDTO memberDTO)
+        {
+            var member = new Member
+            {
+                Name = memberDTO.Name,
+                Description = memberDTO.Description,
+                Image = memberDTO.File.FileName,
+            };
+            return member;
+        }
+
+        public Testimonials TestimonialDTOToTestimonial(TestimonialDTO testimonialDTO)
+        {
+            var testimonial = new Testimonials
+            {
+                Name = testimonialDTO.Name,
+                Content = testimonialDTO.Content,
+                Image = testimonialDTO.File.FileName,
+            };
+            return testimonial;
+        }
+
+        public TestimonialDTO TestimonialToTestimonialDTO(Testimonials testimonial)
+        {
+            var testimonialDTO = new TestimonialDTO
+            {
+                Name = testimonial.Name,
+                Content = testimonial.Content,
+            };
+            return testimonialDTO;
         }
     }
 }

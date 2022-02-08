@@ -2,11 +2,15 @@
 using System;
 using System.Threading.Tasks;
 using OngProject.Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using OngProject.Core.Models.Response;
+using OngProject.Core.Models.DTOs;
 
 namespace OngProject.Controllers
 {
     [Route("members")]
     [ApiController]
+    [Authorize]
     public class MembersController : ControllerBase
     {
         private readonly IMemberService _membersService;
@@ -15,7 +19,7 @@ namespace OngProject.Controllers
         {
             _membersService = memberService;
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -33,26 +37,37 @@ namespace OngProject.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        
+
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
             return Ok();
         }
-        
+
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromForm] MemberDTO memberDTO)
         {
+            try
+            {
+                var result = await _membersService.Insert(memberDTO);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
-        
+
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
-        
+
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<Result> Delete(int id)
         {
+            return await _membersService.Delete(id);
         }
     }
 }

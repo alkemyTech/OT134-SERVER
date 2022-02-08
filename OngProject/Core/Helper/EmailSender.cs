@@ -38,7 +38,7 @@ namespace OngProject.Core.Helper
             var client = new SendGridClient(apiKey);
             var msg = new SendGridMessage()
             {
-                From = new EmailAddress("matilpcsd227@gmail.com", "ONG Somos Más"),
+                From = new EmailAddress(_config["MailParams:FromMail"], _config["MailParams:FromMailDescription"]),
                 Subject = subject,
                 PlainTextContent = message,
                 HtmlContent = message
