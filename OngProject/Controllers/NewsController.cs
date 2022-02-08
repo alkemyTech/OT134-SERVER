@@ -74,8 +74,22 @@ namespace OngProject.Controllers
 
         // DELETE api/<NewsController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> Delete(int id)
         {
+            try
+            {
+                var result = await this._newsService.Delete(id);
+                if (result.Success)
+                {
+                    return Ok(result);
+                }
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
