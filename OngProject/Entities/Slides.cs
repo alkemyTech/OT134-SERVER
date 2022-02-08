@@ -6,7 +6,6 @@ namespace OngProject.Entities
     public class Slides : EntityBase
     {
         [Display(Name = "UrlDeImagen")]
-        [StringLength(255)]
         public string ImageUrl { get; set; }
 
         [Display(Name = "Texto")]
