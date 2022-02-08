@@ -51,12 +51,22 @@ namespace OngProject.Controllers
         {
         }
 
-        
+
         [HttpDelete("{id}")]
         [Authorize(Roles = "Administrator")]
-        public async Task<Result> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return await _categoryService.Delete(id);
+
+            var result = await _categoryService.Delete(id);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+
+
+            return BadRequest(result);
         }
+
     }
+
 }

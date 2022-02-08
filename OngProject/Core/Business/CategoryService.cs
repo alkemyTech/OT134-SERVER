@@ -27,21 +27,21 @@ namespace OngProject.Core.Business
             try
             {
                 var category = await _unitOfWork.CategoryRepository.GetByIdAsync(id);
-                if (category == null)
+                if (category != null)
                 {
-                    return Result.FailureResult("La categoria seleccionada no existe");
+                    if (category.SoftDelete)
+                    {
+                        return Result.FailureResult("La categoria seleccionada ya fue eliminada");
+                    }
+                    category.SoftDelete = true;
+                    category.LastModified = DateTime.Now;
+                    await _unitOfWork.SaveChangesAsync();
+
+                    return Result<Category>.SuccessResult(category);
                 }
 
-                if (category.SoftDelete)
-                {
-                    return Result.FailureResult("La categoria seleccionada ya fue eliminada");
-                }
+                return Result.FailureResult("La categoria no existe.");
 
-                category.SoftDelete = true;
-                category.LastModified = DateTime.Now;
-                await _unitOfWork.SaveChangesAsync();
-
-                return Result<Category>.SuccessResult(category);
             }
             catch (Exception e)
             {
