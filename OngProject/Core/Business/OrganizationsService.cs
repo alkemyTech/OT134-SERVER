@@ -3,23 +3,24 @@ using OngProject.Entities;
 using OngProject.Repositories.Interfaces;
 using System;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using OngProject.Core.Mapper;
 using OngProject.Core.Models.DTOs;
+using OngProject.Core.Models.Response;
+using System.Collections.Generic;
 
 namespace OngProject.Core.Business
 {
     public class OrganizationService : IOrganizationsService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly EntityMapper _mapper;
+        private readonly IEntityMapper _mapper;
+        private readonly ISlideSerivice _slideSerivice;
 
-        public OrganizationService(IUnitOfWork unitOfWork)
+        public OrganizationService(IUnitOfWork unitOfWork, IEntityMapper mapper, ISlideSerivice slideSerivice)
         {
             _unitOfWork = unitOfWork;
-            _mapper = new EntityMapper();
+            _mapper = mapper;
+            _slideSerivice = slideSerivice;
         }
 
         public void Delete(Organization organization)
@@ -27,10 +28,27 @@ namespace OngProject.Core.Business
             throw new NotImplementedException();
         }
 
-        public async Task<OrganizationDTO> GetAll()
+        public async Task<IEnumerable<OrganizationDTO>> GetAll()
         {
-            var response = await _unitOfWork.OrganizationRepository.FindAllAsync();
-            return _mapper.OrganizationToOrganizationDto(response.FirstOrDefault());
+            var response = await _unitOfWork.OrganizationRepository.FindByConditionAsync(x => !x.SoftDelete);
+
+            List<OrganizationDTO> organizationDto = new();
+
+            if (response.Count > 0)
+            {
+                foreach (var entity in response)
+                {
+                    var orgDto = _mapper.OrganizationToOrganizationDto(entity);
+
+                    orgDto.Slides = await _slideSerivice.GetAllByOrganization(entity.Id);
+
+                    organizationDto.Add(orgDto);
+                }
+
+                return organizationDto;
+            }
+            else
+                return null;
         }
 
         public Organization GetById()

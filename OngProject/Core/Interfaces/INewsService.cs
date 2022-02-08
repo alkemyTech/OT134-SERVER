@@ -1,17 +1,17 @@
-﻿using OngProject.Entities;
-using System;
+﻿using OngProject.Core.Models.DTOs;
+using OngProject.Core.Models.Response;
+using OngProject.Entities;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace OngProject.Core.Interfaces
 {
     public interface INewsService
     {
-        public IEnumerable<New> GetAll();
-        public New GetById();
-        public void Insert(New news);
-        public void Update(New news);
-        public void Delete(New news);
+        Task<ICollection<NewDtoForDisplay>> GetAll();
+        New GetById();
+        Task<Result> Insert(NewDtoForUpload newDTO);
+        Task<Result> Update(New news);
+        Task<Result> Delete(int id);
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace OngProject.Core.Models.Response
 {
@@ -9,7 +6,7 @@ namespace OngProject.Core.Models.Response
     {
         public bool Success { get; protected set; }
         public string FailureMessage { get; protected set; }
-        public List<string> ErrorList { get; protected set; }
+        public List<string> ErrorList { get; set; }
 
         protected Result()
         {
@@ -41,6 +38,11 @@ namespace OngProject.Core.Models.Response
         public static Result ErrorResult(List<string> errorList)
         {
             return new Result(errorList);
+        }
+
+        public bool isError()
+        {
+            return ErrorList != null && ErrorList.Count > 0;
         }
     }
 

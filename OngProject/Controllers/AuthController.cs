@@ -3,6 +3,11 @@ using System;
 using System.Threading.Tasks;
 using OngProject.Core.Models.DTOs;
 using OngProject.Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using System.Linq;
+using System.Security.Claims;
+using OngProject.Core.Models.Response;
+using System.Collections.Generic;
 
 namespace OngProject.Controllers
 {
@@ -19,32 +24,54 @@ namespace OngProject.Controllers
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDTO userLoginDto)
-        {
-
-            try
+        {            
+            var result = await _userService.LoginAsync(userLoginDto);
+            if (result.Success)
             {
-                var result = await _userService.LoginAsync(userLoginDto);
-
                 return Ok(result);
             }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+
+            return StatusCode(result.isError() ? 500 : 400, result);
         }
 
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register([FromBody] UserRegisterDto dto)
+        public async Task<IActionResult> Register([FromForm] UserRegisterDto dto)
         {
-            try
+            var result = await _userService.Insert(dto);
+            if (result.Success)
             {
-                return Ok(await _userService.Insert(dto));                
+                return Ok(result);                
             }
-            catch (Exception e){
-                return BadRequest(e.Message);
-            }
+
+            return StatusCode(result.isError() ? 500 : 400, result);
         }
-        
+
+        [HttpGet]
+        [Route("me")]
+        [Authorize]
+        public async Task<IActionResult> Me()
+        {   try
+            {
+                var claimId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+                if (claimId == null)
+                {
+                    throw new Exception("No se encontró id de usuario");
+                }
+
+                var result = await this._userService.GetById(Int32.Parse(claimId.Value));
+                if (result.Success)
+                {
+                    return Ok(result);
+                }
+
+                return StatusCode(result.isError()? 500 : 400, result);
+                
+            }catch(Exception e)
+            {
+                return StatusCode(500, Result.ErrorResult(new List<string> { e.Message }));
+            }
+
+        }
     }
 }

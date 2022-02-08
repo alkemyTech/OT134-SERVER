@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using OngProject.Core.Models.DTOs;
+using OngProject.Core.Models.Response;
 
 namespace OngProject.Core.Interfaces
 {
     public interface IMemberService
     {
         Task<IEnumerable<MemberDTO>> GetAll();
-        public Member GetById();
-        public void Insert(Member member);
-        public void Update(Member member);
-        public void Delete(Member member);
+        Member GetById();
+        Task<Result> Insert(MemberDTO memberDTO);
+        void Update(Member member);
+        Task<Result> Delete(int id);
     }
 }

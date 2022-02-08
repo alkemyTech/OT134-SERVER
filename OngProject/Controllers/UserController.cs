@@ -21,19 +21,15 @@ namespace OngProject.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            try
-            {
-                var userDto = await _userService.GetAll();
+            
+            var results = await _userService.GetAll();
 
-                if (userDto != null)
-                    return Ok(userDto);
-                else
-                    return NotFound("Empty users charged");
-            }
-            catch (Exception ex)
+            if (results.Success)
             {
-                return StatusCode(500, ex.Message);
+                return Ok(results);
             }
+
+            return BadRequest(results);            
         }
 
         // GET api/<UserController>/5
@@ -59,15 +55,14 @@ namespace OngProject.Controllers
         [HttpDelete("{id}")]
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int id)
-        {
-            try
-            {                
-                return Ok(await this._userService.Delete(id));
-            }
-            catch (Exception e)
+        {            
+            var result = await this._userService.Delete(id);
+            if (result.Success)
             {
-                return BadRequest(e.Message);
+                return Ok(result);
             }
+         
+            return BadRequest(result);         
         }
     }
 }

@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OngProject.Core.Interfaces;
+using OngProject.Core.Models.DTOs;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -23,9 +22,21 @@ namespace OngProject.Controllers
 
         // GET: api/<NewsController>
         [HttpGet]
-        public IActionResult Get()
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> GetAllNews()
         {
-            return Ok();
+            try
+            {
+                var entityList = await _newsService.GetAll();
+                if (entityList != null)
+                    return Ok(entityList);
+                else
+                    return NotFound("No se encontraron Noticias");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         // GET api/<NewsController>/5
@@ -37,8 +48,22 @@ namespace OngProject.Controllers
 
         // POST api/<NewsController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> Post([FromForm] NewDtoForUpload newDtoForUpload)
         {
+            try
+            {
+                var result = await _newsService.Insert(newDtoForUpload);
+                if (result.Success)
+                {
+                    return Ok(result);
+                }
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // PUT api/<NewsController>/5
@@ -49,8 +74,22 @@ namespace OngProject.Controllers
 
         // DELETE api/<NewsController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> Delete(int id)
         {
+            try
+            {
+                var result = await this._newsService.Delete(id);
+                if (result.Success)
+                {
+                    return Ok(result);
+                }
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

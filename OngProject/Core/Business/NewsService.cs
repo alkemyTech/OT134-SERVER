@@ -1,9 +1,10 @@
 ﻿using OngProject.Core.Interfaces;
+using OngProject.Core.Models.DTOs;
+using OngProject.Core.Models.Response;
 using OngProject.Entities;
 using OngProject.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace OngProject.Core.Business
@@ -11,34 +12,96 @@ namespace OngProject.Core.Business
     public class NewsService : INewsService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public NewsService(IUnitOfWork unitOfWork)
+        private readonly IEntityMapper _mapper;
+        private readonly IImageService _imageService;
+
+        public NewsService(IUnitOfWork unitOfWork, IEntityMapper mapper, IImageService imageService)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
+            _imageService = imageService;
         }
 
-        public IEnumerable<New> GetAll()
+        public async Task<ICollection<NewDtoForDisplay>> GetAll()
         {
-            throw new NotImplementedException();
+            var response = await _unitOfWork.NewsRepository.FindByConditionAsync(x => x.SoftDelete == false);
+            if (response.Count == 0)
+                return null;
+            else
+            {
+                List<NewDtoForDisplay> listOfnewDtoForDisplays = new();
+                foreach (var item in response)
+                {
+                    listOfnewDtoForDisplays.Add(_mapper.NewtoNewDtoForDisplay(item));
+                }
+                return listOfnewDtoForDisplays;
+            }
         }
-
         public New GetById()
         {
             throw new NotImplementedException();
         }
+        public async Task<Result> Insert(NewDtoForUpload newDtoForUpload)
+        {
+            try
+            {
+                var newEntity = _mapper.NewDtoForUploadtoNew(newDtoForUpload);
 
-        public void Insert(New news)
+                var ValidationName = await _unitOfWork.NewsRepository.FindByConditionAsync(x => x.Name == newDtoForUpload.Name);
+                var ValidationContent = await _unitOfWork.NewsRepository.FindByConditionAsync(x => x.Content == newDtoForUpload.Content);
+                var ValidationCategoryId = await _unitOfWork.CategoryRepository.FindByConditionAsync(x => x.Id == newDtoForUpload.Category);
+                if (ValidationName.Count > 0)
+                    throw new Exception("Una noticia con ese nombre ya existe en el sistema, intente uno diferente al ingresado.");
+                if (ValidationContent.Count > 0)
+                    throw new Exception("Una noticia con ese contenido ya existe en el sistema, intente uno diferente al ingresado.");
+                if (ValidationCategoryId.Count == 0)
+                    throw new Exception("No existe una categoria con ese Id en el sistema, intente uno diferente al ingresado.");
+                else
+                {
+                    var imageUploadUrl = await _imageService.UploadFile(newDtoForUpload.Image.FileName, newDtoForUpload.Image);
+                    newEntity.Image = imageUploadUrl;
+                    newEntity.LastModified = DateTime.Today;
+
+                    await _unitOfWork.NewsRepository.Create(newEntity);
+                    await _unitOfWork.SaveChangesAsync();
+
+                    var newtoNewDtoForDisplay = _mapper.NewtoNewDtoForDisplay(newEntity);
+
+                    return Result<NewDtoForDisplay>.SuccessResult(newtoNewDtoForDisplay);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public async Task<Result> Update(New news)
         {
             throw new NotImplementedException();
         }
-
-        public void Update(New news)
+        public async Task<Result> Delete(int id)
         {
-            throw new NotImplementedException();
-        }
+            try
+            {
+                var newEntity = await this._unitOfWork.NewsRepository.GetByIdAsync(id);
+                if (newEntity != null)
+                {
+                    if (newEntity.SoftDelete)
+                    {
+                        return Result.FailureResult($"id({newEntity.Id}) ya esta eliminado del sistema.");
+                    }
+                    newEntity.SoftDelete = true;
+                    newEntity.LastModified = DateTime.Today;
+                    await this._unitOfWork.SaveChangesAsync();
 
-        public void Delete(New news)
-        {
-            throw new NotImplementedException();
+                    return Result<string>.SuccessResult($"Noticia:({newEntity.Id}) ha sido eliminada exitosamente.");
+                }
+                return Result.FailureResult("id de noticia inexistente.");
+            }
+            catch (Exception e)
+            {
+                return Result.ErrorResult(new List<string> { e.Message });
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
-﻿using OngProject.Core.Interfaces;
-using OngProject.Core.Mapper;
+﻿using Microsoft.Extensions.Configuration;
+using OngProject.Core.Helper;
+using OngProject.Core.Interfaces;
 using OngProject.Core.Models.DTOs;
 using OngProject.Core.Models.Response;
 using OngProject.Entities;
@@ -13,13 +14,15 @@ namespace OngProject.Core.Business
 {
     public class ContactService : IContactService
     {
+        private readonly IConfiguration _config;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly EntityMapper _mapper;
+        private readonly IEntityMapper _mapper;
 
-        public ContactService(IUnitOfWork unitOfWork)
+        public ContactService(IConfiguration configuration, IUnitOfWork unitOfWork, IEntityMapper mapper)
         {
+            _config = configuration;
             _unitOfWork = unitOfWork;
-            _mapper = new EntityMapper();
+            _mapper = mapper;
         }
 
         public void Delete(Contacts contacts)
@@ -36,7 +39,7 @@ namespace OngProject.Core.Business
             }
             else
             {
-                List<ContactDTO> dto = new List<ContactDTO>();
+                List<ContactDTO> dto = new();
                 foreach (var item in response)
                 {
                     dto.Add(_mapper.ContactToContactDTO(item));
@@ -70,6 +73,14 @@ namespace OngProject.Core.Business
                 contacts.LastModified = DateTime.Now;
                 await _unitOfWork.ContactRepository.Create(contacts);
                 await _unitOfWork.SaveChangesAsync();
+
+                //se envia mail de bienvenida
+                var emailSender = new EmailSender(_config);
+                var emailTitle = "Gracias por contactar con nosotros!";
+                var emailBody = $"<h4>Hola {contacts.Name}</h4><p> Hemos recibido su mensaje, en breve nos pondremos en contacto con usted.</p>";
+                var emailContact = string.Format("<a href='mailto:{0}'>{0}</a>", _config["MailParams:WelcomeMailContact"]);
+
+                await emailSender.SendEmailWithTemplateAsync(contacts.Email, emailTitle, emailBody, emailContact);
 
                 return Result<ContactDTO>.SuccessResult(_mapper.ContactToContactDTO(contacts));
             }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OngProject.Core.Interfaces;
+using OngProject.Core.Models.DTOs;
+using OngProject.Core.Models.Response;
 using System;
 using System.Threading.Tasks;
 
@@ -22,7 +24,7 @@ namespace OngProject.Controllers
             try
             {
                 var commentDTO = await _commentsService.GetAll();
-                if (commentDTO!= null)
+                if (commentDTO != null)
                 {
                     return Ok(commentDTO);
                 }
@@ -33,16 +35,35 @@ namespace OngProject.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        [Route("/news/:id/comments")]
+        [HttpGet]
+        public async Task<Result> Get(int id)
         {
-            return Ok();
+            try
+            {
+                var response = await _commentsService.GetById(id);
+                return (Result)response;
+            }
+            catch (Exception ex)
+            {
+
+                return Result.FailureResult("Ocurrio un Problema" + ex.ToString());
+            }
         }
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<Result> Post([FromBody] CommentDTO dto)
         {
+            try
+            {
+                var response = await _commentsService.Insert(dto);
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+                return Result.FailureResult("Ocurrio un Problema : " + ex.ToString());
+            }
         }
 
         [HttpPut("{id}")]
@@ -50,9 +71,19 @@ namespace OngProject.Controllers
         {
         }
 
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{id},{idUser}")]
+        public async Task<Result> Delete(int id,int idUser)
         {
+            try
+            {
+                var result = await _commentsService.Delete(id,idUser);
+                return Result<Result>.SuccessResult(result);
+            }
+            catch (Exception ex)
+            {
+
+                return Result.FailureResult("Ocurrio un Problema : " + ex.ToString());
+            }
         }
     }
 }
