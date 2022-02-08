@@ -1,7 +1,14 @@
-﻿namespace OngProject.Core.Models.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace OngProject.Core.Models.DTOs
 {
     public class CategoryDTO
     {
+        [Required]
         public string Name { get; set; }
+        [Required]
+        public string Description { get; set; }
+        [Required]
+        public Microsoft.AspNetCore.Http.IFormFile Image { get; set; }
     }
 }
