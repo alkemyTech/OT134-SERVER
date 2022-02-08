@@ -48,12 +48,7 @@ namespace OngProject.Core.Business
                     var categoryDto = _entityMapper.CategoryToCategoryDTO(category);
                     return Result<CategoryDTO>.SuccessResult(categoryDto);
                 }
-                else
-                {
-                    return Result.FailureResult("Error 404");
-                }
-                
-                
+                return Result.FailureResult("La categoria no existe.");
 
             }
             catch (Exception)

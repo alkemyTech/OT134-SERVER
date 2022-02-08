@@ -9,7 +9,7 @@ namespace OngProject.Controllers
 {
     [Route("categories")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
@@ -34,22 +34,20 @@ namespace OngProject.Controllers
             }
 
         }
+        
         [HttpGet("{id}")]
-        public async Task<Result> GetCategoryById(int id)
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> GetCategoryById(int id)
         {
-            try
-            {
-                var response = await _categoryService.GetById(id);
+            
+                var result = await _categoryService.GetById(id);
+                if (result.Success)
+                {
+                    return Ok(result);
+                }
 
-                return response;
-
-            }
-
-            catch (Exception e)
-            {
-
-                return Result.FailureResult("Ocurrio un error: " + e.Message);
-            }
+                return StatusCode(404);
+           
         }
 
         [HttpPost]
