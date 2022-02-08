@@ -8,7 +8,7 @@ namespace OngProject.Core.Interfaces
 {
     public interface INewsService
     {
-        IEnumerable<New> GetAll();
+        Task<ICollection<NewDtoForDisplay>> GetAll();
         New GetById();
         Task<Result> Insert(NewDtoForUpload newDTO);
         Task<Result> Update(New news);
