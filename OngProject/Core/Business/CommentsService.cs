@@ -108,6 +108,10 @@ namespace OngProject.Core.Business
             {
                 var result = await _unitOfWork.CommentsRepository.GetByIdAsync(IdComment);
                 var VerifyAdminUser = await _unitOfWork.UserRepository.GetByIdAsync(idUser);
+                if (result == null)
+                {
+                    return Result.FailureResult("Error 404 - Comentario no encontrado");
+                }
                 if (result.SoftDelete)
                 {
                     return Result.FailureResult("Error 404 - Comentario no encontrado");

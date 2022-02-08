@@ -19,7 +19,8 @@ namespace OngProject.Core.Interfaces
         Comment CommentDTOToComment(CommentDTO dto);
         New NewDtoForUploadtoNew(NewDtoForUpload newDTO);
         NewDtoForDisplay NewtoNewDtoForDisplay(New newvar);
-        Activities ActivityDTOToActivity(ActivityDTO dto);
+        Activities ActivityDTOForRegister(ActivityDTOForRegister dto);
+        ActivityDTOForDisplay ActivityForActivityDTODisplay(Activities dto);
         Member MemberDTOToMember(MemberDTO memberDTO); 
         TestimonialDTO TestimonialToTestimonialDTO(Testimonials testimonial);
         Testimonials TestimonialDTOToTestimonial(TestimonialDTO testimonialDTO);
