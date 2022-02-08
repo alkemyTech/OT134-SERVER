@@ -21,7 +21,6 @@ namespace OngProject.Core.Mapper
             return organizationDto;
         }
 
-
         public UserDTO UserToUserDto(User user)
         {
             var userDto = new UserDTO
@@ -118,6 +117,7 @@ namespace OngProject.Core.Mapper
 
             return categoryDto;
         }
+
         public Comment CommentDTOToComment(CommentDTO dto)
         {
             var commetn = new Comment
@@ -139,6 +139,27 @@ namespace OngProject.Core.Mapper
             };
             return activity;
         }
+    
+        public New NewDtoForUploadtoNew(NewDtoForUpload newDtoForUpload)
+        {
+            New newEntity = new()
+            {
+                Name = newDtoForUpload.Name,
+                Content = newDtoForUpload.Content,
+                CategoryId = newDtoForUpload.Category
+            };
+            return newEntity;
+        }
+        public NewDtoForDisplay NewtoNewDtoForDisplay(New newEntity)
+        {
+            NewDtoForDisplay newEntityForDisplay = new()
+            {
+                Name = newEntity.Name,
+                Content = newEntity.Content,
+                Image=newEntity.Image,
+                Category = newEntity.CategoryId
+            };
+            return newEntityForDisplay;
 
         public Member MemberDTOToMember(MemberDTO memberDTO)
         {
