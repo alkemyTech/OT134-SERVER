@@ -15,10 +15,12 @@ namespace OngProject.Entities
 
         [Display(Name = "Orden")]
         [StringLength(255)]
-        public string order { get; set; }
+        public int Order { get; set; }
 
         [Display(Name = "IdDeOrganizacion")]
-        [ForeignKey("OrganizationId")]
+        [ForeignKey("Organization")]
         public int OrganizationId { get; set; }
+
+        public virtual Organization Organization { get; set; }
     }
 }

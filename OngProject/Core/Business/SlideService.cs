@@ -20,9 +20,32 @@ namespace OngProject.Core.Business
             _mapper = mapper;
         }
 
-        public void Delete(Slides slides)
+        public async Task<Result> Delete(int id)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                Slides slide = await _unitOfWork.SlideRepository.GetByIdAsync(id);
+
+                if (slide != null && !slide.SoftDelete)
+                {
+                    slide.SoftDelete = true;
+                    slide.LastModified = DateTime.Now;
+                    _unitOfWork.SaveChanges();
+
+                    return Result.SuccessResult();
+                }
+                else
+                {
+                    if (slide == null)
+                        return Result.FailureResult("No se encontro ningun Slide con Id ingresado");
+                    else
+                        return Result.FailureResult("Slide con Id ingresado ha sido eliminado previamente");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Result.FailureResult(ex.Message);
+            }
         }
 
         public async Task<ICollection<SlideDTO>> GetAll()
@@ -34,7 +57,7 @@ namespace OngProject.Core.Business
             }
             else 
             {
-                List<SlideDTO> dto = new();
+                List<SlideDTO> dto = new ();
                 foreach (var item in response)
                 {
                     dto.Add(_mapper.SlideToSlideDTO(item));
@@ -73,6 +96,24 @@ namespace OngProject.Core.Business
         public void Update(Slides slides)
         {
             throw new System.NotImplementedException();
+        }
+
+        public async Task<ICollection<SlideDTO>> GetAllByOrganization(int idOrganization)
+        {
+            var response = await _unitOfWork.SlideRepository.FindByConditionAsync(x => x.OrganizationId == idOrganization);
+            if (response.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                List<SlideDTO> dto = new();
+                foreach (var item in response)
+                {
+                    dto.Add(_mapper.SlideToSlideDTO(item));
+                }
+                return dto;
+            }
         }
     }
 }

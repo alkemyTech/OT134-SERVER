@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using OngProject.Entities;
 
 namespace OngProject.Core.Models.DTOs
 {
@@ -27,5 +28,7 @@ namespace OngProject.Core.Models.DTOs
         [Url]
         [Required(ErrorMessage = "The Linkedin Url Is Required")]
         public string LinkedinUrl { get; set; }
+
+        public ICollection<SlideDTO> Slides { get; set; }
     }
 }
