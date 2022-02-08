@@ -11,7 +11,7 @@ namespace OngProject.Core.Interfaces
     {
         public Task<IEnumerable<CategoryDTO>> GetAll();
         public Category GetById();
-        public void Insert(Category category);
+        public Task<Result> Insert(CategoryDTO categoryDTO);
         public void Update(Category category);
         Task<Result> Delete(int id);
     }
