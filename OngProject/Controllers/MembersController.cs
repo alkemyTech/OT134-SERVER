@@ -45,7 +45,7 @@ namespace OngProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromForm] MemberDTO memberDTO)
+        public async Task<IActionResult> Post([FromForm] MemberDTORegister memberDTO)
         {
             try
             {
@@ -65,9 +65,14 @@ namespace OngProject.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<Result> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return await _membersService.Delete(id);
+            var result = await _membersService.Delete(id);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return StatusCode(result.isError() ? 500 : 400, result);
         }
     }
 }

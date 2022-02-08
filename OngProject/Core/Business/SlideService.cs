@@ -89,7 +89,7 @@ namespace OngProject.Core.Business
             }
             catch(Exception ex)
             {
-                return Result.FailureResult(ex.Message);
+                return Result.ErrorResult(new List<string>{ex.Message});
             }
         }
 

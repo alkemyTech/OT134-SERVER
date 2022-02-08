@@ -56,30 +56,28 @@ namespace OngProject.Core.Mapper
                 RolId = dto.RolId
             };
         }
-
-        public SlideDTO SlideToSlideDTO(Slides slides)
+        public SlideDtoForDisplay SlideToSlideDtoForDisplay(Slides slides)
         {
-            var slideDto = new SlideDTO
+            var slideDto = new SlideDtoForDisplay
             {
                 Order = slides.Order,
-                Text = slides.Text,
                 ImageUrl = slides.ImageUrl,
-                OrganizationId = slides.OrganizationId
             };
             return slideDto;
         }
 
-        public Slides SlideDTOToSlide(SlideDTO slideDto)
+        public Slides SlideDtoForUploadToSlide(SlideDtoForUpload slideDto)
         {
             var slide = new Slides
             {
                 Order = slideDto.Order,
                 Text = slideDto.Text,
-                ImageUrl = slideDto.ImageUrl,
                 OrganizationId = slideDto.OrganizationId
             };
             return slide;
         }
+
+
         public ContactDTO ContactToContactDTO(Contacts contacts)
         {
             var contactDto = new ContactDTO
@@ -110,24 +108,22 @@ namespace OngProject.Core.Mapper
             };
             return commentDTO;
         }
-        public MemberDTO MemberToMemberDTO(Member member)
+        public CategoryDtoForDisplay CategoryToCategoryDtoForDisplay(Category category)
         {
-            var memberDTO = new MemberDTO
-            {
-                Name = member.Name,
-                Description = member.Description,
-            };
-            return memberDTO;
-        }
-
-        public CategoryDTO CategoryToCategoryDTO(Category category)
-        {
-            var categoryDto = new CategoryDTO
+            var categoryDtoForDisplay = new CategoryDtoForDisplay
             {
                 Name = category.Name,
             };
-
-            return categoryDto;
+            return categoryDtoForDisplay;
+        }
+        public Category CategoryDtoForRegisterToCategory(CategoryDTOForRegister category)
+        {
+            var categoryEntity = new Category
+            {
+                Name = category.Name,
+                Description=category.Description,
+            };
+            return categoryEntity;
         }
 
         public Comment CommentDTOToComment(CommentDTO dto)
@@ -191,7 +187,6 @@ namespace OngProject.Core.Mapper
             };
             return member;
         }
-
         public Testimonials TestimonialDTOToTestimonial(TestimonialDTO testimonialDTO)
         {
             var testimonial = new Testimonials
@@ -211,6 +206,36 @@ namespace OngProject.Core.Mapper
                 Content = testimonial.Content,
             };
             return testimonialDTO;
+        }
+        public MemberDTORegister MemberToMemberDTO(Member member)
+        {
+            var memberDTO = new MemberDTORegister
+            {
+                Name = member.Name,
+                Description = member.Description,
+            };
+            return memberDTO;
+        }
+
+        public MemberDTODisplay MemberToMemberDTODisplay(Member member)
+        {
+            var memberDTO = new MemberDTODisplay
+            {
+                Name = member.Name,
+                Description = member.Description,
+                Image = member.Image,
+            };
+            return memberDTO;
+        }
+
+        public Member MemberDTORegisterToMember(MemberDTORegister memberDTO)
+        {
+            var member = new Member
+            {
+                Name = memberDTO.Name,
+                Description = memberDTO.Description,
+            };
+            return member;
         }
     }
 }

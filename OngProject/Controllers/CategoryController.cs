@@ -46,7 +46,7 @@ namespace OngProject.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Insert([FromForm] CategoryDTO categoryDTO)
+        public async Task<IActionResult> Insert([FromForm] CategoryDTOForRegister categoryDTO)
         {
 
             var response = await _categoryService.Insert(categoryDTO);
