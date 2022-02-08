@@ -68,13 +68,13 @@ namespace OngProject.Core.Business
                     await _unitOfWork.ActivitiesRepository.Create(activity);
                     await _unitOfWork.SaveChangesAsync();
 
-                    var activityCalss = new Activities
+                    var activityCalss = new ActivityDTO
                     {
                         Name = activities.Name,
                         Content = activities.Content,
-                        Image = result 
+                        Image = result
                     };
-                    return Result<Activities>.SuccessResult(activityCalss);
+                    return Result<ActivityDTO>.SuccessResult(activityCalss);
                 }
             }
             catch (Exception ex)
