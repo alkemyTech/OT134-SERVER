@@ -1,4 +1,5 @@
 ﻿using OngProject.Core.Models.DTOs;
+using OngProject.Core.Models.Response;
 using OngProject.Entities;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,6 @@ namespace OngProject.Core.Interfaces
         public Category GetById();
         public void Insert(Category category);
         public void Update(Category category);
-        public void Delete(Category category);
+        Task<Result> Delete(int id);
     }
 }
