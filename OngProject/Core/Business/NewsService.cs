@@ -22,9 +22,20 @@ namespace OngProject.Core.Business
             _imageService = imageService;
         }
 
-        public IEnumerable<New> GetAll()
+        public async Task<ICollection<NewDtoForDisplay>> GetAll()
         {
-            throw new NotImplementedException();
+            var response = await _unitOfWork.NewsRepository.FindByConditionAsync(x => x.SoftDelete == false);
+            if (response.Count == 0)
+                return null;
+            else
+            {
+                List<NewDtoForDisplay> listOfnewDtoForDisplays = new();
+                foreach (var item in response)
+                {
+                    listOfnewDtoForDisplays.Add(_mapper.NewtoNewDtoForDisplay(item));
+                }
+                return listOfnewDtoForDisplays;
+            }
         }
         public New GetById()
         {
