@@ -41,9 +41,21 @@ namespace OngProject.Controllers
 
         // GET api/<NewsController>/5
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return Ok();
+            try
+            {
+                var result = await _newsService.GetById(id);
+                if (result.Success)
+                {
+                    return Ok(result);
+                }
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // POST api/<NewsController>
