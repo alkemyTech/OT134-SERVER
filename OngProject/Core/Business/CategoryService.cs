@@ -22,9 +22,31 @@ namespace OngProject.Core.Business
             _unitOfWork = unitOfWork;
             _imageService = imageService;
         }
-        public void Delete(Category category)
+        public async Task<Result> Delete(int id)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                var category = await _unitOfWork.CategoryRepository.GetByIdAsync(id);
+                if (category != null)
+                {
+                    if (category.SoftDelete)
+                    {
+                        return Result.FailureResult("La categoria seleccionada ya fue eliminada");
+                    }
+                    category.SoftDelete = true;
+                    category.LastModified = DateTime.Now;
+                    await _unitOfWork.SaveChangesAsync();
+
+                    return Result<Category>.SuccessResult(category);
+                }
+
+                return Result.FailureResult("La categoria no existe.");
+
+            }
+            catch (Exception e)
+            {
+                return Result.FailureResult("Error al eliminar la categoria: " + e.Message);
+            }
         }
 
         public async Task<IEnumerable<CategoryDTO>> GetAll()

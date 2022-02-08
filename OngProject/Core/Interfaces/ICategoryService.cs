@@ -13,6 +13,6 @@ namespace OngProject.Core.Interfaces
         public Category GetById();
         public Task<Result> Insert(CategoryDTO categoryDTO);
         public void Update(Category category);
-        public void Delete(Category category);
+        Task<Result> Delete(int id);
     }
 }
