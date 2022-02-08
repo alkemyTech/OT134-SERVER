@@ -22,14 +22,25 @@ namespace OngProject.Controllers
 
         // GET: api/<NewsController>
         [HttpGet]
-        public IActionResult Get()
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> GetAllNews()
         {
-            return Ok();
+            try
+            {
+                var entityList = await _newsService.GetAll();
+                if (entityList != null)
+                    return Ok(entityList);
+                else
+                    return NotFound("No se encontraron Noticias");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
-
         // GET api/<NewsController>/5
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public IActionResult GetById(int id)
         {
             return Ok();
         }
