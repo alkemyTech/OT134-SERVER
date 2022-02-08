@@ -16,5 +16,8 @@ namespace OngProject.Core.Interfaces
         MemberDTO MemberToMemberDTO(Member member);
         CategoryDTO CategoryToCategoryDTO(Category category);
         Comment CommentDTOToComment(CommentDTO dto);
+        New NewDtoForUploadtoNew(NewDtoForUpload newDTO);
+        NewDtoForDisplay NewtoNewDtoForDisplay(New newvar);
+        Activities ActivityDTOToActivity(ActivityDTO dto);
     }
 }

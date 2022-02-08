@@ -1,5 +1,8 @@
-﻿using OngProject.Entities;
+﻿using OngProject.Core.Models.DTOs;
+using OngProject.Core.Models.Response;
+using OngProject.Entities;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace OngProject.Core.Interfaces
 {
@@ -7,8 +10,8 @@ namespace OngProject.Core.Interfaces
     {
         IEnumerable<New> GetAll();
         New GetById();
-        void Insert(New news);
-        void Update(New news);
-        void Delete(New news);
+        Task<Result> Insert(NewDtoForUpload newDTO);
+        Task<Result> Update(New news);
+        Task<Result> Delete(New news);
     }
 }
