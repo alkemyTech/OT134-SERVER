@@ -68,9 +68,29 @@ namespace OngProject.Core.Business
         {
             throw new NotImplementedException();
         }
-        public async Task<Result> Delete(New news)
+        public async Task<Result> Delete(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var newEntity = await this._unitOfWork.NewsRepository.GetByIdAsync(id);
+                if (newEntity != null)
+                {
+                    if (newEntity.SoftDelete)
+                    {
+                        return Result.FailureResult($"id({newEntity.Id}) ya esta eliminado del sistema.");
+                    }
+                    newEntity.SoftDelete = true;
+                    newEntity.LastModified = DateTime.Today;
+                    await this._unitOfWork.SaveChangesAsync();
+
+                    return Result<string>.SuccessResult($"Noticia:({newEntity.Id}) ha sido eliminada exitosamente.");
+                }
+                return Result.FailureResult("id de noticia inexistente.");
+            }
+            catch (Exception e)
+            {
+                return Result.ErrorResult(new List<string> { e.Message });
+            }
         }
     }
 }

@@ -12,6 +12,6 @@ namespace OngProject.Core.Interfaces
         New GetById();
         Task<Result> Insert(NewDtoForUpload newDTO);
         Task<Result> Update(New news);
-        Task<Result> Delete(New news);
+        Task<Result> Delete(int id);
     }
 }
