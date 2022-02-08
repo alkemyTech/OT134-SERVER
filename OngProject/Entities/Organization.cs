@@ -36,6 +36,7 @@ namespace OngProject.Entities
         [Url]
         [Required(ErrorMessage = "The Linkedin Url Is Required")]
         public string LinkedinUrl { get; set; }
+
     }
 
 }

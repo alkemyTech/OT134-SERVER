@@ -13,5 +13,7 @@ namespace OngProject.Core.Interfaces
         void Insert(Slides slides);
         void Update(Slides slides);
         void Delete(Slides slides);
+        Task<ICollection<SlideDTO>> GetAllByOrganization(int idOrganization);
+        Task<Result> Delete(int id);
     }
 }
