@@ -121,7 +121,8 @@ namespace OngProject.Core.Mapper
             var categoryEntity = new Category
             {
                 Name = category.Name,
-                Description=category.Description,
+                Description = category.Description,
+                Image = category.Image,
             };
             return categoryEntity;
         }

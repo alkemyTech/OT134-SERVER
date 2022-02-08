@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OngProject.Core.Interfaces;
 using OngProject.Core.Models.DTOs;
@@ -39,9 +39,18 @@ namespace OngProject.Controllers
         }
         
         [HttpGet("{id}")]
-        public IActionResult GetCategoryById(int id)
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> GetCategoryById(int id)
         {
-            return Ok();
+            
+                var result = await _categoryService.GetById(id);
+                if (result.Success)
+                {
+                    return Ok(result);
+                }
+
+                return StatusCode(404);
+           
         }
 
         [HttpPost]

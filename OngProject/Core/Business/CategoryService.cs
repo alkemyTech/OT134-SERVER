@@ -1,4 +1,6 @@
-﻿using OngProject.Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using OngProject.Core.Interfaces;
+using OngProject.Core.Mapper;
 using OngProject.Core.Models.DTOs;
 using OngProject.Core.Models.Response;
 using OngProject.Entities;
@@ -60,9 +62,26 @@ namespace OngProject.Core.Business
             return categoriesDTOForDisplay;
         }
 
-        public Category GetById()
+        public async Task<Result> GetById(int id)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                var category = await _unitOfWork.CategoryRepository.GetByIdAsync(id);
+                if (category != null)
+                {
+                    var categoryDto = _entityMapper.CategoryToCategoryDTO(category);
+                    return Result<CategoryDTO>.SuccessResult(categoryDto);
+                }
+                return Result.FailureResult("La categoria no existe.");
+
+            }
+            catch (Exception)
+            {
+
+                return Result.FailureResult("Ocurrio un problema al buscar la categoria.");
+            }
+            
+            
         }
 
         public async Task<Result> Insert(CategoryDTOForRegister categoryDTO)
