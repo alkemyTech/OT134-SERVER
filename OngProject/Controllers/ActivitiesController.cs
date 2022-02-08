@@ -12,7 +12,7 @@ namespace OngProject.Controllers
 {
     [Route("activities")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Administrator")]
     public class ActivitiesController : ControllerBase
     {
         private readonly IActivitiesService _activitiesService;

@@ -17,7 +17,7 @@ namespace OngProject.Core.Business
 
         public CommentsService(IUnitOfWork unitOfWork, IEntityMapper mapper)
         {
-            _unitOfWork = unitOfWork; 
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
@@ -41,10 +41,10 @@ namespace OngProject.Core.Business
                 {
                     return Result.FailureResult("Debe seleccionar una novedad");
                 }
-                else 
+                else
                 {
                     var response = await _unitOfWork.CommentsRepository.FindAllAsync();
-                    var ListComments = response.Where(x => x.NewId == IdNew).OrderBy(x => x.LastModified)
+                    var ListComments = response.Where(x => x.NewId == IdNew && x.SoftDelete == false).OrderBy(x => x.LastModified)
                                                .Select(x => _mapper.CommentToCommentDTO(x));
                     List<CommentDTO> dto = new();
                     foreach (var item in ListComments)
@@ -82,6 +82,7 @@ namespace OngProject.Core.Business
                 {
                     var result = _mapper.CommentDTOToComment(commentDTO);
                     result.LastModified = DateTime.Today;
+                    result.SoftDelete = false;
                     await _unitOfWork.CommentsRepository.Create(result);
                     await _unitOfWork.SaveChangesAsync();
 
@@ -101,9 +102,43 @@ namespace OngProject.Core.Business
             throw new NotImplementedException();
         }
 
-        public void Delete(Comment comment)
+        public async Task<Result> Delete(int IdComment, int idUser)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result = await _unitOfWork.CommentsRepository.GetByIdAsync(IdComment);
+                var VerifyAdminUser = await _unitOfWork.UserRepository.GetByIdAsync(idUser);
+                if (result.SoftDelete)
+                {
+                    return Result.FailureResult("Error 404 - Comentario no encontrado");
+                }
+                else if (VerifyAdminUser.RolId == 2)
+                {
+                    result.SoftDelete = true;
+                    result.LastModified = DateTime.Now;
+
+                    await _unitOfWork.SaveChangesAsync();
+
+                    return Result<Comment>.SuccessResult(result);
+                }
+                else if (result.UserId == idUser)
+                {
+                    result.SoftDelete = true;
+                    result.LastModified = DateTime.Now;
+
+                    await this._unitOfWork.SaveChangesAsync();
+
+                    return Result<Comment>.SuccessResult(result);
+                }
+                else
+                {
+                    return Result.FailureResult("Error 403 - Usted no tiene permiso para borrar este comentario");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Result.FailureResult("Ocurrio un Problema al eliminar el comentario : " + ex.ToString());
+            }
         }
 
     }

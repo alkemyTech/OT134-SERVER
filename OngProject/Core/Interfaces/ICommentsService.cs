@@ -12,6 +12,6 @@ namespace OngProject.Core.Interfaces
         Task<Result> GetById(int id);
         Task<Result> Insert(CommentDTO commentDTO);
         void Update(Comment comment);
-        void Delete(Comment comment);
+        Task<Result> Delete(int IdComment,int idUser);
     }
 }

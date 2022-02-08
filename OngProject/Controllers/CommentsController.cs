@@ -71,9 +71,19 @@ namespace OngProject.Controllers
         {
         }
 
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{id},{idUser}")]
+        public async Task<Result> Delete(int id,int idUser)
         {
+            try
+            {
+                var result = await _commentsService.Delete(id,idUser);
+                return Result<Result>.SuccessResult(result);
+            }
+            catch (Exception ex)
+            {
+
+                return Result.FailureResult("Ocurrio un Problema : " + ex.ToString());
+            }
         }
     }
 }
