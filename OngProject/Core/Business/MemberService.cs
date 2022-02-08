@@ -24,12 +24,12 @@ namespace OngProject.Core.Business
             _imageService = new ImageService(_unitOfWork);
         }
 
-        public async Task<IEnumerable<MemberDTO>> GetAll()
+        public async Task<IEnumerable<MemberDTODisplay>> GetAll()
         {
             var members = await _unitOfWork.MembersRepository.FindAllAsync();
 
             var membersDTO = members
-                .Select(member => _mapper.MemberToMemberDTO(member))
+                .Select(member => _mapper.MemberToMemberDTODisplay(member))
                 .ToList();
 
             return membersDTO;
@@ -40,14 +40,14 @@ namespace OngProject.Core.Business
             throw new NotImplementedException();
         }
 
-        public async Task<Result> Insert(MemberDTO memberDTO)
+        public async Task<Result> Insert(MemberDTORegister memberDTO)
         {
             try
             {
                 var member = _mapper.MemberDTOToMember(memberDTO);
 
                 var resultName = await _unitOfWork.MembersRepository.FindByConditionAsync(x => x.Name == memberDTO.Name);
-                
+
                 if (resultName.Count == 0)
                 {
                     var aws = new S3AwsHelper();
@@ -55,17 +55,19 @@ namespace OngProject.Core.Business
 
                     member.SoftDelete = false;
                     member.LastModified = DateTime.Now;
+                    member.Image = result;
 
                     await _unitOfWork.MembersRepository.Create(member);
                     await _unitOfWork.SaveChangesAsync();
 
-                    var memberCalss = new Member
+                    var memberDisplay = new MemberDTODisplay
                     {
-                        Name = result,
+                        Image = result,
+                        Name = memberDTO.Name,
                         Description = memberDTO.Description,
                     };
-                    return Result<Member>.SuccessResult(memberCalss);  
-                }               
+                    return Result<MemberDTODisplay>.SuccessResult(memberDisplay);
+                }
                 else
                 {
                     throw new Exception("El nombre ya existe en el sistema, intente uno diferente al ingresado.");
@@ -95,9 +97,10 @@ namespace OngProject.Core.Business
 
                     member.SoftDelete = true;
                     member.LastModified = DateTime.Now;
-                    await _unitOfWork.SaveChangesAsync();
+                    await _unitOfWork.SaveChangesAsync();               
 
-                    return Result<Member>.SuccessResult(member);
+                    return Result<string>.SuccessResult($"Miembro:({member.Id}) ha sido eliminado exitosamente.");
+                   
                 }
                 return Result.FailureResult("No existe un miembro con ese Id");
             }

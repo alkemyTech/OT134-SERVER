@@ -19,10 +19,11 @@ namespace OngProject.Core.Business
         private readonly IEntityMapper _entityMapper;
         private readonly IImageService _imageService;
 
-        public CategoryService(IUnitOfWork unitOfWork, IImageService imageService)
+        public CategoryService(IUnitOfWork unitOfWork, IImageService imageService, IEntityMapper entityMapper)
         {
             _unitOfWork = unitOfWork;
             _imageService = imageService;
+            _entityMapper = entityMapper;
         }
         public async Task<Result> Delete(int id)
         {
@@ -51,14 +52,14 @@ namespace OngProject.Core.Business
             }
         }
 
-        public async Task<IEnumerable<CategoryDTO>> GetAll()
+        public async Task<IEnumerable<CategoryDtoForDisplay>> GetAll()
         {
             var categories = await _unitOfWork.CategoryRepository.FindAllAsync();
 
-            var categoriesDTO = categories
-                .Select(category => _entityMapper.CategoryToCategoryDTO(category));
+            var categoriesDTOForDisplay = categories              
+                .Select(category => _entityMapper.CategoryToCategoryDtoForDisplay(category));
 
-            return categoriesDTO;
+            return categoriesDTOForDisplay;
         }
 
         public async Task<Result> GetById(int id)
@@ -83,7 +84,7 @@ namespace OngProject.Core.Business
             
         }
 
-        public async Task<Result> Insert(CategoryDTO categoryDTO)
+        public async Task<Result> Insert(CategoryDTOForRegister categoryDTO)
         {
             string imageName = String.Empty,
                 image = categoryDTO.Name != null ? categoryDTO.Image.Name : String.Empty;
@@ -91,9 +92,10 @@ namespace OngProject.Core.Business
             {
 
                 if (image != String.Empty)
-                {
                     imageName = await _imageService.UploadFile($"{Guid.NewGuid()}_{categoryDTO.Image.FileName}", categoryDTO.Image);
-                }
+
+                //Usar el mapper con el DTO
+                //Implementar validaciones
 
                 var newCategory = new Category()
                 {

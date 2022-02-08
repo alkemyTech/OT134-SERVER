@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using OngProject.Core.Interfaces;
 using OngProject.Core.Models.DTOs;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -35,7 +34,7 @@ namespace OngProject.Controllers
             return Ok();
         }
         [HttpPost]
-        public async Task<IActionResult> Post([FromForm] ActivityDTO dto)
+        public async Task<IActionResult> Post([FromForm] ActivityDTOForRegister dto)
         {
             try
             {

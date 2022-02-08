@@ -2,7 +2,7 @@
 
 namespace OngProject.Core.Models.DTOs
 {
-    public class CategoryDTO
+    public class CategoryDTOForRegister
     {
         [Required]
         public string Name { get; set; }

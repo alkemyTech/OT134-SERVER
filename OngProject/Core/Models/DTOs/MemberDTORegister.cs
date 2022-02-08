@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OngProject.Core.Models.DTOs
 {
-    public class MemberDTO
+    public class MemberDTORegister
     {
         [Display(Name = "Nombre")]
         [Required(ErrorMessage = "El nombre es requerido")]
