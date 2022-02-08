@@ -32,7 +32,7 @@ namespace OngProject.Core.Helper
                 var putRequest = new PutObjectRequest()
                 {
                     BucketName = "cohorte-enero-835eb560",
-                    Key = file.FileName,
+                    Key = key,
                     InputStream = file.OpenReadStream(),
                     ContentType = file.ContentType,
                     CannedACL = S3CannedACL.PublicRead
@@ -42,7 +42,7 @@ namespace OngProject.Core.Helper
                 {
                     Message = "File upload successfully",
                     Code = (int)result.HttpStatusCode,
-                    NameImage = file.FileName,
+                    NameImage = key,
                     Url = $"https://cohorte-enero-835eb560.s3.amazonaws.com/{key}",
                 };
                 return response;
