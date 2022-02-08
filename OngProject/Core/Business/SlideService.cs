@@ -53,7 +53,7 @@ namespace OngProject.Core.Business
             }
         }
 
-        public async Task<ICollection<SlideDTO>> GetAll()
+        public async Task<ICollection<SlideDtoForDisplay>> GetAll()
         {
             var response = await _unitOfWork.SlideRepository.FindByConditionAsync(x => x.SoftDelete == false);
             if (response.Count == 0)
@@ -62,10 +62,10 @@ namespace OngProject.Core.Business
             }
             else 
             {
-                List<SlideDTO> dto = new ();
+                List<SlideDtoForDisplay> dto = new ();
                 foreach (var item in response)
                 {
-                    dto.Add(_mapper.SlideToSlideDTO(item));
+                    dto.Add(_mapper.SlideToSlideDtoForDisplay(item));
                 }
                 return dto;
             }
@@ -93,7 +93,7 @@ namespace OngProject.Core.Business
             }
         }
 
-        public async Task<Result> Insert(SlideDTO slideDto)
+        public async Task<Result> Insert(SlideDtoForUpload slideDto)
         {
             try
             {
@@ -108,7 +108,8 @@ namespace OngProject.Core.Business
 
                 if (slideDto.Order == 0)
                 {
-                    var slidesList = await _unitOfWork.SlideRepository.FindByConditionAsync(x => x.OrganizationId == slideDto.OrganizationId);
+                    var slidesList = await _unitOfWork.SlideRepository.FindByConditionAsync(
+                        x => x.OrganizationId == slideDto.OrganizationId && x.Order == slideDto.Order);
 
                     slidesList = slidesList.OrderBy(x => x.Order).ToList();
 
@@ -123,15 +124,16 @@ namespace OngProject.Core.Business
                         return Result.FailureResult("Numero de Orden ya Ingresado anteriormente en Organizacion Ingresada");
                 }
 
-                var slide = _mapper.SlideDTOToSlide(slideDto);
+                var slide = _mapper.SlideDtoForUploadToSlide(slideDto);
                 slide.ImageUrl = await UploadEncodedImageToBucketAsync(slideDto.ImageUrl);
                 slide.LastModified = DateTime.Now;
+
                 await _unitOfWork.SlideRepository.Create(slide);
                 _unitOfWork.SaveChanges();
 
-                var newSlideDto = _mapper.SlideToSlideDTO(slide);
+                var newSlideDto = _mapper.SlideToSlideDtoForDisplay(slide);
 
-                return Result<SlideDTO>.SuccessResult(newSlideDto);
+                return Result<SlideDtoForDisplay>.SuccessResult(newSlideDto);
             }
             catch (Exception ex)
             {
@@ -144,7 +146,7 @@ namespace OngProject.Core.Business
             throw new System.NotImplementedException();
         }
 
-        public async Task<ICollection<SlideDTO>> GetAllByOrganization(int idOrganization)
+        public async Task<ICollection<SlideDtoForDisplay>> GetAllByOrganization(int idOrganization)
         {
             var response = await _unitOfWork.SlideRepository.FindByConditionAsync(x => x.OrganizationId == idOrganization);
             if (response.Count == 0)
@@ -153,10 +155,10 @@ namespace OngProject.Core.Business
             }
             else
             {
-                List<SlideDTO> dto = new();
+                List<SlideDtoForDisplay> dto = new();
                 foreach (var item in response)
                 {
-                    dto.Add(_mapper.SlideToSlideDTO(item));
+                    dto.Add(_mapper.SlideToSlideDtoForDisplay(item));
                 }
                 return dto;
             }

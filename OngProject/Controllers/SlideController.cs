@@ -10,7 +10,7 @@ namespace OngProject.Controllers
 {
     [Route("/Slides/")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Administrator")]
     public class SlideController : Controller
     {
         private readonly ISlideSerivice _slideSerivice;
@@ -56,7 +56,7 @@ namespace OngProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostSlide(SlideDTO slideDto)
+        public async Task<IActionResult> PostSlide(SlideDtoForUpload slideDto)
         {
             var result = await _slideSerivice.Insert(slideDto);
             if (result.Success)
