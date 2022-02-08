@@ -19,5 +19,8 @@ namespace OngProject.Core.Interfaces
         New NewDtoForUploadtoNew(NewDtoForUpload newDTO);
         NewDtoForDisplay NewtoNewDtoForDisplay(New newvar);
         Activities ActivityDTOToActivity(ActivityDTO dto);
+        Member MemberDTOToMember(MemberDTO memberDTO); 
+        TestimonialDTO TestimonialToTestimonialDTO(Testimonials testimonial);
+        Testimonials TestimonialDTOToTestimonial(TestimonialDTO testimonialDTO);
     }
 }

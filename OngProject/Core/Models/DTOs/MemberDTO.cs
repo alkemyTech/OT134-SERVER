@@ -1,14 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace OngProject.Core.Models.DTOs
 {
     public class MemberDTO
     {
-        [Required(ErrorMessage = "The Name Is Required")]
-        [StringLength(maximumLength: 255, ErrorMessage = "The Name Is Too Long")]
+        [Display(Name = "Nombre")]
+        [Required(ErrorMessage = "El nombre es requerido")]
+        [StringLength(maximumLength: 255, ErrorMessage = "El nombre es demasiado largo")]
         public string Name { get; set; }
 
-        [StringLength(maximumLength: 255, ErrorMessage = "The Description Is Too Long")]
+        [Display(Name = "Descripción")]
+        [StringLength(maximumLength: 255, ErrorMessage = "La descripción es demasiado larga")]
         public string Description { get; set; }
+
+        [Required]
+        public IFormFile File { get; set; }
     }
 }

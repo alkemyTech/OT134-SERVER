@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using OngProject.Core.Interfaces;
 using OngProject.Core.Models.Response;
+using OngProject.Core.Models.DTOs;
+using System;
 
 namespace OngProject.Controllers
 {
@@ -30,8 +32,18 @@ namespace OngProject.Controllers
         }
         
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromForm] TestimonialDTO testimonialDTO)
         {
+            try
+            {
+                var result = await _testimonialsService.Insert(testimonialDTO);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         
         [HttpPut("{id}")]

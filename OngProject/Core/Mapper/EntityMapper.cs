@@ -53,7 +53,6 @@ namespace OngProject.Core.Mapper
                 LastName = dto.LastName,
                 Email = dto.Email,
                 Password = dto.Password,
-                Photo = dto.Photo,
                 RolId = dto.RolId
             };
         }
@@ -62,8 +61,10 @@ namespace OngProject.Core.Mapper
         {
             var slideDto = new SlideDTO
             {
-                order = slides.order,
-                ImageUrl = slides.ImageUrl
+                Order = slides.Order,
+                Text = slides.Text,
+                ImageUrl = slides.ImageUrl,
+                OrganizationId = slides.OrganizationId
             };
             return slideDto;
         }
@@ -138,6 +139,7 @@ namespace OngProject.Core.Mapper
             };
             return activity;
         }
+        
         public New NewDtoForUploadtoNew(NewDtoForUpload newDtoForUpload)
         {
             New newEntity = new()
@@ -148,6 +150,7 @@ namespace OngProject.Core.Mapper
             };
             return newEntity;
         }
+        
         public NewDtoForDisplay NewtoNewDtoForDisplay(New newEntity)
         {
             NewDtoForDisplay newEntityForDisplay = new()
@@ -158,6 +161,38 @@ namespace OngProject.Core.Mapper
                 Category = newEntity.CategoryId
             };
             return newEntityForDisplay;
+        }
+
+        public Member MemberDTOToMember(MemberDTO memberDTO)
+        {
+            var member = new Member
+            {
+                Name = memberDTO.Name,
+                Description = memberDTO.Description,
+                Image = memberDTO.File.FileName,
+            };
+            return member;
+        }
+
+        public Testimonials TestimonialDTOToTestimonial(TestimonialDTO testimonialDTO)
+        {
+            var testimonial = new Testimonials
+            {
+                Name = testimonialDTO.Name,
+                Content = testimonialDTO.Content,
+                Image = testimonialDTO.File.FileName,
+            };
+            return testimonial;
+        }
+
+        public TestimonialDTO TestimonialToTestimonialDTO(Testimonials testimonial)
+        {
+            var testimonialDTO = new TestimonialDTO
+            {
+                Name = testimonial.Name,
+                Content = testimonial.Content,
+            };
+            return testimonialDTO;
         }
     }
 }
