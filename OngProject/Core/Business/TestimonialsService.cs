@@ -90,7 +90,9 @@ namespace OngProject.Core.Business
                     testimonial.LastModified = DateTime.Now;
                     await this._unitOfWork.SaveChangesAsync();
 
-                    return Result<Testimonials>.SuccessResult(testimonial);
+                    var testimonialDTO = _mapper.TestimonialToTestimonialDTO(testimonial);
+
+                    return Result<TestimonialDTO>.SuccessResult(testimonialDTO);
                 }
 
                 return Result.FailureResult("No existe un testimonio con ese Id");
