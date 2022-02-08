@@ -5,7 +5,6 @@ namespace OngProject.Core.Models.DTOs
     public class SlideDTO
     {
         [Display(Name = "UrlDeImagen")]
-        [StringLength(255)]
         public string ImageUrl { get; set; }
 
         [Display(Name = "Texto")]
@@ -13,7 +12,7 @@ namespace OngProject.Core.Models.DTOs
         public string Text { get; set; }
 
         [Display(Name = "Orden")]
-        [StringLength(255)]
+        //[StringLength(255)]
         public int Order { get; set; }
 
         [Display(Name = "IdDeOrganizacion")]

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OngProject.Core.Interfaces;
+using OngProject.Core.Models.DTOs;
 using OngProject.Core.Models.Response;
 using System;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace OngProject.Controllers
 {
     [Route("/Slides/")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class SlideController : Controller
     {
         private readonly ISlideSerivice _slideSerivice;
@@ -46,6 +47,12 @@ namespace OngProject.Controllers
         public async Task<Result> DeleteSlide(int slideId)
         {
             return await _slideSerivice.Delete(slideId);
+        }
+
+        [HttpPost]
+        public async Task<Result> PostSlide(SlideDTO slideDto)
+        {
+            return await _slideSerivice.Insert(slideDto);
         }
     }
 }
