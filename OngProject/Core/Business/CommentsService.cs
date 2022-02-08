@@ -44,7 +44,7 @@ namespace OngProject.Core.Business
                 else
                 {
                     var response = await _unitOfWork.CommentsRepository.FindAllAsync();
-                    var ListComments = response.Where(x => x.NewId == IdNew).OrderBy(x => x.LastModified)
+                    var ListComments = response.Where(x => x.NewId == IdNew && x.SoftDelete == false).OrderBy(x => x.LastModified)
                                                .Select(x => _mapper.CommentToCommentDTO(x));
                     List<CommentDTO> dto = new();
                     foreach (var item in ListComments)
@@ -82,6 +82,7 @@ namespace OngProject.Core.Business
                 {
                     var result = _mapper.CommentDTOToComment(commentDTO);
                     result.LastModified = DateTime.Today;
+                    result.SoftDelete = false;
                     await _unitOfWork.CommentsRepository.Create(result);
                     await _unitOfWork.SaveChangesAsync();
 
