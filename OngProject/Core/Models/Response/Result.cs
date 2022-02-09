@@ -7,22 +7,26 @@ namespace OngProject.Core.Models.Response
         public bool Success { get; protected set; }
         public string FailureMessage { get; protected set; }
         public List<string> ErrorList { get; set; }
+        public int StatusCode { get; set; }
 
         protected Result()
         {
             this.Success = true;
+            this.StatusCode = 200;
         }
 
         protected Result(string message)
         {
             this.Success = false;
             this.FailureMessage = message;
+            this.StatusCode = 400;
         }
 
         protected Result(List<string> errorList)
         {
             this.Success = false;
             this.ErrorList = errorList;
+            this.StatusCode = 500;
         }
 
         public static Result SuccessResult()
@@ -40,6 +44,27 @@ namespace OngProject.Core.Models.Response
             return new Result(errorList);
         }
 
+        public static Result SuccessResult(int status)
+        {            
+            var result = SuccessResult();
+            result.StatusCode = status;
+            return result;
+        }
+
+        public static Result FailureResult(string message, int status)
+        {
+            var result = FailureResult(message);
+            result.StatusCode = status;
+            return result;
+        }
+
+        public static Result ErrorResult(List<string> errorList, int status)
+        {
+            var result = ErrorResult(errorList);
+            result.StatusCode = status;
+            return result;
+        }
+
         public bool isError()
         {
             return ErrorList != null && ErrorList.Count > 0;
@@ -54,11 +79,19 @@ namespace OngProject.Core.Models.Response
         {
             this.Success = true;
             this.Data = t;
+            this.StatusCode = 200;
         }
 
         public static Result SuccessResult(T t)
         {
             return new Result<T>(t);
+        }
+
+        public static Result SuccessResult(T t, int status)
+        {
+            var result = SuccessResult(t);
+            result.StatusCode = status;
+            return result;
         }
     }
 }
