@@ -21,8 +21,6 @@ namespace OngProject.Core.Interfaces
         NewDtoForDisplay NewtoNewDtoForDisplay(New newvar);
         Activities ActivityDTOForRegister(ActivityDTOForRegister dto);
         ActivityDTOForDisplay ActivityForActivityDTODisplay(Activities dto);
-        Member MemberDTOToMember(MemberDTO memberDTO);
-        Activities ActivityDTOToActivity(ActivityDTO dto);
         TestimonialDTO TestimonialToTestimonialDTO(Testimonials testimonial);
         Testimonials TestimonialDTOToTestimonial(TestimonialDTO testimonialDTO);
         TestimonialDTODisplay TestimonialDTOToTestimonialDisplay(TestimonialDTO testimonalDTO);

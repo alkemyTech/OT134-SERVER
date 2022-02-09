@@ -69,8 +69,8 @@ namespace OngProject.Core.Business
                 var category = await _unitOfWork.CategoryRepository.GetByIdAsync(id);
                 if (category != null)
                 {
-                    var categoryDto = _entityMapper.CategoryToCategoryDTO(category);
-                    return Result<CategoryDTO>.SuccessResult(categoryDto);
+                    var categoryDto = _entityMapper.CategoryToCategoryDtoForDisplay(category);
+                    return Result<CategoryDtoForDisplay>.SuccessResult(categoryDto);
                 }
                 return Result.FailureResult("La categoria no existe.");
 
@@ -80,8 +80,6 @@ namespace OngProject.Core.Business
 
                 return Result.FailureResult("Ocurrio un problema al buscar la categoria.");
             }
-            
-            
         }
 
         public async Task<Result> Insert(CategoryDTOForRegister categoryDTO)

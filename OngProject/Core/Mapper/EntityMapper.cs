@@ -122,7 +122,6 @@ namespace OngProject.Core.Mapper
             {
                 Name = category.Name,
                 Description = category.Description,
-                Image = category.Image,
             };
             return categoryEntity;
         }
@@ -178,7 +177,7 @@ namespace OngProject.Core.Mapper
             };
             return newEntityForDisplay;
         }
-        public Member MemberDTOToMember(MemberDTO memberDTO)
+        public Member MemberDTOToMember(MemberDTORegister memberDTO)
         {
             var member = new Member
             {
