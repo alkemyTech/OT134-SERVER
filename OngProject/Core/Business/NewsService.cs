@@ -92,9 +92,36 @@ namespace OngProject.Core.Business
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<Result> Update(New news)
+        public async Task<Result> Update(int id, NewDtoForUpload newsDTO)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var news = await _unitOfWork.NewsRepository.GetByIdAsync(id);
+
+                if (news != null)
+                {
+                    await _imageService.AwsDeleteFile(news.Image[(news.Image.LastIndexOf("/") + 1)..]);
+
+                    var imageUrl = await _imageService.UploadFile($"{Guid.NewGuid()}_{newsDTO.Image.FileName}", newsDTO.Image);
+                                       
+                    news.Name = newsDTO.Name;
+                    news.Content = newsDTO.Content;
+                    news.Image = imageUrl;
+                    news.CategoryId = newsDTO.Category;
+                    news.LastModified = DateTime.Now;
+
+                    await _unitOfWork.SaveChangesAsync();
+
+                    var newsDisplay = _mapper.NewtoNewDtoForDisplay(news);
+
+                    return Result<NewDtoForDisplay>.SuccessResult(newsDisplay);
+                }
+                return Result.FailureResult("Id de noticia inexistente.");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
         public async Task<Result> Delete(int id)
         {
