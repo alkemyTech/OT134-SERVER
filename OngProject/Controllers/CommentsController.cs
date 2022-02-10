@@ -3,6 +3,9 @@ using OngProject.Core.Interfaces;
 using OngProject.Core.Models.DTOs;
 using OngProject.Core.Models.Response;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace OngProject.Controllers
@@ -52,31 +55,59 @@ namespace OngProject.Controllers
         }
 
         [HttpPost]
-        public async Task<Result> Post([FromBody] CommentDTO dto)
+        public async Task<Result> Post([FromBody] CommentDtoForRegister dto)
         {
             try
             {
-                var response = await _commentsService.Insert(dto);
+                var claim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+                if (claim == null)
+                    throw new Exception("Debe estar registrado para agregar un comentario");
+
+                var response = await _commentsService.Insert(dto, Int32.Parse(claim.Value));
+     
                 return response;
             }
             catch (Exception ex)
             {
-
                 return Result.FailureResult("Ocurrio un Problema : " + ex.ToString());
             }
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        [HttpDelete("{id},{idUser}")]
-        public async Task<Result> Delete(int id,int idUser)
+        public async Task<IActionResult> Put(int id, [FromBody] CommentDtoForDisplay commentDto)
         {
             try
             {
-                var result = await _commentsService.Delete(id,idUser);
+                var claim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+                if (claim == null)
+                    throw new Exception("Debe estar registrado para modificar un comentario");
+
+                var result = await _commentsService.Update(id, Int32.Parse(claim.Value), commentDto);
+
+                if(result.Success)
+                    return Ok(result);
+
+                return StatusCode(result.isError() ? 404 : 403, result);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, Result.ErrorResult(new List<string> { ex.Message }));
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<Result> Delete(int id)
+        {
+            try
+            {
+                var claim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+                if (claim == null)
+                    throw new Exception("Debe estar registrado para borrar un comentario");
+
+                var result = await _commentsService.Delete(id, Int32.Parse(claim.Value));
                 return Result<Result>.SuccessResult(result);
             }
             catch (Exception ex)
@@ -85,5 +116,6 @@ namespace OngProject.Controllers
                 return Result.FailureResult("Ocurrio un Problema : " + ex.ToString());
             }
         }
+
     }
 }

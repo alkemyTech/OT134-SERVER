@@ -13,10 +13,10 @@ namespace OngProject.Core.Interfaces
         Slides SlideDtoForUploadToSlide(SlideDtoForUpload slideDto);
         ContactDTO ContactToContactDTO(Contacts contacts);
         Contacts ContactDTOToContact(ContactDTO contactsDto);
-        CommentDTO CommentToCommentDTO(Comment comment);
+        CommentDtoForDisplay CommentToCommentDtoForDisplay(Comment comment);
+        Comment CommentForRegisterToComment(CommentDtoForRegister commentDto);
         CategoryDtoForDisplay CategoryToCategoryDtoForDisplay(Category category);
         Category CategoryDtoForRegisterToCategory(CategoryDTOForRegister category);
-        Comment CommentDTOToComment(CommentDTO dto);
         New NewDtoForUploadtoNew(NewDtoForUpload newDTO);
         NewDtoForDisplay NewtoNewDtoForDisplay(New newvar);
         Activities ActivityDTOForRegister(ActivityDTOForRegister dto);

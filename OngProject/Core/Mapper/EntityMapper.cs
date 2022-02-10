@@ -100,14 +100,24 @@ namespace OngProject.Core.Mapper
             };
             return contacts;
         }
-        public CommentDTO CommentToCommentDTO(Comment comment)
+        public CommentDtoForDisplay CommentToCommentDtoForDisplay(Comment comment)
         {
-            var commentDTO = new CommentDTO
+            var commentDTO = new CommentDtoForDisplay
             {
                 Body = comment.Body
             };
             return commentDTO;
         }
+        public Comment CommentForRegisterToComment(CommentDtoForRegister commentDto)
+        {
+            var comment = new Comment
+            {
+                NewId = commentDto.NewId,
+                Body = commentDto.Body
+            };
+            return comment;
+        }
+
         public CategoryDtoForDisplay CategoryToCategoryDtoForDisplay(Category category)
         {
             var categoryDtoForDisplay = new CategoryDtoForDisplay
@@ -124,17 +134,6 @@ namespace OngProject.Core.Mapper
                 Description = category.Description,
             };
             return categoryEntity;
-        }
-
-        public Comment CommentDTOToComment(CommentDTO dto)
-        {
-            var commetn = new Comment
-            {
-                Body = dto.Body,
-                NewId = dto.NewId,
-                UserId = dto.UserId
-            };
-            return commetn;
         }
 
         public ActivityDTOForDisplay ActivityForActivityDTODisplay(Activities dto)
