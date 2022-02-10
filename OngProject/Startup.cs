@@ -17,6 +17,7 @@ using OngProject.Core.Business;
 using Amazon.S3;
 using OngProject.Core.Mapper;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 
 namespace OngProject
 {
@@ -70,7 +71,8 @@ namespace OngProject
             });
 
             services.AddEntityFrameworkProxies();
-            services.AddEntityFrameworkSqlServer();            
+            services.AddEntityFrameworkSqlServer();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<IImageService, ImageService>();

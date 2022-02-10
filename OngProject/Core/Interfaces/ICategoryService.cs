@@ -1,13 +1,15 @@
 ﻿using OngProject.Core.Models.DTOs;
 using OngProject.Core.Models.Response;
 using OngProject.Entities;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using OngProject.Core.Helper;
+using OngProject.Core.Models.PagedResourceParameters;
+
 namespace OngProject.Core.Interfaces
 {
     public interface ICategoryService
     {
-        Task<IEnumerable<CategoryDtoForDisplay>> GetAll();
+        Task<Result> GetAll(PaginationParams pagingParams);
         Task<Result> GetById(int id);
         Task<Result> Insert(CategoryDTOForRegister categoryDTO);
         void Update(Category category);

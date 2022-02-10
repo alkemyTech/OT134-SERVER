@@ -2,8 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OngProject.Core.Interfaces;
 using OngProject.Core.Models.DTOs;
-using OngProject.Core.Models.Response;
-using System;
+using OngProject.Core.Models.PagedResourceParameters;
 using System.Threading.Tasks;
 
 namespace OngProject.Controllers
@@ -20,22 +19,13 @@ namespace OngProject.Controllers
             _categoryService = categoryService;
             _imageService = imageService;
         }
-        [HttpGet]
-        public async Task<IActionResult> GetAllCategories()
-        {
-            try
-            {
-                var categoriesDto = await _categoryService.GetAll();
-                if (categoriesDto != null)
-                    return Ok(categoriesDto);
-                else
-                    return NotFound("Categorias vacias");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAllCategories([FromQuery] PaginationParams pagingParams)
+        {            
+            var result = await _categoryService.GetAll(pagingParams);
+            
+            return StatusCode(result.StatusCode, result);
         }
         
         [HttpGet("{id}")]
