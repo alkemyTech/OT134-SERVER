@@ -60,17 +60,23 @@ namespace OngProject.Core.Business
         {
             try
             {
-                var categories = await _unitOfWork.CategoryRepository.FindAllAsync();
+                var categories = await _unitOfWork.CategoryRepository.FindAllAsync(null, null, null, paginationParams.PageNumber, paginationParams.PageSize);
+                var totalCount = await _unitOfWork.CategoryRepository.Count();
 
-                if(categories.Count == 0)
+                if (totalCount == 0)
                 {
                     return Result.FailureResult("No existen categorias");
+                }
+
+                if (categories.Count == 0)
+                {
+                    return Result.FailureResult("paginacion invalida, no hay resultados");
                 }
 
                 var categoriesDTOForDisplay = categories
                     .Select(category => _entityMapper.CategoryToCategoryDtoForDisplay(category));
 
-                var paged =  PagedList<CategoryDtoForDisplay>.Create(categoriesDTOForDisplay.ToList(),
+                var paged =  PagedList<CategoryDtoForDisplay>.Create(categoriesDTOForDisplay.ToList(), totalCount,
                                                                 paginationParams.PageNumber,
                                                                 paginationParams.PageSize);
 

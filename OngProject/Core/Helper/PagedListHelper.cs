@@ -13,29 +13,19 @@ namespace OngProject.Core.Helper
         public bool HasPrevius => (CurrentPage > 1 && CurrentPage <= TotalPages);
         public bool HasNext => (CurrentPage < TotalPages);
 
-        public PagedList(ICollection<T> source, int pageNumber, int pageSize)
+        public PagedList(ICollection<T> source, int totalCount, int pageNumber, int pageSize)
         {
-            this.TotalCount = source.Count;            
+            this.TotalCount = totalCount;            
             this.PageSize = pageSize;
-            this.TotalPages = (int)Math.Ceiling(this.TotalCount / (double)this.PageSize);
+            this.TotalPages = (int)Math.Ceiling(this.TotalCount / (double)this.PageSize);            
+            this.CurrentPage = pageNumber;            
             
-            if(pageNumber <= this.TotalPages && pageNumber >= 1)
-            {
-                this.CurrentPage = pageNumber;
-            }
-            else
-            {
-                this.CurrentPage = pageNumber > this.TotalPages ? this.TotalPages : 1;
-            }
-
-            var items = source.Skip((this.CurrentPage - 1) * this.PageSize).Take(this.PageSize).ToList();
-
-            AddRange(items);
+            AddRange(source);
         }
 
-        public static PagedList<T> Create(ICollection<T> source, int pageNumber, int pageSize)
+        public static PagedList<T> Create(ICollection<T> source, int totalCount, int pageNumber, int pageSize)
         {
-            return new PagedList<T>(source, pageNumber, pageSize);
+            return new PagedList<T>(source, totalCount, pageNumber, pageSize);
         }
     }
 }
