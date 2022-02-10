@@ -80,8 +80,15 @@ namespace OngProject.Controllers
 
         // PUT api/<NewsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> Put(int id, [FromForm] NewDtoForUpload newsDTO)
         {
+            var result = await _newsService.Update(id, newsDTO);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return StatusCode(result.isError() ? 500 : 400, result);
         }
 
         // DELETE api/<NewsController>/5
