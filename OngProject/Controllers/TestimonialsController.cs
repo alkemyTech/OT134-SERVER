@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using OngProject.Core.Interfaces;
-using OngProject.Core.Models.Response;
 using OngProject.Core.Models.DTOs;
 using System;
+using OngProject.Core.Models.PagedResourceParameters;
 
 namespace OngProject.Controllers
 {
@@ -20,9 +20,11 @@ namespace OngProject.Controllers
         }
         
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> GetAll([FromQuery] PaginationParams pagingParams)
         {
-            return Ok();
+            var result = await _testimonialsService.GetAll(pagingParams);
+
+            return StatusCode(result.StatusCode, result);
         }
         
         [HttpGet("{id}")]

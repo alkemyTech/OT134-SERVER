@@ -1,12 +1,15 @@
-﻿using OngProject.Core.Helper;
+﻿using Microsoft.AspNetCore.Http;
+using OngProject.Core.Helper;
 using OngProject.Core.Interfaces;
-using OngProject.Core.Mapper;
 using OngProject.Core.Models.DTOs;
+using OngProject.Core.Models.Paged;
+using OngProject.Core.Models.PagedResourceParameters;
 using OngProject.Core.Models.Response;
 using OngProject.Entities;
 using OngProject.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace OngProject.Core.Business
@@ -14,19 +17,46 @@ namespace OngProject.Core.Business
     public class TestimonialsService : ITestimonialsService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly EntityMapper _mapper;
-        private readonly ImageService _imageService;
+        private readonly IEntityMapper _mapper;
+        private readonly IImageService _imageService;
+        private readonly IHttpContextAccessor _httpContext;
 
-        public TestimonialsService(IUnitOfWork unitOfWork)
+        public TestimonialsService(IUnitOfWork unitOfWork, IImageService imageService, IEntityMapper entityMapper, IHttpContextAccessor httpContext)
         {
             _unitOfWork = unitOfWork;
-            _mapper = new EntityMapper();
-            _imageService = new ImageService(_unitOfWork);
+            _mapper = entityMapper;
+            _imageService = imageService;
+            _httpContext = httpContext;
         }
 
-        public IEnumerable<Testimonials> GetAll()
+        public async Task<Result> GetAll(PaginationParams paginationParams)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var testimonials = await _unitOfWork.TestimonialsRepository.FindAllAsync(null, null, null, paginationParams.PageNumber, paginationParams.PageSize);
+                var totalCount = await _unitOfWork.TestimonialsRepository.Count();
+
+                if (totalCount == 0)
+                {
+                    return Result.FailureResult("No existen testimonios");
+                }
+
+                if (testimonials.Count == 0)
+                {
+                    return Result.FailureResult("Paginación inválida, no hay resultados");
+                }             
+
+                var paged = PagedList<Testimonials>.Create(testimonials.ToList(), totalCount, paginationParams.PageNumber, paginationParams.PageSize);
+
+                var url = $"{this._httpContext.HttpContext.Request.Scheme}://{this._httpContext.HttpContext.Request.Host}{this._httpContext.HttpContext.Request.Path}";
+                var pagedResponse = new PagedResponse<Testimonials>(paged, url);
+
+                return Result<PagedResponse<Testimonials>>.SuccessResult(pagedResponse);
+            }
+            catch (Exception ex)
+            {
+                return Result.ErrorResult(new List<string> { ex.Message });
+            }
         }
 
         public Testimonials GetById()
