@@ -56,6 +56,18 @@ namespace OngProject.Core.Mapper
                 RolId = dto.RolId
             };
         }
+
+        public UserDtoForDisplay UserToUserDtoForDisplay(User user)
+        {
+            return new UserDtoForDisplay
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Photo = user.Photo
+            };
+        }
+
         public SlideDtoForDisplay SlideToSlideDtoForDisplay(Slides slides)
         {
             var slideDto = new SlideDtoForDisplay

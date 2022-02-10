@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OngProject.Core.Interfaces;
-using System;
+using OngProject.Core.Models.DTOs;
 using System.Threading.Tasks;
 
 namespace OngProject.Controllers
@@ -45,12 +45,14 @@ namespace OngProject.Controllers
         {
         }
 
-        // PUT api/<UserController>/5
+        // PUT <UserController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromForm] UserUpdateDto user)
         {
-        }        
-        
+            var response = await _userService.Update(id, user);
+            return StatusCode(response.StatusCode, response);
+        }
+
         // DELETE api/<UserController>/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "Administrator")]
