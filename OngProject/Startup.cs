@@ -21,6 +21,7 @@ using System.Linq;
 using System.Reflection;
 using System.IO;
 using System;
+using Microsoft.AspNetCore.Http;
 
 namespace OngProject
 {
@@ -81,7 +82,8 @@ namespace OngProject
             });
 
             services.AddEntityFrameworkProxies();
-            services.AddEntityFrameworkSqlServer();            
+            services.AddEntityFrameworkSqlServer();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<IImageService, ImageService>();

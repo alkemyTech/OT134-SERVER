@@ -1,7 +1,9 @@
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using OngProject.Core.Helper;
 using OngProject.Core.Interfaces;
-using OngProject.Core.Mapper;
 using OngProject.Core.Models.DTOs;
+using OngProject.Core.Models.Paged;
+using OngProject.Core.Models.PagedResourceParameters;
 using OngProject.Core.Models.Response;
 using OngProject.Entities;
 using OngProject.Repositories.Interfaces;
@@ -18,12 +20,14 @@ namespace OngProject.Core.Business
         private readonly IUnitOfWork _unitOfWork;
         private readonly IEntityMapper _entityMapper;
         private readonly IImageService _imageService;
+        private readonly IHttpContextAccessor _httpContext;
 
-        public CategoryService(IUnitOfWork unitOfWork, IImageService imageService, IEntityMapper entityMapper)
+        public CategoryService(IUnitOfWork unitOfWork, IImageService imageService, IEntityMapper entityMapper, IHttpContextAccessor httpContext)
         {
             _unitOfWork = unitOfWork;
             _imageService = imageService;
             _entityMapper = entityMapper;
+            _httpContext = httpContext;
         }
         public async Task<Result> Delete(int id)
         {
@@ -52,14 +56,39 @@ namespace OngProject.Core.Business
             }
         }
 
-        public async Task<IEnumerable<CategoryDtoForDisplay>> GetAll()
+        public async Task<Result> GetAll(PaginationParams paginationParams)
         {
-            var categories = await _unitOfWork.CategoryRepository.FindAllAsync();
+            try
+            {
+                var categories = await _unitOfWork.CategoryRepository.FindAllAsync(null, null, null, paginationParams.PageNumber, paginationParams.PageSize);
+                var totalCount = await _unitOfWork.CategoryRepository.Count();
 
-            var categoriesDTOForDisplay = categories              
-                .Select(category => _entityMapper.CategoryToCategoryDtoForDisplay(category));
+                if (totalCount == 0)
+                {
+                    return Result.FailureResult("No existen categorias");
+                }
 
-            return categoriesDTOForDisplay;
+                if (categories.Count == 0)
+                {
+                    return Result.FailureResult("paginacion invalida, no hay resultados");
+                }
+
+                var categoriesDTOForDisplay = categories
+                    .Select(category => _entityMapper.CategoryToCategoryDtoForDisplay(category));
+
+                var paged =  PagedList<CategoryDtoForDisplay>.Create(categoriesDTOForDisplay.ToList(), totalCount,
+                                                                paginationParams.PageNumber,
+                                                                paginationParams.PageSize);
+
+                var url = $"{this._httpContext.HttpContext.Request.Scheme}://{this._httpContext.HttpContext.Request.Host}{this._httpContext.HttpContext.Request.Path}";
+                var pagedResponse = new PagedResponse<CategoryDtoForDisplay>(paged, url);
+                
+                return Result<PagedResponse<CategoryDtoForDisplay>>.SuccessResult(pagedResponse);
+            }
+            catch(Exception e)
+            {
+                return Result.ErrorResult(new List<string> { e.Message });
+            }
         }
 
         public async Task<Result> GetById(int id)
