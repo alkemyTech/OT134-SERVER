@@ -1,5 +1,4 @@
 using OngProject.Core.Interfaces;
-using OngProject.Entities;
 using OngProject.Repositories.Interfaces;
 using System;
 using OngProject.Core.Models.DTOs;
@@ -147,9 +146,33 @@ namespace OngProject.Core.Business
             }
         }
 
-        public void Update(User user)
+
+        public async Task<Result> Update(int id, UserUpdateDto userDto)
         {
-            throw new NotImplementedException();
+            try
+            { 
+                var user = await _unitOfWork.UserRepository.GetByIdAsync(id);
+                if (user is not null)
+                {
+                    if (id != userDto.Id && user.RolId == 1)
+                        return Result.FailureResult("No tiene permiso para modificar los datos de otro usuario.", 403);
+
+                    user.FirstName = userDto.FirstName;
+                    user.LastName = userDto.LastName;
+                    user.Email = userDto.Email;
+                    user.LastModified = DateTime.Now;
+                    await _imageService.AwsDeleteFile(user.Photo[(user.Photo.LastIndexOf("/") + 1)..]);
+                    user.Photo = await _imageService.UploadFile($"{Guid.NewGuid()}_{userDto.Photo.FileName}", userDto.Photo);
+
+                    await this._unitOfWork.SaveChangesAsync();
+                    return Result<UserDtoForDisplay>.SuccessResult(_mapper.UserToUserDtoForDisplay(user), 200);
+                }
+                return Result.FailureResult("id de usuario inexistente.", 404);
+            }  
+            catch (Exception ex)
+            {
+                return Result.FailureResult("Error al actualizar el usuario: " + ex.Message, 500);
+            }
         }
 
         public async Task<Result> Delete(int id)
