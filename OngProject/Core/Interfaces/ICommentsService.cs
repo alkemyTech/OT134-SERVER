@@ -8,10 +8,10 @@ namespace OngProject.Core.Interfaces
 {
     public interface ICommentsService
     {
-        Task<IEnumerable<CommentDTO>> GetAll();
+        Task<IEnumerable<CommentDtoForDisplay>> GetAll();
         Task<Result> GetById(int id);
-        Task<Result> Insert(CommentDTO commentDTO);
-        void Update(Comment comment);
+        Task<Result> Insert(CommentDtoForRegister commentDTO, int idUser);
+        Task<Result> Update(int idComment, int idUser, CommentDtoForDisplay commentDto);
         Task<Result> Delete(int IdComment,int idUser);
     }
 }
