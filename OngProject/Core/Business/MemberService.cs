@@ -8,31 +8,62 @@ using System.Threading.Tasks;
 using OngProject.Core.Models.DTOs;
 using OngProject.Core.Models.Response;
 using OngProject.Core.Helper;
+using OngProject.Core.Models.PagedResourceParameters;
+using OngProject.Core.Models.Paged;
+using Microsoft.AspNetCore.Http;
 
 namespace OngProject.Core.Business
 {
     public class MemberService : IMemberService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IEntityMapper _mapper;
+        private readonly IEntityMapper _entityMapper;
         private readonly ImageService _imageService;
+        private readonly IHttpContextAccessor _httpContext;
 
-        public MemberService(IUnitOfWork unitOfWork, IEntityMapper mapper)
+        public MemberService(IUnitOfWork unitOfWork, 
+                             IEntityMapper mapper, 
+                             IHttpContextAccessor httpContext)
         {
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
+            _entityMapper = mapper;
             _imageService = new ImageService(_unitOfWork);
+            _httpContext = httpContext;
         }
 
-        public async Task<IEnumerable<MemberDTODisplay>> GetAll()
+        public async Task<Result> GetAll(PaginationParams paginationParams)
         {
-            var members = await _unitOfWork.MembersRepository.FindAllAsync();
+            try
+            {
+                var members = await _unitOfWork.MembersRepository.FindAllAsync(null, null, null, paginationParams.PageNumber, paginationParams.PageSize);
+                var totalMembers = await _unitOfWork.MembersRepository.Count();
 
-            var membersDTO = members
-                .Select(member => _mapper.MemberToMemberDTODisplay(member))
-                .ToList();
+                if (totalMembers == 0)
+                {
+                    return Result.FailureResult("No existen Miembros que mostrar");
+                }
 
-            return membersDTO;
+                if (members.Count == 0)
+                {
+                    return Result.FailureResult("paginacion invalida, no hay resultados disponibles");
+                }
+
+                var Dto = members
+                    .Select(member => _entityMapper.MemberToMemberDTODisplay(member));
+
+                var paged = PagedList<MemberDTODisplay>.Create(Dto.ToList(), totalMembers,
+                                                                paginationParams.PageNumber,
+                                                                paginationParams.PageSize);
+
+                var url = $"{this._httpContext.HttpContext.Request.Scheme}://{this._httpContext.HttpContext.Request.Host}{this._httpContext.HttpContext.Request.Path}";
+                var pagedResponse = new PagedResponse<MemberDTODisplay>(paged, url);
+
+                return Result<PagedResponse<MemberDTODisplay>>.SuccessResult(pagedResponse);
+            }
+            catch (Exception e)
+            {
+                return Result.ErrorResult(new List<string> { e.Message });
+            }
         }
 
         public Member GetById()
@@ -44,7 +75,7 @@ namespace OngProject.Core.Business
         {
             try
             {
-                var member = _mapper.MemberDTORegisterToMember(memberDTO);
+                var member = _entityMapper.MemberDTORegisterToMember(memberDTO);
 
                 var resultName = await _unitOfWork.MembersRepository.FindByConditionAsync(x => x.Name == memberDTO.Name);
 
