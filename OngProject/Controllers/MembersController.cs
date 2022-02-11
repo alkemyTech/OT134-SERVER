@@ -3,8 +3,8 @@ using System;
 using System.Threading.Tasks;
 using OngProject.Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using OngProject.Core.Models.Response;
 using OngProject.Core.Models.DTOs;
+using OngProject.Core.Models.PagedResourceParameters;
 
 namespace OngProject.Controllers
 {
@@ -21,21 +21,11 @@ namespace OngProject.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAllMembers([FromQuery] PaginationParams pagingParams)
         {
-            try
-            {
-                var memberDTO = await _membersService.GetAll();
-                if (memberDTO != null)
-                {
-                    return Ok(memberDTO);
-                }
-                else return NotFound("No se encontró información sobre los miembros");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            var result = await _membersService.GetAll(pagingParams);
+
+            return StatusCode(result.StatusCode, result);
         }
 
         [HttpGet("{id}")]
