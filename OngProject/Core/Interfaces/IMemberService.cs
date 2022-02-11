@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using OngProject.Core.Models.DTOs;
 using OngProject.Core.Models.Response;
+using OngProject.Core.Models.PagedResourceParameters;
 
 namespace OngProject.Core.Interfaces
 {
     public interface IMemberService
     {
-        Task<IEnumerable<MemberDTODisplay>> GetAll();
+        Task<Result> GetAll(PaginationParams paginationParams);
         Member GetById();
         Task<Result> Insert(MemberDTORegister memberDTO);
         void Update(Member member);

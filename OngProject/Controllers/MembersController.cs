@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using OngProject.Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using OngProject.Core.Models.DTOs;
+using OngProject.Core.Models.PagedResourceParameters;
 using Swashbuckle.AspNetCore.Annotations;
 using Microsoft.AspNetCore.Http;
 
@@ -34,25 +35,16 @@ namespace OngProject.Controllers
         /// <response code="404">Not Found. Server couldn't find any members information.</response> 
         /// <response code="500">Internal Server Error.</response>  
         [HttpGet]
+        public async Task<IActionResult> GetAllMembers([FromQuery] PaginationParams pagingParams)
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Get()
         {
-            try
-            {
-                var memberDTO = await _membersService.GetAll();
-                if (memberDTO != null)
-                {
-                    return Ok(memberDTO);
-                }
-                else return NotFound("No se encontró información sobre los miembros");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            var result = await _membersService.GetAll(pagingParams);
+
+            return StatusCode(result.StatusCode, result);
         }
 
         /// GET: members/5
