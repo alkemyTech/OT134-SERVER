@@ -5,6 +5,10 @@
     <UserSecretsId>781d8b0e-11ee-4395-8abe-bdf7ca975528</UserSecretsId>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>D:\dotnet\OT134-SERVER\OngProject\OngProject.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.1" />
     <PackageReference Include="AWSSDK.S3" Version="3.7.7.15" />
