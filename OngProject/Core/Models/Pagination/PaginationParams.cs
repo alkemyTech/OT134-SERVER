@@ -6,10 +6,16 @@ namespace OngProject.Core.Models.PagedResourceParameters
     {
         const int MaxPageSize = 50;
 
+        /// <summary>
+        ///     Number of page.
+        /// </summary>
         [Range(1, int.MaxValue, ErrorMessage = "Please enter a value bigger than {1}")]
         public int PageNumber { get; set; } = 1;
         private int _pageSize = 10;
 
+        /// <summary>
+        ///     Amount of element in a page.
+        /// </summary>
         [Range(1, int.MaxValue)]
         public int PageSize
         {
