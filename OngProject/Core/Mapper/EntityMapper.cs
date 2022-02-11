@@ -138,6 +138,17 @@ namespace OngProject.Core.Mapper
             };
             return categoryDtoForDisplay;
         }
+
+        public CategoryDTO CategoryToCategoryDTO(Category category)
+        {
+            return new CategoryDTO
+            {
+                Name = category.Name,
+                Description = category.Description,
+                Image = category.Image
+            };
+        }
+
         public Category CategoryDtoForRegisterToCategory(CategoryDTOForRegister category)
         {
             var categoryEntity = new Category

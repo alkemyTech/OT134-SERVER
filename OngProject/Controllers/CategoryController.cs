@@ -13,11 +13,9 @@ namespace OngProject.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
-        private readonly IImageService _imageService;
-        public CategoryController(ICategoryService categoryService, IImageService imageService)
+        public CategoryController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
-            _imageService = imageService;
         }
 
         [HttpGet]
@@ -57,8 +55,12 @@ namespace OngProject.Controllers
         }
 
         [HttpPut("{id}")]
-        public void UpdateCategory()
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> Put(int id, [FromForm] CategoryDTOForUpload dto)
         {
+            var result = await _categoryService.Update(id, dto);
+            
+            return StatusCode(result.StatusCode, result);
         }
 
 

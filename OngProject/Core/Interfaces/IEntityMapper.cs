@@ -18,6 +18,7 @@ namespace OngProject.Core.Interfaces
         Comment CommentForRegisterToComment(CommentDtoForRegister commentDto);
         CategoryDtoForDisplay CategoryToCategoryDtoForDisplay(Category category);
         Category CategoryDtoForRegisterToCategory(CategoryDTOForRegister category);
+        CategoryDTO CategoryToCategoryDTO(Category category);
         New NewDtoForUploadtoNew(NewDtoForUpload newDTO);
         NewDtoForDisplay NewtoNewDtoForDisplay(New newvar);
         Activities ActivityDTOForRegister(ActivityDTOForRegister dto);

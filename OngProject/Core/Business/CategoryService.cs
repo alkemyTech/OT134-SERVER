@@ -98,8 +98,8 @@ namespace OngProject.Core.Business
                 var category = await _unitOfWork.CategoryRepository.GetByIdAsync(id);
                 if (category != null)
                 {
-                    var categoryDto = _entityMapper.CategoryToCategoryDtoForDisplay(category);
-                    return Result<CategoryDtoForDisplay>.SuccessResult(categoryDto);
+                    var categoryDto = _entityMapper.CategoryToCategoryDTO(category);
+                    return Result<CategoryDTO>.SuccessResult(categoryDto);
                 }
                 return Result.FailureResult("La categoria no existe.");
 
@@ -141,14 +141,45 @@ namespace OngProject.Core.Business
             }
             catch (Exception e)
             {
-
                 return Result.FailureResult("Ocurrio un problema al crear una nueva categoria: " + e.Message);
             }
         }
 
-        public void Update(Category category)
+        public async Task<Result> Update(int id, CategoryDTOForUpload dto)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                var category = await _unitOfWork.CategoryRepository.GetByIdAsync(id);
+
+                if (category != null)
+                {
+                    category.Name = dto.Name;
+                    category.Description = dto.Description;                    
+                    category.LastModified = DateTime.Now;
+
+                    //Imagen opcional
+                    if(dto.Image == null && category.Image != null || dto.Image != null && category.Image != null)
+                    {
+                        await _imageService.AwsDeleteFile(category.Image[(category.Image.LastIndexOf("/") + 1)..]);
+                        category.Image = null;
+                    }
+                    if (dto.Image != null)
+                    {                        
+                        category.Image = await _imageService.UploadFile($"{Guid.NewGuid()}_{dto.Image.FileName}", dto.Image);
+                    }                    
+
+                    await _unitOfWork.SaveChangesAsync();
+
+                    var categoryDto = _entityMapper.CategoryToCategoryDTO(category);
+
+                    return Result<CategoryDTO>.SuccessResult(categoryDto);
+                }
+                return Result.FailureResult("Id de categoria inexistente.");
+            }
+            catch (Exception ex)
+            {
+                return Result.ErrorResult(new List<string> { ex.Message });
+            }
         }
     }
 }
