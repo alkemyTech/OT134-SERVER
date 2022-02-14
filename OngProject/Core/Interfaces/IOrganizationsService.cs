@@ -8,10 +8,10 @@ namespace OngProject.Core.Interfaces
 {
     public interface IOrganizationsService
     {
-        Task<IEnumerable<OrganizationDTO>>GetAll();
+        Task<IEnumerable<OrganizationDTOForDisplay>> GetAll();
         Organization GetById();
-        void Insert(Organization organization);
-        void Update(Organization organization);
+        Task<Result> Insert(OrganizationDTOForUpload organizationDTOForUpload);
+        Task<Result> Update(int id, OrganizationDTOForUpload organizationDTOForUpload);
         void Delete(Organization organization);
     }
 }

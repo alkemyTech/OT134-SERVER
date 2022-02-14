@@ -6,21 +6,39 @@ namespace OngProject.Core.Mapper
 {
     public class EntityMapper : IEntityMapper
     {
-        public OrganizationDTO OrganizationToOrganizationDto(Organization organization)
+        public Organization OrganizationDtoForUploadtoOrganization(OrganizationDTOForUpload organizationDTOForUpload)
         {
-            var organizationDto = new OrganizationDTO
+            var Organization= new Organization()
+            {
+                Name = organizationDTOForUpload.Name,
+                Address = organizationDTOForUpload.Address,
+                Phone = organizationDTOForUpload.Phone,
+                Email = organizationDTOForUpload.Email,
+                WelcomeText = organizationDTOForUpload.WelcomeText,
+                AboutUsText = organizationDTOForUpload.AboutUsText,
+                FacebookUrl = organizationDTOForUpload.FacebookUrl,
+                InstagramUrl = organizationDTOForUpload.InstagramUrl,
+                LinkedinUrl = organizationDTOForUpload.LinkedinUrl
+            };
+            return Organization;
+        }
+        public OrganizationDTOForDisplay OrganizationToOrganizationDTOForDisplay(Organization organization)
+        {
+            var organizationDTOForDisplay = new OrganizationDTOForDisplay
             {
                 Name = organization.Name,
-                Image = organization.Image,
-                Phone = organization.Phone,
+                Image=organization.Image,
                 Address = organization.Address,
+                Phone = organization.Phone,
+                Email = organization.Email,
+                WelcomeText = organization.WelcomeText,
+                AboutUsText = organization.AboutUsText,
                 FacebookUrl = organization.FacebookUrl,
                 InstagramUrl = organization.InstagramUrl,
                 LinkedinUrl = organization.LinkedinUrl
             };
-            return organizationDto;
+            return organizationDTOForDisplay;
         }
-
         public UserDTO UserToUserDto(User user)
         {
             var userDto = new UserDTO
@@ -147,14 +165,24 @@ namespace OngProject.Core.Mapper
             };
             return categoryEntity;
         }
+        
+        public CategoryDTO CategoryToCategoryDTO(Category category)
+        {
+            return new CategoryDTO
+            {
+                Name = category.Name,
+                Description = category.Description,
+                Image = category.Image
+            };
+        }
 
         public ActivityDTOForDisplay ActivityForActivityDTODisplay(Activities dto)
         {
             var activityDisplay = new ActivityDTOForDisplay
             {
-                 Name=dto.Name,
-                 Content = dto.Content,
-                 Image = dto.Image
+                Name = dto.Name,
+                Content = dto.Content,
+                Image = dto.Image
             };
             return activityDisplay;
         }

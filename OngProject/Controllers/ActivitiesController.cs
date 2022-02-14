@@ -64,6 +64,7 @@ namespace OngProject.Controllers
             }
         }
 
+
         /// PUT: activities/Put
         /// <summary>
         ///     Update an already created Activity
@@ -78,7 +79,21 @@ namespace OngProject.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public void Put(int id, [FromBody] string value)
+
+        // PUT api/<ActivitiesController>/5
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Administrator")]
+
+            public async Task<IActionResult> Put(int id, [FromForm] ActivitiesDtoForUpload activitiesDto)
+
         {
+            var result = await _activitiesService.Update(id, activitiesDto);
+
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return StatusCode(result.isError() ? 500 : 400, result);
         }
 
         // DELETE api/<ActivitiesController>/5

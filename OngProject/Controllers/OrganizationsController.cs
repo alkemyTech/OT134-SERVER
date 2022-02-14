@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OngProject.Core.Interfaces;
 using OngProject.Core.Models.DTOs;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -48,14 +47,42 @@ namespace OngProject.Controllers
 
         // POST api/<OrganizationsController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> Post([FromForm] OrganizationDTOForUpload organizationDTOForUpload)
         {
+            try
+            {
+                var result = await _organizationsService.Insert(organizationDTOForUpload);
+                if (result.Success)
+                {
+                    return Ok(result);
+                }
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // PUT api/<OrganizationsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> Put(int id,[FromForm] OrganizationDTOForUpload organizationDTOForUpload)
         {
+            try
+            {
+                var result = await _organizationsService.Update(id, organizationDTOForUpload);
+                if (result.Success)
+                {
+                    return Ok(result);
+                }
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // DELETE api/<OrganizationsController>/5

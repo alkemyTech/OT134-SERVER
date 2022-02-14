@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OngProject.Core.Interfaces;
 using OngProject.Core.Models.DTOs;
 using OngProject.Core.Models.Response;
@@ -12,6 +13,7 @@ namespace OngProject.Controllers
 {
     [Route("comments")]
     [ApiController]
+    [Authorize]
     public class CommentsController : ControllerBase
     {
         private readonly ICommentsService _commentsService;
@@ -105,7 +107,8 @@ namespace OngProject.Controllers
                 var claim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
 
                 if (claim == null)
-                    throw new Exception("Debe estar registrado para borrar un comentario");
+                    //throw new Exception("Debe estar registrado para borrar un comentario");
+                    return Result.FailureResult("Debe estar registrado para borrar un comentario");
 
                 var result = await _commentsService.Delete(id, Int32.Parse(claim.Value));
                 return Result<Result>.SuccessResult(result);

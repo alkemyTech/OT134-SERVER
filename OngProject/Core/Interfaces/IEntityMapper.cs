@@ -5,7 +5,8 @@ namespace OngProject.Core.Interfaces
 {
     public interface IEntityMapper
     {
-        OrganizationDTO OrganizationToOrganizationDto(Organization organization);
+        Organization OrganizationDtoForUploadtoOrganization(OrganizationDTOForUpload organizationDTOForUpload);
+        OrganizationDTOForDisplay OrganizationToOrganizationDTOForDisplay(Organization organization);
         UserDTO UserToUserDto(User user);
         UserDetailDto UserToUserDetailDto(User user);
         User UserRegisterDtoToUser(UserRegisterDto dto);
@@ -18,6 +19,7 @@ namespace OngProject.Core.Interfaces
         Comment CommentForRegisterToComment(CommentDtoForRegister commentDto);
         CategoryDtoForDisplay CategoryToCategoryDtoForDisplay(Category category);
         Category CategoryDtoForRegisterToCategory(CategoryDTOForRegister category);
+        CategoryDTO CategoryToCategoryDTO(Category category);
         New NewDtoForUploadtoNew(NewDtoForUpload newDTO);
         NewDtoForDisplay NewtoNewDtoForDisplay(New newvar);
         Activities ActivityDTOForRegister(ActivityDTOForRegister dto);
