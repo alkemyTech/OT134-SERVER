@@ -73,7 +73,7 @@ namespace OngProject.Controllers
         /// <response code="500">Internal Server Error</response>
         /// <response code="200">Ok. Return the new Activity updated</response>
         /// <response code="400">BadRequest.Value is empty or cant find an Activity with this Id</response>
-        [HttpPost]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
