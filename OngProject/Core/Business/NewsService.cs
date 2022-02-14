@@ -1,9 +1,14 @@
-﻿using OngProject.Core.Interfaces;
+﻿using Microsoft.AspNetCore.Http;
+using OngProject.Core.Helper;
+using OngProject.Core.Interfaces;
 using OngProject.Core.Models.DTOs;
+using OngProject.Core.Models.Paged;
+using OngProject.Core.Models.PagedResourceParameters;
 using OngProject.Core.Models.Response;
 using OngProject.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace OngProject.Core.Business
@@ -13,27 +18,44 @@ namespace OngProject.Core.Business
         private readonly IUnitOfWork _unitOfWork;
         private readonly IEntityMapper _mapper;
         private readonly IImageService _imageService;
+        private readonly IHttpContextAccessor _httpContext;
 
-        public NewsService(IUnitOfWork unitOfWork, IEntityMapper mapper, IImageService imageService)
+        public NewsService(IUnitOfWork unitOfWork, IEntityMapper mapper, IImageService imageService, IHttpContextAccessor httpContext)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _imageService = imageService;
+            _httpContext = httpContext;
         }
 
-        public async Task<ICollection<NewDtoForDisplay>> GetAll()
+        public async Task<Result> GetAll(PaginationParams paginationParams)
         {
-            var response = await _unitOfWork.NewsRepository.FindByConditionAsync(x => x.SoftDelete == false);
-            if (response.Count == 0)
-                return null;
-            else
+            try
             {
-                List<NewDtoForDisplay> listOfnewDtoForDisplays = new();
-                foreach (var item in response)
-                {
-                    listOfnewDtoForDisplays.Add(_mapper.NewtoNewDtoForDisplay(item));
-                }
-                return listOfnewDtoForDisplays;
+                var news = await _unitOfWork.NewsRepository.FindAllAsync(null, null, null, paginationParams.PageNumber, paginationParams.PageSize);
+                var totalCount = await _unitOfWork.NewsRepository.Count();
+
+                if (totalCount == 0)
+                    return Result.FailureResult("No existen noticias");
+
+                if (news.Count == 0)
+                    return Result.FailureResult("paginacion invalida, no hay resultados");
+                
+                var newsDTOForDisplay = news
+                    .Select(newEntity => _mapper.NewtoNewDtoForDisplay(newEntity));
+                
+                var paged = PagedList<NewDtoForDisplay>.Create(newsDTOForDisplay.ToList(), totalCount,
+                                                                paginationParams.PageNumber,
+                                                                paginationParams.PageSize);
+
+                var url = $"{this._httpContext.HttpContext.Request.Scheme}://{this._httpContext.HttpContext.Request.Host}{this._httpContext.HttpContext.Request.Path}";
+                var pagedResponse = new PagedResponse<NewDtoForDisplay>(paged, url);
+
+                return Result<PagedResponse<NewDtoForDisplay>>.SuccessResult(pagedResponse);
+            }
+            catch (Exception e)
+            {
+                return Result.ErrorResult(new List<string> { e.Message });
             }
         }
         public async Task<Result> GetById(int id)

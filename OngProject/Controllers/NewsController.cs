@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OngProject.Core.Interfaces;
 using OngProject.Core.Models.DTOs;
+using OngProject.Core.Models.PagedResourceParameters;
 using System;
 using System.Threading.Tasks;
 
@@ -23,20 +24,11 @@ namespace OngProject.Controllers
         // GET: api/<NewsController>
         [HttpGet]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> GetAllNews()
+        public async Task<IActionResult> GetAllNews([FromQuery] PaginationParams pagingParams)
         {
-            try
-            {
-                var entityList = await _newsService.GetAll();
-                if (entityList != null)
-                    return Ok(entityList);
-                else
-                    return NotFound("No se encontraron Noticias");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            var result = await _newsService.GetAll(pagingParams);
+
+            return StatusCode(result.StatusCode, result);
         }
 
         // GET api/<NewsController>/5
