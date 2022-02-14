@@ -133,8 +133,18 @@ namespace OngProject
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "OngProject v1"));
+
+                app.UseSwagger(c =>
+                {
+                    c.RouteTemplate = "api/docs/{documentname}/swagger.json";
+                });
+
+
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/api/docs/v1/swagger.json", "OngProject v1");
+                    c.RoutePrefix = "api/docs";
+                });
             }
 
             app.UseHttpsRedirection();
