@@ -6,12 +6,39 @@ namespace OngProject.Core.Models.Paged
 {
     public class PagedResponse<T>
     {
+        /// <summary>
+        ///     If exist, url of the previus page.
+        /// </summary>
+        /// <example>https://yourdomain.com/resource/PageNumber=1&PageSize=2</example>
         public string PreviusPage { get; set; }
+
+        /// <summary>
+        ///     If exist, url of the nex page.
+        /// </summary>
+        /// <example>https://yourdomain.com/resource/PageNumber=3&PageSize=2</example>
         public string NextPage { get; set; }
+
+        /// <summary>
+        ///     Number of the current page.
+        /// </summary>
+        /// <example>2</example>
         public int PageNumber { get; set; }
+
+        /// <summary>
+        ///     Number of the total pages.
+        /// </summary>
+        /// <example>5</example>
         public int TotalPages { get; set; }
+
+        /// <summary>
+        ///     Items per page.
+        /// </summary>
+        /// <example>10</example>
         public int PageSize { get; set; }
 
+        /// <summary>
+        ///     Results.
+        /// </summary>
         public List<T> Items { get; set; }
         public PagedResponse(PagedList<T> pagedList, string url)
         {            

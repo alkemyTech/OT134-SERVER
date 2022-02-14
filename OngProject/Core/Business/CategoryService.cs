@@ -38,21 +38,21 @@ namespace OngProject.Core.Business
                 {
                     if (category.SoftDelete)
                     {
-                        return Result.FailureResult("La categoria seleccionada ya fue eliminada");
+                        return Result.FailureResult("La categoria seleccionada ya fue eliminada", StatusCodes.Status404NotFound);
                     }
                     category.SoftDelete = true;
                     category.LastModified = DateTime.Now;
                     await _unitOfWork.SaveChangesAsync();
 
-                    return Result<Category>.SuccessResult(category);
+                    return Result<string>.SuccessResult($"Categoria {id} eliminada exitosamente.");
                 }
 
-                return Result.FailureResult("La categoria no existe.");
+                return Result.FailureResult("La categoria no existe.", StatusCodes.Status404NotFound);
 
             }
             catch (Exception e)
             {
-                return Result.FailureResult("Error al eliminar la categoria: " + e.Message);
+                return Result.ErrorResult(new List<string> { "Error al eliminar la categoria: " + e.Message });
             }
         }
 
@@ -65,7 +65,7 @@ namespace OngProject.Core.Business
 
                 if (totalCount == 0)
                 {
-                    return Result.FailureResult("No existen categorias");
+                    return Result.FailureResult("No existen categorias", StatusCodes.Status404NotFound);
                 }
 
                 if (categories.Count == 0)
@@ -98,16 +98,15 @@ namespace OngProject.Core.Business
                 var category = await _unitOfWork.CategoryRepository.GetByIdAsync(id);
                 if (category != null)
                 {
-                    var categoryDto = _entityMapper.CategoryToCategoryDtoForDisplay(category);
-                    return Result<CategoryDtoForDisplay>.SuccessResult(categoryDto);
+                    var categoryDto = _entityMapper.CategoryToCategoryDTO(category);
+                    return Result<CategoryDTO>.SuccessResult(categoryDto);
                 }
-                return Result.FailureResult("La categoria no existe.");
+                return Result.FailureResult("La categoria no existe.", StatusCodes.Status404NotFound);
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                return Result.FailureResult("Ocurrio un problema al buscar la categoria.");
+                return Result.ErrorResult(new List<string> { ex.Message });
             }
         }
 
@@ -136,13 +135,12 @@ namespace OngProject.Core.Business
                 await _unitOfWork.CategoryRepository.Create(newCategory);
                 await _unitOfWork.SaveChangesAsync();
 
-                return Result<Category>.SuccessResult(newCategory);
+                return Result<CategoryDTO>.SuccessResult(_entityMapper.CategoryToCategoryDTO(newCategory));
 
             }
             catch (Exception e)
             {
-
-                return Result.FailureResult("Ocurrio un problema al crear una nueva categoria: " + e.Message);
+                return Result.ErrorResult(new List<string> { "Ocurrio un problema al crear una nueva categoria: " + e.Message });
             }
         }
 
