@@ -52,8 +52,17 @@ namespace OngProject.Controllers
 
         // PUT api/<ActivitiesController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [Authorize(Roles = "Administrator")]
+
+            public async Task<IActionResult> Put(int id, [FromForm] ActivitiesDtoForUpload activitiesDto)
         {
+            var result = await _activitiesService.Update(id, activitiesDto);
+
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return StatusCode(result.isError() ? 500 : 400, result);
         }
 
         // DELETE api/<ActivitiesController>/5

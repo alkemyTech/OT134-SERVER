@@ -32,9 +32,32 @@ namespace OngProject.Core.Business
         {
             throw new NotImplementedException();
         }
-        public void Update(Activities activities)
+        public async Task<Result> Update(int id, ActivitiesDtoForUpload activitiesDto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var activities = await _unitOfWork.ActivitiesRepository.GetByIdAsync(id);
+                if (activities == null) return Result.FailureResult("No se encontro el id");
+
+                await _imageService.AwsDeleteFile(activities.Image[(activities.Image.LastIndexOf("/") + 1)..]);
+
+                var image = await _imageService.UploadFile($"{Guid.NewGuid()}_{activitiesDto.Image.FileName}", activitiesDto.Image);
+
+                activities.Name = activitiesDto.Name;
+                activities.Content = activitiesDto.Content;
+                activities.Image = image;
+                activities.LastModified = DateTime.Now;
+
+                await _unitOfWork.SaveChangesAsync();
+                var activitiesDisplay = _mapper.ActivityForActivityDTODisplay(activities);
+
+                return Result<ActivityDTOForDisplay>.SuccessResult(activitiesDisplay);
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
         public void Delete(Activities activities)
