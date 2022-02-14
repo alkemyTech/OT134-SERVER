@@ -12,7 +12,7 @@ namespace OngProject.Core.Interfaces
         Task<Result> GetAll(PaginationParams pagingParams);
         Task<Result> GetById(int id);
         Task<Result> Insert(CategoryDTOForRegister categoryDTO);
-        void Update(Category category);
+        Task<Result> Update(int id, CategoryDTOForUpload dto);
         Task<Result> Delete(int id);
     }
 }

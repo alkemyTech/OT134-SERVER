@@ -146,9 +146,41 @@ namespace OngProject.Core.Business
             }
         }
 
-        public void Update(Category category)
+        public async Task<Result> Update(int id, CategoryDTOForUpload dto)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                var category = await _unitOfWork.CategoryRepository.GetByIdAsync(id);
+
+                if (category != null)
+                {
+                    category.Name = dto.Name;
+                    category.Description = dto.Description;
+                    category.LastModified = DateTime.Now;
+
+                    //Imagen opcional
+                    if (dto.Image == null && category.Image != null || dto.Image != null && category.Image != null)
+                    {
+                        await _imageService.AwsDeleteFile(category.Image[(category.Image.LastIndexOf("/") + 1)..]);
+                        category.Image = null;
+                    }
+                    if (dto.Image != null)
+                    {
+                        category.Image = await _imageService.UploadFile($"{Guid.NewGuid()}_{dto.Image.FileName}", dto.Image);
+                    }
+
+                    await _unitOfWork.SaveChangesAsync();
+
+                    var categoryDto = _entityMapper.CategoryToCategoryDTO(category);
+
+                    return Result<CategoryDTO>.SuccessResult(categoryDto);
+                }
+                return Result.FailureResult("Id de categoria inexistente.");
+            }
+            catch (Exception ex)
+            {
+                return Result.ErrorResult(new List<string> { ex.Message });
+            }
         }
     }
 }
