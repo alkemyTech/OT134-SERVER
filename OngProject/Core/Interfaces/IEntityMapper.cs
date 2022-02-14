@@ -5,7 +5,8 @@ namespace OngProject.Core.Interfaces
 {
     public interface IEntityMapper
     {
-        OrganizationDTO OrganizationToOrganizationDto(Organization organization);
+        Organization OrganizationDtoForUploadtoOrganization(OrganizationDTOForUpload organizationDTOForUpload);
+        OrganizationDTOForDisplay OrganizationToOrganizationDTOForDisplay(Organization organization);
         UserDTO UserToUserDto(User user);
         UserDetailDto UserToUserDetailDto(User user);
         User UserRegisterDtoToUser(UserRegisterDto dto);
