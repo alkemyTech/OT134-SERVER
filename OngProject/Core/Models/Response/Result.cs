@@ -4,9 +4,28 @@ namespace OngProject.Core.Models.Response
 {
     public class Result
     {
+        /// <summary>
+        ///     if true, the request was completed successfully.
+        /// </summary>
+        /// <example>true</example>
         public bool Success { get; protected set; }
+
+        /// <summary>
+        ///     Description of the failure situation.
+        /// </summary>
+        /// <example>Description of failure.</example>
         public string FailureMessage { get; protected set; }
+
+        /// <summary>
+        ///     List of errors produced.
+        /// </summary>
+        /// <example>Description of the error.</example>
         public List<string> ErrorList { get; set; }
+
+        /// <summary>
+        ///     Reports the status code of request.
+        /// </summary>
+        /// <example>200</example>
         public int StatusCode { get; set; }
 
         protected Result()
@@ -73,6 +92,9 @@ namespace OngProject.Core.Models.Response
 
     public class Result<T> : Result
     {
+        /// <summary>
+        ///     Data resulting from the request.
+        /// </summary>
         public T Data { get; protected set; }
 
         protected Result(T t)
