@@ -35,12 +35,11 @@ namespace OngProject.Controllers
         /// <response code="404">Not Found. Server couldn't find any members information.</response> 
         /// <response code="500">Internal Server Error.</response>  
         [HttpGet]
-        public async Task<IActionResult> GetAllMembers([FromQuery] PaginationParams pagingParams)
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAllMembers([FromQuery] PaginationParams pagingParams)
         {
             var result = await _membersService.GetAll(pagingParams);
 
