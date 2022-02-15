@@ -17,5 +17,8 @@ namespace OngProject.Core.Models.DTOs
         [Required(ErrorMessage = "The Image Is Required")]
         [StringLength(maximumLength: 255, ErrorMessage = "The Image Is Too Long")]
         public string Image { get; set; }
+        public string FacebookUrl { get; set; }
+        public string InstagramUrl { get; set; }
+        public string LinkedinUrl { get; set; }
     }
 }

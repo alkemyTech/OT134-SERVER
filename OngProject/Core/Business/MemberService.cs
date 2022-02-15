@@ -110,10 +110,36 @@ namespace OngProject.Core.Business
             }
         }
 
-        public void Update(Member member)
+        public async Task<Result> Update(int id, MembersDtoForUpload memberDTO)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var member = await _unitOfWork.MembersRepository.GetByIdAsync(id);
+                if (member == null) return Result.FailureResult("No se encontro el id");
+
+                await _imageService.AwsDeleteFile(member.Image[(member.Image.LastIndexOf("/") + 1)..]);
+
+                var image = await _imageService.UploadFile($"{Guid.NewGuid()}_{memberDTO.Image.FileName}", memberDTO.Image);
+
+                member.Name = memberDTO.Name;
+                member.FacebookUrl = memberDTO.FacebookUrl;
+                member.InstagramUrl = memberDTO.InstagramUrl;
+                member.LinkedinUrl = memberDTO.LinkedinUrl;
+                member.Image = image;
+                member.LastModified = DateTime.Now;
+
+                await _unitOfWork.SaveChangesAsync();
+                var memberDisplay = _entityMapper.MemberToMemberDTODisplay(member);
+
+                return Result<MemberDTODisplay>.SuccessResult(memberDisplay);
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
+
 
         public async Task<Result> Delete(int id)
         {

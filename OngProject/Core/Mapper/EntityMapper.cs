@@ -274,7 +274,10 @@ namespace OngProject.Core.Mapper
                 Name = member.Name,
                 Description = member.Description,
                 Image = member.Image,
-            };
+                FacebookUrl = member.FacebookUrl,
+                InstagramUrl = member.InstagramUrl,
+                LinkedinUrl = member.LinkedinUrl,
+    };
             return memberDTO;
         }
 
@@ -287,5 +290,6 @@ namespace OngProject.Core.Mapper
             };
             return member;
         }
+
     }
 }
