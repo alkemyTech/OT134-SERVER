@@ -87,8 +87,11 @@ namespace OngProject.Controllers
         /// <response code="200">OK. Return an object Result indicating that the testimonial was updated in the Db.</response>        
         /// <response code="404">NotFound. Return an object Result with an error message that indicate the cause of the problem.</response>
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromForm] TestimonialDTO dto)
         {
+            var response = await _testimonialsService.Update(id,dto);
+
+            return StatusCode(response.StatusCode, response);
         }
 
         /// DELETE: /testimonials/id
