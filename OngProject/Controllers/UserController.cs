@@ -102,7 +102,7 @@ namespace OngProject.Controllers
         ///     Update a user information.
         /// </summary>
         /// <remarks>
-        ///     Update a member information with the values provided.
+        ///     Update a user information with the values provided.
         /// </remarks>
         /// <param name="id">User ID that will be updated.</param>
         /// <param name="UserUpdateDto">Dto that allow to update the user</param>
