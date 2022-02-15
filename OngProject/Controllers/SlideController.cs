@@ -56,12 +56,20 @@ namespace OngProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostSlide(SlideDtoForUpload slideDto)
+        public async Task<IActionResult> PostSlide([FromForm] SlideDtoForUpload slideDto)
         {
             var result = await _slideSerivice.Insert(slideDto);
             if (result.Success)
                 return Ok(result);
             return StatusCode(result.isError() ? 500 : 400, result);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, [FromForm] SlideDtoForUpdate dto)
+        {
+            var result = await _slideSerivice.Update(id, dto);
+
+            return StatusCode(result.StatusCode, result);
         }
     }
 }

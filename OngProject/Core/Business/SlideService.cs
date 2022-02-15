@@ -141,9 +141,41 @@ namespace OngProject.Core.Business
             }
         }
 
-        public void Update(Slides slides)
+        public async Task<Result> Update(int id, SlideDtoForUpdate dto)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                var slide = await _unitOfWork.SlideRepository.GetByIdAsync(id);
+
+                if (slide != null)
+                {
+                    slide.Text = dto.Text;
+                    slide.Order = dto.Order;
+                    slide.LastModified = DateTime.Now;
+
+                    if (dto.ImageUrl == null && slide.ImageUrl != null || dto.ImageUrl != null && slide.ImageUrl != null)
+                    {
+                        await _imageService.AwsDeleteFile(slide.ImageUrl[(slide.ImageUrl.LastIndexOf("/") + 1)..]);
+                        slide.ImageUrl = null;
+                    }
+                    if (dto.ImageUrl != null)
+                    {
+                        slide.ImageUrl = await UploadEncodedImageToBucketAsync(dto.ImageUrl);
+                    }
+
+                    await _unitOfWork.SaveChangesAsync();
+
+                    var slideDto = _mapper.SlideToSlideDtoForDisplay(slide);
+
+                    return Result<SlideDtoForDisplay>.SuccessResult(slideDto);
+                }
+
+                return Result.FailureResult("Id de Slide inexistente.");
+            }
+            catch (Exception ex)
+            {
+                return Result.ErrorResult(new List<string> { ex.Message });
+            }
         }
 
         public async Task<ICollection<SlideDtoForDisplay>> GetAllByOrganization(int idOrganization)
