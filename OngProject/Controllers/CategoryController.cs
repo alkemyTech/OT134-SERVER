@@ -89,7 +89,7 @@ namespace OngProject.Controllers
         ///     Adds a new Category to the database.
         /// </remarks>
         /// <param name="categoryDTO">New Category data transfer object.</param>
-        /// <response code="200">OK. Returns a result object along with the new member information.</response>        
+        /// <response code="200">OK. Returns a result object along with the new category information.</response>        
         /// <response code="400">BadRequest. Category could not be created.</response>    
         /// <response code="401">Unauthorized. Invalid JWT Token or it wasn't provided.</response>    
         /// <response code="500">Internal Server Error.</response>
