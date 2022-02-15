@@ -100,9 +100,39 @@ namespace OngProject.Core.Business
             }
         }
 
-        public void Update(Testimonials testimonials)
+        public async Task<Result> Update(int id,TestimonialDTO dto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var testimonial = await _unitOfWork.TestimonialsRepository.GetByIdAsync(id);
+                if (testimonial == null) 
+                {
+                    return Result.FailureResult("Testimonio no esncontrado",404);
+                }
+                if (testimonial.SoftDelete)
+                {
+                    return Result.FailureResult("El testimonio ya se elimino", 404);
+                }
+                else 
+                {
+                    var result = await _imageService.UploadFile(dto.File.FileName, dto.File);
+                    testimonial.Image = result;
+                    testimonial.LastModified = DateTime.Now;
+                    testimonial.Content = dto.Content;
+                    testimonial.Name = dto.Name;
+
+                    _unitOfWork.TestimonialsRepository.Update(testimonial);
+                    await _unitOfWork.SaveChangesAsync();
+
+                    var testimonialDisplay = _mapper.TestimonialDTOToTestimonialDisplay(dto);
+                    testimonialDisplay.Image = result;
+                    return Result<TestimonialDTODisplay>.SuccessResult(testimonialDisplay);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Result.ErrorResult(new List<string> { ex.Message });
+            }
         }
 
         public async Task<Result> Delete(int id)

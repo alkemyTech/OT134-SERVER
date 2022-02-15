@@ -12,7 +12,7 @@ namespace OngProject.Core.Interfaces
         Task<Result> GetAll(PaginationParams paginationParams);
         Member GetById();
         Task<Result> Insert(MemberDTORegister memberDTO);
-        void Update(Member member);
+        Task<Result> Update(int id, MembersDtoForUpload memberDTO);
         Task<Result> Delete(int id);
     }
 }
