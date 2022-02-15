@@ -7,6 +7,8 @@ using OngProject.Core.Models.DTOs;
 using OngProject.Core.Models.PagedResourceParameters;
 using Swashbuckle.AspNetCore.Annotations;
 using Microsoft.AspNetCore.Http;
+using OngProject.Core.Models.Paged;
+using OngProject.Core.Models.Response;
 
 namespace OngProject.Controllers
 {
@@ -34,11 +36,11 @@ namespace OngProject.Controllers
         /// <response code="401">Unauthorized. Invalid JWT Token or it wasn't provided.</response>     
         /// <response code="404">Not Found. Server couldn't find any members information.</response> 
         /// <response code="500">Internal Server Error.</response>  
-        [HttpGet]        
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpGet]
+        [ProducesResponseType(typeof(Result<PagedResponse<MemberDTODisplay>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(EmptyResult), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllMembers([FromQuery] PaginationParams pagingParams)
         {
             var result = await _membersService.GetAll(pagingParams);
@@ -59,10 +61,10 @@ namespace OngProject.Controllers
         /// <response code="404">Not Found. Server couldn't find the member with the id provided.</response> 
         /// <response code="500">Internal Server Error.</response>  
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(Result<PagedResponse<MemberDTODisplay>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(EmptyResult), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status500InternalServerError)]
         public IActionResult Get(int id)
         {
             return Ok();
@@ -81,10 +83,10 @@ namespace OngProject.Controllers
         /// <response code="401">Unauthorized. Invalid JWT Token or it wasn't provided.</response>    
         /// <response code="500">Internal Server Error.</response>  
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(Result<PagedResponse<MemberDTODisplay>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(EmptyResult), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Post([FromForm] MemberDTORegister memberDTO)
         {
             try
@@ -113,10 +115,10 @@ namespace OngProject.Controllers
         /// <response code="404">Not Found. Server couldn't find the member with the id provided.</response> 
         /// <response code="500">Internal Server Error.</response> 
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(Result<PagedResponse<MemberDTODisplay>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(EmptyResult), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status500InternalServerError)]
         public void Put(int id, [FromBody] string memberDTO)
         {
         }
@@ -134,18 +136,15 @@ namespace OngProject.Controllers
         /// <response code="404">Not Found. Server couldn't find the member with id provided.</response> 
         /// <response code="500">Internal Server Error.</response>  
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(Result<PagedResponse<MemberDTODisplay>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(EmptyResult), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _membersService.Delete(id);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return StatusCode(result.isError() ? 500 : 400, result);
+
+            return StatusCode(result.StatusCode, result);
         }
     }
 }
