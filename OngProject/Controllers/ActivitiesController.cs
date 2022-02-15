@@ -50,10 +50,36 @@ namespace OngProject.Controllers
             }
         }
 
+
+        /// PUT: activities/Put
+        /// <summary>
+        ///     Update an already created Activity
+        /// </summary>
+        /// <param name="value">New value for the Activity</param>
+        /// <param name="id">Id from Activity for changes</param>
+        /// <response code="500">Internal Server Error</response>
+        /// <response code="200">Ok. Return the new Activity updated</response>
+        /// <response code="400">BadRequest.Value is empty or cant find an Activity with this Id</response>
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //public void Put(int id, [FromBody] string value)
+
         // PUT api/<ActivitiesController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [Authorize(Roles = "Administrator")]
+
+            public async Task<IActionResult> Put(int id, [FromForm] ActivitiesDtoForUpload activitiesDto)
+
         {
+            var result = await _activitiesService.Update(id, activitiesDto);
+
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return StatusCode(result.isError() ? 500 : 400, result);
         }
 
         // DELETE api/<ActivitiesController>/5

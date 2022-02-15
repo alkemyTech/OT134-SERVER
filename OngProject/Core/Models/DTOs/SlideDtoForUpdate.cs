@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+
 namespace OngProject.Core.Models.DTOs
 {
-    public class SlideDtoForUpload
+    public class SlideDtoForUpdate
     {
         [Display(Name = "UrlDeImagen")]
         public string ImageUrl { get; set; }
@@ -14,10 +14,5 @@ namespace OngProject.Core.Models.DTOs
         [Display(Name = "Orden")]
         //[StringLength(255)]
         public int Order { get; set; }
-
-        [Display(Name = "IdDeOrganizacion")]
-        [ForeignKey("Organization")]
-        public int OrganizationId { get; set; }
-
     }
 }

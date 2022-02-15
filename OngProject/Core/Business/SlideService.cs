@@ -93,7 +93,7 @@ namespace OngProject.Core.Business
             }
         }
 
-        public async Task<Result> Insert(SlideDtoForUpload slideDto)
+        public async Task<Result> Insert(SlideDtoForRegister slideDto)
         {
             try
             {
@@ -124,7 +124,7 @@ namespace OngProject.Core.Business
                         return Result.FailureResult("Numero de Orden ya Ingresado anteriormente en Organizacion Ingresada");
                 }
 
-                var slide = _mapper.SlideDtoForUploadToSlide(slideDto);
+                var slide = _mapper.SlideDtoForRegisterToSlide(slideDto);
                 slide.ImageUrl = await UploadEncodedImageToBucketAsync(slideDto.ImageUrl);
                 slide.LastModified = DateTime.Now;
 
@@ -141,9 +141,41 @@ namespace OngProject.Core.Business
             }
         }
 
-        public void Update(Slides slides)
+        public async Task<Result> Update(int id, SlideDtoForUpdate dto)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                var slide = await _unitOfWork.SlideRepository.GetByIdAsync(id);
+
+                if(slide != null)
+                {
+                    slide.Text = dto.Text;
+                    slide.Order = dto.Order;
+                    slide.LastModified = DateTime.Now;
+
+                    if (dto.ImageUrl == null && slide.ImageUrl != null || dto.ImageUrl != null && slide.ImageUrl != null)
+                    {
+                        await _imageService.AwsDeleteFile(slide.ImageUrl[(slide.ImageUrl.LastIndexOf("/") + 1)..]);
+                        slide.ImageUrl = null;
+                    }
+                    if (dto.ImageUrl != null)
+                    {
+                        slide.ImageUrl = await UploadEncodedImageToBucketAsync(dto.ImageUrl);
+                    }
+
+                    await _unitOfWork.SaveChangesAsync();
+
+                    var slideDto = _mapper.SlideToSlideDtoForDisplay(slide);
+
+                    return Result<SlideDtoForDisplay>.SuccessResult(slideDto);
+                }
+
+                return Result.FailureResult("Id de categoria inexistente.");
+            }
+            catch (Exception ex)
+            {
+                return Result.ErrorResult(new List<string> { ex.Message });
+            }
         }
 
         public async Task<ICollection<SlideDtoForDisplay>> GetAllByOrganization(int idOrganization)

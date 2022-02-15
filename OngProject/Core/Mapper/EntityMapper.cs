@@ -66,7 +66,7 @@ namespace OngProject.Core.Mapper
             return slideDto;
         }
 
-        public Slides SlideDtoForUploadToSlide(SlideDtoForUpload slideDto)
+        public Slides SlideDtoForRegisterToSlide(SlideDtoForRegister slideDto)
         {
             var slide = new Slides
             {
