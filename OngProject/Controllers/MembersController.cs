@@ -117,8 +117,16 @@ namespace OngProject.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public void Put(int id, [FromBody] string memberDTO)
+        public async Task<IActionResult> Put (int id, [FromForm] MembersDtoForUpload memberDTO)
         {
+            var result = await _membersService.Update(id, memberDTO);
+
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return StatusCode(result.isError() ? 500 : 400, result);
+
         }
 
         /// DELETE: members/5
