@@ -79,45 +79,30 @@ namespace OngProject.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] CommentDtoForDisplay commentDto)
         {
-            try
-            {
-                var claim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            var claim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
 
-                if (claim == null)
-                    throw new Exception("Debe estar registrado para modificar un comentario");
+            if (claim == null)
+                    //throw new Exception("Debe estar registrado para modificar un comentario");
+                return StatusCode(400, "Debe estar registrado para borrar un comentario");
 
-                var result = await _commentsService.Update(id, Int32.Parse(claim.Value), commentDto);
+            var result = await _commentsService.Update(id, Int32.Parse(claim.Value), commentDto);
 
-                if(result.Success)
-                    return Ok(result);
+            return StatusCode(result.StatusCode, result);
 
-                return StatusCode(result.isError() ? 404 : 403, result);
-            }
-            catch(Exception ex)
-            {
-                return StatusCode(500, Result.ErrorResult(new List<string> { ex.Message }));
-            }
         }
 
         [HttpDelete("{id}")]
-        public async Task<Result> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                var claim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            var claim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
 
-                if (claim == null)
+            if (claim == null)
                     //throw new Exception("Debe estar registrado para borrar un comentario");
-                    return Result.FailureResult("Debe estar registrado para borrar un comentario");
+                    return StatusCode(400, "Debe estar registrado para borrar un comentario");
 
-                var result = await _commentsService.Delete(id, Int32.Parse(claim.Value));
-                return Result<Result>.SuccessResult(result);
-            }
-            catch (Exception ex)
-            {
+            var result = await _commentsService.Delete(id, Int32.Parse(claim.Value));
 
-                return Result.FailureResult("Ocurrio un Problema : " + ex.ToString());
-            }
+            return StatusCode(result.StatusCode, result);
         }
 
     }

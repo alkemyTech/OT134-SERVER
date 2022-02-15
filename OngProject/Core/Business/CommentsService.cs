@@ -103,7 +103,7 @@ namespace OngProject.Core.Business
                 var response = await _unitOfWork.CommentsRepository.GetByIdAsync(idComment);
 
                 if (response == null || response.SoftDelete)
-                    return Result.FailureResult("No se encontro comentario");
+                    return Result.FailureResult("No se encontro comentario", 404);
                 else
                 {
                     var user = await _unitOfWork.CommentsRepository.FindByConditionAsync(x => x.UserId == idUser && x.Id == idComment);
@@ -111,7 +111,7 @@ namespace OngProject.Core.Business
                     var rolUser = await _unitOfWork.UserRepository.GetByIdAsync(idUser);
 
                     if (user.Count == 0 && rolUser.Rol.Name == "User")
-                        return Result.FailureResult("Usted no tiene permiso para modificar este comentario");
+                        return Result.FailureResult("Usted no tiene permiso para modificar este comentario", 403);
 
                     response.Body = commentDto.Body;
                     response.LastModified = DateTime.Today;
@@ -134,36 +134,28 @@ namespace OngProject.Core.Business
             try
             {
                 var result = await _unitOfWork.CommentsRepository.GetByIdAsync(IdComment);
-                var VerifyAdminUser = await _unitOfWork.UserRepository.GetByIdAsync(idUser);
-                if (result == null)
+
+                if (result == null || result.SoftDelete)
                 {
-                    return Result.FailureResult("Error 404 - Comentario no encontrado");
+                    return Result.FailureResult("Comentario no encontrado", 404);
                 }
-                if (result.SoftDelete)
+                else
                 {
-                    return Result.FailureResult("Error 404 - Comentario no encontrado");
-                }
-                else if (VerifyAdminUser.RolId == 2)
-                {
+                    var user = await _unitOfWork.CommentsRepository.FindByConditionAsync(x => x.UserId == idUser && x.Id == IdComment);
+
+                    var rolUser = await _unitOfWork.UserRepository.GetByIdAsync(idUser);
+
+                    if (user.Count == 0 && rolUser.Rol.Name == "User")
+                        return Result.FailureResult("Usted no tiene permiso para modificar este comentario", 403);
+
                     result.SoftDelete = true;
                     result.LastModified = DateTime.Now;
 
                     await _unitOfWork.SaveChangesAsync();
 
-                    return Result<Comment>.SuccessResult(result);
-                }
-                else if (result.UserId == idUser)
-                {
-                    result.SoftDelete = true;
-                    result.LastModified = DateTime.Now;
+                    var commentDisplay = _mapper.CommentToCommentDtoForDisplay(result);
 
-                    await this._unitOfWork.SaveChangesAsync();
-
-                    return Result<Comment>.SuccessResult(result);
-                }
-                else
-                {
-                    return Result.FailureResult("Error 403 - Usted no tiene permiso para borrar este comentario");
+                    return Result<CommentDtoForDisplay>.SuccessResult(commentDisplay);
                 }
             }
             catch (Exception ex)

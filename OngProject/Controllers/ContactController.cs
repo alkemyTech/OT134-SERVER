@@ -41,9 +41,8 @@ namespace OngProject.Controllers
         public async Task<IActionResult> Post(ContactDTO contactDto)
         {
             var response = await _contactService.Insert(contactDto);
-            if (response.Success)
-                return Ok(response);
-            return StatusCode(response.isError() ? 500 : 400, response);
+
+            return StatusCode(response.StatusCode, response);
         }
     }
 }
