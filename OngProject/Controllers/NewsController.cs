@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OngProject.Core.Interfaces;
 using OngProject.Core.Models.DTOs;
+using OngProject.Core.Models.Paged;
 using OngProject.Core.Models.PagedResourceParameters;
+using OngProject.Core.Models.Response;
 using System;
 using System.Threading.Tasks;
 
@@ -40,11 +42,11 @@ namespace OngProject.Controllers
         /// <response code="404">Not found.The server does not contain news.</response> 
         [HttpGet]
         [Authorize(Roles = "Administrator")]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(Result<PagedResponse<NewDtoForDisplay>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(EmptyResult), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAllNews([FromQuery] PaginationParams pagingParams)
         {
             var result = await _newsService.GetAll(pagingParams);
@@ -71,26 +73,15 @@ namespace OngProject.Controllers
         /// <response code="401">Authorization Required. Returns a Result object with a message indicating that the cause of the problem is that the user did not register and/or log in to the system.</response>  
         /// <response code="404">Not found. Server couldn't find the new with the id provided.</response> 
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(Result<NewDtoForDisplay>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(EmptyResult), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get(int id)
         {
-            try
-            {
-                var result = await _newsService.GetById(id);
-                if (result.Success)
-                {
-                    return Ok(result);
-                }
-                return BadRequest(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var response = await _newsService.GetById(id);
+            return StatusCode(response.StatusCode, response);
         }
 
         /// <summary>
@@ -105,27 +96,17 @@ namespace OngProject.Controllers
         /// <response code="200">OK. Return an object Result that includes the News.</response>        
         /// <response code="400">BadRequest. Return an object Result with an error message that indicate the cause of the problem.</response>  
         /// <response code="401">Authorization Required. Returns a Result object with a message indicating that the cause of the problem is that the user did not register and/or log in to the system.</response>  
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpPost]
         [Authorize(Roles = "Administrator")]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(Result<string>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(EmptyResult), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Post([FromForm] NewDtoForUpload newDtoForUpload)
         {
-            try
-            {
-                var result = await _newsService.Insert(newDtoForUpload);
-                if (result.Success)
-                {
-                    return Ok(result);
-                }
-                return BadRequest(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var response = await _newsService.Insert(newDtoForUpload);
+            return StatusCode(response.StatusCode, response);
         }
 
         /// <summary>
@@ -142,21 +123,17 @@ namespace OngProject.Controllers
         /// <response code="400">BadRequest. Return an object Result with an error message that indicate the cause of the problem.</response>  
         /// <response code="401">Authorization Required. Returns a Result object with a message indicating that the cause of the problem is that the user did not register and/or log in to the system.</response>  
         /// <response code="404">Not found. Server couldn't find the New with the id provided.</response> 
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpPut("{id}")]
         [Authorize(Roles = "Administrator")]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(Result<string>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(EmptyResult), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Put(int id, [FromForm] NewDtoForUpload newsDTO)
         {
-            var result = await _newsService.Update(id, newsDTO);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return StatusCode(result.isError() ? 500 : 400, result);
+            var response = await _newsService.Update(id, newsDTO);
+            return StatusCode(response.StatusCode, response);
         }
         /// <summary>
         ///     update a novelty in the database.
@@ -173,26 +150,16 @@ namespace OngProject.Controllers
         /// <response code="404">Not found. Server couldn't find the New with the id provided.</response> 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Administrator")]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(Result<string>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(EmptyResult), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                var result = await this._newsService.Delete(id);
-                if (result.Success)
-                {
-                    return Ok(result);
-                }
-                return BadRequest(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+
+            var response = await this._newsService.Delete(id);
+            return StatusCode(response.StatusCode, response);
         }
     }
 }
