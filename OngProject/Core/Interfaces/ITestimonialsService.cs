@@ -11,7 +11,7 @@ namespace OngProject.Core.Interfaces
         Task<Result> GetAll(PaginationParams paginationParams);
         Testimonials GetById();
         Task<Result> Insert(TestimonialDTO testimonialDTO);
-        void Update(Testimonials testimonials);
+        Task<Result> Update(int id,TestimonialDTO testimonialDTO);
         Task<Result> Delete(int id);
     }
 }
