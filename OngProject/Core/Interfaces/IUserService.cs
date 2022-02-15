@@ -10,7 +10,7 @@ namespace OngProject.Core.Interfaces
         Task<Result> GetById(int id);
         Task<Result> Insert(UserRegisterDto dto);
         Task<Result> LoginAsync(UserLoginDTO userLoginDto);
-        Task<Result> Update(int id, UserUpdateDto user, int claimId);
+        Task<Result> Update(int id, UserUpdateDto user);
         Task<Result> Delete(int id);
     }
 }
