@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using OngProject.Core.Interfaces;
 using OngProject.Core.Models.DTOs;
+using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace OngProject.Controllers
@@ -49,7 +52,8 @@ namespace OngProject.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromForm] UserUpdateDto user)
         {
-            var response = await _userService.Update(id, user);
+            var claimId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            var response = await _userService.Update(id, user, Int32.Parse(claimId.Value));
             return StatusCode(response.StatusCode, response);
         }
 

@@ -147,14 +147,14 @@ namespace OngProject.Core.Business
         }
 
 
-        public async Task<Result> Update(int id, UserUpdateDto userDto)
+        public async Task<Result> Update(int id, UserUpdateDto userDto, int claimId)
         {
             try
             { 
                 var user = await _unitOfWork.UserRepository.GetByIdAsync(id);
                 if (user is not null)
                 {
-                    if (id != userDto.Id && user.RolId == 1)
+                    if (id != claimId)
                         return Result.FailureResult("No tiene permiso para modificar los datos de otro usuario.", 403);
 
                     user.FirstName = userDto.FirstName;
