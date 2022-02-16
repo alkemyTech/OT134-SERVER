@@ -48,12 +48,12 @@ namespace OngProject.Controllers
         {
         }
 
-        // PUT <UserController>/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromForm] UserUpdateDto user)
+        // PUT <UserController>
+        [HttpPut]
+        public async Task<IActionResult> Put([FromForm] UserUpdateDto user)
         {
             var claimId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-            var response = await _userService.Update(id, user, Int32.Parse(claimId.Value));
+            var response = await _userService.Update(Int32.Parse(claimId.Value), user );
             return StatusCode(response.StatusCode, response);
         }
 
