@@ -6,6 +6,9 @@ using OngProject.Core.Models.DTOs;
 using OngProject.Core.Models.Response;
 using OngProject.Entities;
 using Swashbuckle.AspNetCore.Annotations;
+using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace OngProject.Controllers
@@ -118,8 +121,12 @@ namespace OngProject.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Put(int id, [FromForm] UserUpdateDto user)
+        // PUT <UserController>
+        [HttpPut]
+        public async Task<IActionResult> Put([FromForm] UserUpdateDto user)
         {
-            var response = await _userService.Update(id, user);
+            var claimId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            var response = await _userService.Update(Int32.Parse(claimId.Value), user );
             return StatusCode(response.StatusCode, response);
         }
 

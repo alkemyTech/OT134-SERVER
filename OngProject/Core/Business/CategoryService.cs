@@ -120,17 +120,10 @@ namespace OngProject.Core.Business
                 if (image != String.Empty)
                     imageName = await _imageService.UploadFile($"{Guid.NewGuid()}_{categoryDTO.Image.FileName}", categoryDTO.Image);
 
-                //Usar el mapper con el DTO
-                //Implementar validaciones
+                var newCategory = this._entityMapper.CategoryDtoForRegisterToCategory(categoryDTO);
 
-                var newCategory = new Category()
-                {
-                    Description = categoryDTO.Description,
-                    Image = imageName,
-                    LastModified = DateTime.Now,
-                    Name = categoryDTO.Name,
-                    SoftDelete = false
-                };
+                newCategory.Image = imageName;
+                newCategory.LastModified = DateTime.Now;
 
                 await _unitOfWork.CategoryRepository.Create(newCategory);
                 await _unitOfWork.SaveChangesAsync();

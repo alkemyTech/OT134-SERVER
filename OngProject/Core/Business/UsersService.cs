@@ -153,17 +153,17 @@ namespace OngProject.Core.Business
             { 
                 var user = await _unitOfWork.UserRepository.GetByIdAsync(id);
                 if (user is not null)
-                {
-                    if (id != userDto.Id && user.RolId == 1)
-                        return Result.FailureResult("No tiene permiso para modificar los datos de otro usuario.", 403);
-
+                {                
                     user.FirstName = userDto.FirstName;
                     user.LastName = userDto.LastName;
                     user.Email = userDto.Email;
                     user.LastModified = DateTime.Now;
-                    await _imageService.AwsDeleteFile(user.Photo[(user.Photo.LastIndexOf("/") + 1)..]);
-                    user.Photo = await _imageService.UploadFile($"{Guid.NewGuid()}_{userDto.Photo.FileName}", userDto.Photo);
 
+                    if (userDto.Photo is not null)
+                    {
+                        await _imageService.AwsDeleteFile(user.Photo[(user.Photo.LastIndexOf("/") + 1)..]);
+                        user.Photo = await _imageService.UploadFile($"{Guid.NewGuid()}_{userDto.Photo.FileName}", userDto.Photo);
+                    }
                     await this._unitOfWork.SaveChangesAsync();
                     return Result<UserDtoForDisplay>.SuccessResult(_mapper.UserToUserDtoForDisplay(user), 200);
                 }

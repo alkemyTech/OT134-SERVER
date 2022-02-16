@@ -11,7 +11,7 @@ namespace OngProject.Core.Interfaces
         Task<ICollection<SlideDtoForDisplay>>GetAll();
         Task<Result> GetById(int id);
         Task<Result> Insert(SlideDtoForUpload slideDto);
-        void Update(Slides slides);
+        Task<Result> Update(int id, SlideDtoForUpdate dto);
         Task<ICollection<SlideDtoForDisplay>> GetAllByOrganization(int idOrganization);
         Task<Result> Delete(int id);
     }

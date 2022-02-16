@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OngProject.Core.Interfaces;
 using OngProject.Core.Models.DTOs;
+using OngProject.Core.Models.Paged;
+using OngProject.Core.Models.Response;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Threading.Tasks;
@@ -23,31 +25,37 @@ namespace OngProject.Controllers
             _activitiesService = activitiesService;
         }
 
-        [HttpGet]
+        /*[HttpGet]
         public IActionResult Get()
         {
             return Ok();
-        }
+        }*/
 
-        // GET api/<ActivitiesController>/5
+        /*// GET api/<ActivitiesController>/5
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
             return Ok();
-        }
+        }*/
 
-        /// POST: activities/Post
+        /// POST: Activities
         /// <summary>
-        ///     Create a new Activity
+        ///     Creates a new Activity.
         /// </summary>
-        /// <param name="dto">New Activity</param>
-        /// <response code="500">Internal Server Error</response>
-        /// <response code="200">Ok. Return the new Activity created</response>
-        /// <response code="400">BadRequest.Name or Content of the new Activity is already exist</response>
+        /// <remarks>
+        ///     Adds a new Activity to the database.
+        /// </remarks>
+        /// <param name="dto">New Activity data transfer object.</param>
+        /// <response code="200">OK. Returns a result object along with the new member information.</response>        
+        /// <response code="400">BadRequest. Category could not be created.</response>    
+        /// <response code="401">Unauthorized. Invalid JWT Token or it wasn't provided.</response>    
+        /// <response code="500">Internal Server Error.</response>
+        /// <returns></returns>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Result<PagedResponse<ActivityDTOForDisplay>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(EmptyResult), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Post([FromForm] ActivityDTOForRegister dto)
         {
             try
@@ -69,23 +77,21 @@ namespace OngProject.Controllers
         /// <summary>
         ///     Update an already created Activity
         /// </summary>
-        /// <param name="value">New value for the Activity</param>
+        /// <param name="activitiesDto">New value for the Activity</param>
         /// <param name="id">Id from Activity for changes</param>
         /// <response code="500">Internal Server Error</response>
         /// <response code="200">Ok. Return the new Activity updated</response>
         /// <response code="400">BadRequest.Value is empty or cant find an Activity with this Id</response>
-        [HttpPut]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public void Put(int id, [FromBody] string value)
-
-        // PUT api/<ActivitiesController>/5
         [HttpPut("{id}")]
         [Authorize(Roles = "Administrator")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(Result<PagedResponse<ActivityDTOForDisplay>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(EmptyResult), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status500InternalServerError)]
 
-            public async Task<IActionResult> Put(int id, [FromForm] ActivitiesDtoForUpload activitiesDto)
-
+        public async Task<IActionResult> Put(int id, [FromForm] ActivitiesDtoForUpload activitiesDto)
         {
             var result = await _activitiesService.Update(id, activitiesDto);
 
@@ -96,10 +102,10 @@ namespace OngProject.Controllers
             return StatusCode(result.isError() ? 500 : 400, result);
         }
 
-        // DELETE api/<ActivitiesController>/5
+        /*// DELETE api/<ActivitiesController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-        }
+        }*/
     }
 }

@@ -36,10 +36,10 @@ namespace OngProject.Controllers
         /// <response code="200">OK. Return an object Result returns a result object along with a generated token to login.</response>        
         /// <response code="400">BadRequest. User could not be created.</response>  
         [HttpPost]
-        [Route("login")]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Route("login")]       
+        [ProducesResponseType(typeof(Result), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(Result<string>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Login([FromBody]  UserLoginDTO userLoginDto)
         {
             var result = await _userService.LoginAsync(userLoginDto);
@@ -64,9 +64,9 @@ namespace OngProject.Controllers
         /// <response code="400">BadRequest. User could not be created.</response>  
         [HttpPost]
         [Route("register")]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(Result<string>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Register([FromForm] UserRegisterDto dto)
         {
             var result = await _userService.Insert(dto);
@@ -91,9 +91,9 @@ namespace OngProject.Controllers
         [HttpGet]
         [Route("me")]
         [Authorize]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(Result<UserDetailDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Me()
         {
             try
