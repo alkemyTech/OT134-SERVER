@@ -1,14 +1,16 @@
-﻿using OngProject.Entities;
-using System.Collections.Generic;
+using OngProject.Core.Models.DTOs;
+using System.Threading.Tasks;
+using OngProject.Core.Models.Response;
 
 namespace OngProject.Core.Interfaces
 {
     public interface IUserService
     {
-        public IEnumerable<User> GetAll();
-        public User GetById();
-        public void Insert(User user);
-        public void Update(User user);
-        public void Delete(User user);
+        Task<Result> GetAll();
+        Task<Result> GetById(int id);
+        Task<Result> Insert(UserRegisterDto dto);
+        Task<Result> LoginAsync(UserLoginDTO userLoginDto);
+        Task<Result> Update(int id, UserUpdateDto user);
+        Task<Result> Delete(int id);
     }
 }

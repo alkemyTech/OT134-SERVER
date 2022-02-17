@@ -1,14 +1,17 @@
-﻿using OngProject.Entities;
+﻿using OngProject.Core.Models.DTOs;
+using OngProject.Core.Models.Response;
+using OngProject.Entities;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace OngProject.Core.Interfaces
 {
     public interface IOrganizationsService
     {
-        public IEnumerable<Organization> GetAll();
-        public Organization GetById();
-        public void Insert(Organization organization);
-        public void Update(Organization organization);
-        public void Delete(Organization organization);
+        Task<IEnumerable<OrganizationDTOForDisplay>> GetAll();
+        Organization GetById();
+        Task<Result> Insert(OrganizationDTOForUpload organizationDTOForUpload);
+        Task<Result> Update(int id, OrganizationDTOForUpload organizationDTOForUpload);
+        void Delete(Organization organization);
     }
 }

@@ -21,8 +21,5 @@ namespace OngProject.Entities
         [Required(ErrorMessage = "The image is required")]
         [StringLength(maximumLength: 255, ErrorMessage = "The image is too long")]
         public string Image { get; set; }
-
-        [Required(ErrorMessage = "The deleted time is required")]
-        public DateTime DeletedAt { get; set; }
     }
 }

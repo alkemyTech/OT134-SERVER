@@ -11,11 +11,13 @@ namespace OngProject.DataAccess
             modelBuilder.Entity<Rol>().HasData(
                 new Rol
                 {
+                    Id = 1,
                     Name = "User",
                     Description = "Regular user without permissions"
                 },
                 new Rol
                 {
+                    Id = 2,
                     Name = "Administrator",
                     Description = "Administrator user with permissions"
                 }

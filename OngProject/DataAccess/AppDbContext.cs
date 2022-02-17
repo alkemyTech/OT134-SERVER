@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using OngProject.Entities;
 
 namespace OngProject.DataAccess
 {
-	public class AppDbContext : DbContext
+    public class AppDbContext : DbContext
 	{
 		public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
 		{
-
 		}
 
 		public DbSet<Activities> Activities { get; set; }
@@ -35,6 +30,19 @@ namespace OngProject.DataAccess
 
 		public DbSet<User> Users { get; set; }
 
+
+		SeedDataUser dataUser = new SeedDataUser();
+		SeedUserRol rolUser = new SeedUserRol();
+		SeedTestimonial seedTestimonial = new SeedTestimonial();
+		SeedNew seedNew = new SeedNew();
+		SeedCategory seedCategory = new SeedCategory();
+		SeedActivity seedActivity = new SeedActivity();
+		SeedMember seedMember = new SeedMember();
+		SeedContact seedContact = new SeedContact();
+		SeedComment seedComment = new SeedComment();
+		SeedOrganization seedOrganization = new SeedOrganization();
+		SeedSlide seedSlide = new SeedSlide();
+
 		
 		SeedDataUser DataUser = new SeedDataUser();
 		SeedUserRol RolUser = new SeedUserRol();
@@ -49,39 +57,21 @@ namespace OngProject.DataAccess
 			DataMember.SeedMembers(modelBuilder);
 		}
 
-		protected void SeedCategories(ModelBuilder modelBuilder)
-		{
-			for (int i = 1; i < 11; i++)
-			{
-				modelBuilder.Entity<Category>().HasData(
-					new Category
-					{
-						Id = i,
-						Name = "Category " + i,
-						Description = "Description for Category" + i,
-						Image = "image_category" + i,
-						LastModified = DateTime.Now
-					}
-				);
-			}
-		}
 
-		private void SeedActivities(ModelBuilder modelBuilder)
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			for (int i = 1; i < 11; i++)
-			{
-				modelBuilder.Entity<Activities>().HasData(
-					new Activities
-					{
-						Id = i,
-						Name = "Activity " + i,
-						Content = "Content from activity " + i,
-						Image = "Image from activity " + i,
-						LastModified = DateTime.Now
-					}
-				);
-			}
+			seedCategory.SeedCategories(modelBuilder);
+			seedActivity.SeedActivities(modelBuilder);
+			rolUser.SeedRoles(modelBuilder);
+			dataUser.SeedRegularUsers(modelBuilder);
+			dataUser.SeedAdministratorUsers(modelBuilder);
+			seedTestimonial.SeedTestimonials(modelBuilder);
+			seedNew.SeedNews(modelBuilder);
+			seedMember.SeedMembers(modelBuilder);
+			seedComment.SeedComments(modelBuilder);
+			seedContact.SeedContacts(modelBuilder);
+			seedOrganization.SeedOrganizations(modelBuilder);
+			seedSlide.SeedSlides(modelBuilder);
 		}
-
 	}	
 }

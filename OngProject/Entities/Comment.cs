@@ -9,10 +9,10 @@ namespace OngProject.Entities
     public class Comment : EntityBase
     {
         public int NewId { get; set; }
-        public New New { get; set; }
+        public virtual New New { get; set; }
 
         public int UserId { get; set; }
-        public User User { get; set; }
+        public virtual User User { get; set; }
 
         [Required(ErrorMessage = "Body es requerido.")]
         [StringLength(maximumLength: 65535, ErrorMessage = "Body es demasiado largo.")]
