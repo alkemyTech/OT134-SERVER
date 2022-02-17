@@ -119,10 +119,7 @@ namespace OngProject.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Put(int id, [FromForm] UserUpdateDto user)
-        // PUT <UserController>
-        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]        
         public async Task<IActionResult> Put([FromForm] UserUpdateDto user)
         {
             var claimId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
