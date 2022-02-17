@@ -47,16 +47,7 @@ namespace OngProject.DataAccess
 		SeedDataUser DataUser = new SeedDataUser();
 		SeedUserRol RolUser = new SeedUserRol();
 		SeedDataMember DataMember = new SeedDataMember();
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
-		{
-			this.SeedCategories(modelBuilder);
-			this.SeedActivities(modelBuilder);
-			RolUser.SeedRoles(modelBuilder);
-			DataUser.SeedRegularUsers(modelBuilder);
-			DataUser.SeedAdministratorUsers(modelBuilder);
-			DataMember.SeedMembers(modelBuilder);
-		}
-
+		
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
