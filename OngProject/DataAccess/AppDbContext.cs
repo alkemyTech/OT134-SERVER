@@ -30,6 +30,7 @@ namespace OngProject.DataAccess
 
 		public DbSet<User> Users { get; set; }
 
+
 		SeedDataUser dataUser = new SeedDataUser();
 		SeedUserRol rolUser = new SeedUserRol();
 		SeedTestimonial seedTestimonial = new SeedTestimonial();
@@ -41,6 +42,21 @@ namespace OngProject.DataAccess
 		SeedComment seedComment = new SeedComment();
 		SeedOrganization seedOrganization = new SeedOrganization();
 		SeedSlide seedSlide = new SeedSlide();
+
+		
+		SeedDataUser DataUser = new SeedDataUser();
+		SeedUserRol RolUser = new SeedUserRol();
+		SeedDataMember DataMember = new SeedDataMember();
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			this.SeedCategories(modelBuilder);
+			this.SeedActivities(modelBuilder);
+			RolUser.SeedRoles(modelBuilder);
+			DataUser.SeedRegularUsers(modelBuilder);
+			DataUser.SeedAdministratorUsers(modelBuilder);
+			DataMember.SeedMembers(modelBuilder);
+		}
+
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
