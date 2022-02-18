@@ -45,14 +45,9 @@ namespace OngProject.Controllers
         public async Task<IActionResult> Get()
         {
             
-            var results = await _userService.GetAll();
+            var result = await _userService.GetAll();
 
-            if (results.Success)
-            {
-                return Ok(results);
-            }
-
-            return BadRequest(results);            
+            return StatusCode(result.StatusCode, result);            
         }
 
         /// GET: user/5
@@ -150,12 +145,8 @@ namespace OngProject.Controllers
         public async Task<IActionResult> Delete(int id)
         {            
             var result = await this._userService.Delete(id);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-         
-            return BadRequest(result);         
+                     
+            return StatusCode(result.StatusCode, result);
         }
     }
 }
