@@ -33,10 +33,15 @@ namespace OngProject.Core.Business
             {
                 var users = await _unitOfWork.UserRepository.FindAllAsync();
 
-                var usersDTO = users
-                        .Select(user => _mapper.UserToUserDto(user));
+                if (users.Count == 0)
+                {
+                    return Result.FailureResult("No existen usuarios.", 404);
+                }
 
-                return Result<IEnumerable<UserDTO>>.SuccessResult(usersDTO);
+                var usersDTO = users
+                        .Select(user => _mapper.UserToUserDto(user)).ToList();
+
+                return Result<ICollection<UserDTO>>.SuccessResult(usersDTO);
             }
             catch(Exception e)
             {
@@ -184,7 +189,7 @@ namespace OngProject.Core.Business
                 {
                     if (user.SoftDelete) 
                     {                        
-                        return Result.FailureResult($"id({user.Id}) ya eliminado del sistema.");
+                        return Result.FailureResult($"id({user.Id}) ya eliminado del sistema.", 404);
                     }
                     user.SoftDelete = true;
                     user.LastModified = DateTime.Today;
@@ -193,7 +198,7 @@ namespace OngProject.Core.Business
                     return Result<string>.SuccessResult($"Usuario({user.Id}) eliminado exitosamente.");
                 }
 
-                return Result.FailureResult("id de usuario inexistente.");
+                return Result.FailureResult("id de usuario inexistente.", 404);
             }
             catch(Exception e)
             {                
