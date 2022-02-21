@@ -66,16 +66,8 @@ namespace OngProject.Controllers
         [ProducesResponseType(typeof(Result), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Post([FromForm] MemberDTORegister memberDTO)
         {
-            try
-            {
-                var result = await _membersService.Insert(memberDTO);
-
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var result = await _membersService.Insert(memberDTO);
+            return StatusCode(result.StatusCode, result);
         }
 
         /// PUT: members/5
@@ -96,15 +88,10 @@ namespace OngProject.Controllers
         [ProducesResponseType(typeof(EmptyResult), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(Result), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put (int id, [FromForm] MembersDtoForUpload memberDTO)
+        public async Task<IActionResult> Put(int id, [FromForm] MembersDtoForUpload memberDTO)
         {
             var result = await _membersService.Update(id, memberDTO);
-
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return StatusCode(result.isError() ? 500 : 400, result);
+            return StatusCode(result.StatusCode, result);
 
         }
 

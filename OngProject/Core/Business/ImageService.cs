@@ -26,7 +26,7 @@ namespace OngProject.Core.Business
             var result = await _s3AwsHelper.AwsGetFile(imageName);
             return result;
         }
-        public async Task<string> AwsDeleteFile([FromQuery] string imageName)
+        public virtual async Task<string> AwsDeleteFile([FromQuery] string imageName)
         {
             var result = await _s3AwsHelper.AwsDeleteFile(imageName);
             return result.Message;

@@ -18,17 +18,17 @@ namespace OngProject.Core.Business
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IEntityMapper _entityMapper;
-        private readonly ImageService _imageService;
+        private readonly IImageService _imageService;
         private readonly IHttpContextAccessor _httpContext;
 
         public MemberService(IUnitOfWork unitOfWork,
                              IEntityMapper mapper,
                              IHttpContextAccessor httpContext,
-                             ImageService imageService)
+                             IImageService imageService)
         {
             _unitOfWork = unitOfWork;
             _entityMapper = mapper;
-            _imageService = imageService;//new ImageService(_unitOfWork);
+            _imageService = imageService;
             _httpContext = httpContext;
         }
 
@@ -71,6 +71,14 @@ namespace OngProject.Core.Business
         {
             try
             {
+                if (memberDTO.Name == "" || memberDTO.Name == null)
+                {
+                    return Result.FailureResult("Debe Agregar un Nombre", 400);
+                }
+                else if (memberDTO.File == null) 
+                {
+                    return Result.FailureResult("Debe Agregar una Imagen", 400);
+                }
                 var member = _entityMapper.MemberDTORegisterToMember(memberDTO);
 
                 var resultName = await _unitOfWork.MembersRepository.FindByConditionAsync(x => x.Name == memberDTO.Name);
@@ -95,12 +103,12 @@ namespace OngProject.Core.Business
                 }
                 else
                 {
-                    throw new Exception("El nombre ya existe en el sistema, intente uno diferente al ingresado.");
+                    return Result.FailureResult("El nombre ya existe en el sistema, intente uno diferente al ingresado.", 400);
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("Miembro no registrado: " + ex.Message);
+                return Result.FailureResult($"Miembro no registrado: {ex.Message}", 500);
             }
         }
 
@@ -109,7 +117,7 @@ namespace OngProject.Core.Business
             try
             {
                 var member = await _unitOfWork.MembersRepository.GetByIdAsync(id);
-                if (member == null) return Result.FailureResult("No se encontro el id");
+                if (member == null) return Result.FailureResult("No se encontro el id",404);
 
                 await _imageService.AwsDeleteFile(member.Image[(member.Image.LastIndexOf("/") + 1)..]);
 
@@ -128,9 +136,9 @@ namespace OngProject.Core.Business
                 return Result<MemberDTODisplay>.SuccessResult(memberDisplay);
 
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw new Exception(e.Message);
+                return Result.FailureResult($"Error al actualizar al miembro: {ex.Message}", 500);
             }
         }
 
