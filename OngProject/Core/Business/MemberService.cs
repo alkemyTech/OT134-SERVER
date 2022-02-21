@@ -71,14 +71,6 @@ namespace OngProject.Core.Business
         {
             try
             {
-                if (memberDTO.Name == "" || memberDTO.Name == null)
-                {
-                    return Result.FailureResult("Debe Agregar un Nombre", 400);
-                }
-                else if (memberDTO.File == null) 
-                {
-                    return Result.FailureResult("Debe Agregar una Imagen", 400);
-                }
                 var member = _entityMapper.MemberDTORegisterToMember(memberDTO);
 
                 var resultName = await _unitOfWork.MembersRepository.FindByConditionAsync(x => x.Name == memberDTO.Name);

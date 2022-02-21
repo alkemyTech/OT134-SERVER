@@ -19,6 +19,7 @@ namespace Test.Helper
         public static IJwtHelper JwtHelper;
         public static IHttpContextAccessor httpContext;
         public static ImageService ImageService;
+        public static  IUserService userService;
 
         public static void MakeContext()
         {   

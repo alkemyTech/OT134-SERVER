@@ -8,6 +8,8 @@ using OngProject.Core.Models.DTOs;
 using OngProject.Core.Models.Paged;
 using OngProject.Core.Models.PagedResourceParameters;
 using OngProject.Core.Models.Response;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Threading.Tasks;
 using Test.Helper;
@@ -17,7 +19,6 @@ namespace Test
     [TestClass]
     public class MemberControllerTest
     {
-
         [TestMethod]
         public async Task DeleteMemeberSuccessfullyTest()
         {
@@ -136,19 +137,12 @@ namespace Test
                 Description = "Descripcion de prueba",
                 File = Image
             };
-            var mockImageService = new Mock<ImageService>(ContextHelper.UnitOfWork);
-            var link = "https://www.netmentor.es/entrada/mock-unit-test-csharp";
-            mockImageService.Setup(x => x.UploadFile(It.IsAny<string>(), It.IsAny<IFormFile>())).ReturnsAsync(link);
-            var memberServie = new MemberService(ContextHelper.UnitOfWork, ContextHelper.EntityMapper, ContextHelper.httpContext, mockImageService.Object);
-            var mebmerController = new MembersController(memberServie);
 
             // Act
-            var response = await mebmerController.Post(memberDTO);
-            var result = response as ObjectResult;
+            var errorcount = checkValidationProperties(memberDTO).Count;
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(400, result.StatusCode);
+            Assert.AreNotEqual(0, errorcount);
         }
         [TestMethod]
         public async Task AddingAMemberWithNullImageFailedTest()
@@ -160,19 +154,11 @@ namespace Test
                 Description = "Descripcion de prueba",
                 File = null
             };
-            var mockImageService = new Mock<ImageService>(ContextHelper.UnitOfWork);
-            var link = "https://www.netmentor.es/entrada/mock-unit-test-csharp";
-            mockImageService.Setup(x => x.UploadFile(It.IsAny<string>(), It.IsAny<IFormFile>())).ReturnsAsync(link);
-            var memberServie = new MemberService(ContextHelper.UnitOfWork, ContextHelper.EntityMapper, ContextHelper.httpContext, mockImageService.Object);
-            var mebmerController = new MembersController(memberServie);
-
             // Act
-            var response = await mebmerController.Post(memberDTO);
-            var result = response as ObjectResult;
+            var errorcount = checkValidationProperties(memberDTO).Count;
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(400, result.StatusCode);
+            Assert.AreNotEqual(0, errorcount);
         }
         [TestMethod]
         public async Task AddingAnExistingMemberFailedTest()
@@ -270,6 +256,15 @@ namespace Test
                 ContentType = "image/png"
             };
             return image;
+        }
+        public IList<ValidationResult> checkValidationProperties(object model)
+        {
+            var result = new List<ValidationResult>();
+            var validationContext = new ValidationContext(model, null, null);
+            Validator.TryValidateObject(model, validationContext, result, true);
+            if (model is IValidatableObject) (model as IValidatableObject).Validate(validationContext);
+
+            return result;
         }
     }
 }

@@ -15,7 +15,7 @@ namespace OngProject.Controllers
     [SwaggerTag("Members", "Controller to create, read, update and delete members entities.")]
     [Route("members")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class MembersController : ControllerBase
     {
         private readonly IMemberService _membersService;
