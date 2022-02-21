@@ -47,6 +47,7 @@ namespace Test.Helper
         {
             for (int i = 1; i < 11; i++)
             {
+                var delete = i > 1 ? false : true; // el primer usuario lo creo eliminado
                 _context.Add(
                     new User
                     {
@@ -56,7 +57,7 @@ namespace Test.Helper
                         Email = "User" + i + "@ong.com",
                         Password = EncryptHelper.GetSHA256("Password" + i),
                         Photo = "Photo" + i,
-                        SoftDelete = false,
+                        SoftDelete = delete,
                         RolId = 1,
                         LastModified = DateTime.Now
                     }
