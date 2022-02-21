@@ -16,7 +16,7 @@ namespace OngProject.Core.Business
             this._s3AwsHelper = new S3AwsHelper();
             _unitOfWork = unitOfWork;
         }
-        public async Task<string> UploadFile(string key, IFormFile file)
+        public virtual async Task<string> UploadFile(string key, IFormFile file)
         {
             var result = await _s3AwsHelper.AwsUploadFile(key, file);
             return result.Url.ToString();

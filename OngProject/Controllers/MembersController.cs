@@ -15,7 +15,7 @@ namespace OngProject.Controllers
     [SwaggerTag("Members", "Controller to create, read, update and delete members entities.")]
     [Route("members")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class MembersController : ControllerBase
     {
         private readonly IMemberService _membersService;
@@ -47,29 +47,6 @@ namespace OngProject.Controllers
 
             return StatusCode(result.StatusCode, result);
         }
-
-        /// GET: members/5
-        /// <summary>
-        ///    Gets a Member information.
-        /// </summary>
-        /// <remarks>
-        ///     Gets information about the member with the id provided.
-        /// </remarks>
-        ///  <param name="id">Member id that will be searched.</param>
-        /// <response code="200">OK. Returns the member information.</response>  
-        /// <response code="401">Unauthorized. Invalid JWT Token or it wasn't provided.</response>     
-        /// <response code="404">Not Found. Server couldn't find the member with the id provided.</response> 
-        /// <response code="500">Internal Server Error.</response>  
-        [HttpGet("{id}")]
-        [ProducesResponseType(typeof(Result<PagedResponse<MemberDTODisplay>>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(EmptyResult), StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(Result), StatusCodes.Status500InternalServerError)]
-        public IActionResult Get(int id)
-        {
-            return Ok();
-        }
-
         /// POST: members
         /// <summary>
         ///     Creates a new Member.

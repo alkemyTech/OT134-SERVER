@@ -1,5 +1,7 @@
 ﻿
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using OngProject.Core.Business;
 using OngProject.Core.Helper;
 using OngProject.Core.Interfaces;
 using OngProject.Core.Mapper;
@@ -15,18 +17,22 @@ namespace Test.Helper
         public static IEntityMapper EntityMapper;
         public static IConfiguration Config;
         public static IJwtHelper JwtHelper;
-        
+        public static IHttpContextAccessor httpContext;
+        public static ImageService ImageService;
+
         public static void MakeContext()
         {   
             EntityMapper = new EntityMapper();
             Config = new PrepareConfigurationHelper().Config;
             JwtHelper = new JwtHelper(Config);
+            httpContext = new HttpContextAccessor();
         }
 
         public static void MakeDbContext(bool pupulate=true)
         {
             DbContext = PrepareDbContextHelper.MakeDbContext(pupulate);
-            UnitOfWork = new PrepareUnitOfWorkHelper(DbContext).unitOfWork;            
+            UnitOfWork = new PrepareUnitOfWorkHelper(DbContext).unitOfWork;
+            ImageService = new ImageService(UnitOfWork);
         }
     }
 }

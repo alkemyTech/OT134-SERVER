@@ -21,13 +21,14 @@ namespace OngProject.Core.Business
         private readonly ImageService _imageService;
         private readonly IHttpContextAccessor _httpContext;
 
-        public MemberService(IUnitOfWork unitOfWork, 
-                             IEntityMapper mapper, 
-                             IHttpContextAccessor httpContext)
+        public MemberService(IUnitOfWork unitOfWork,
+                             IEntityMapper mapper,
+                             IHttpContextAccessor httpContext,
+                             ImageService imageService)
         {
             _unitOfWork = unitOfWork;
             _entityMapper = mapper;
-            _imageService = new ImageService(_unitOfWork);
+            _imageService = imageService;//new ImageService(_unitOfWork);
             _httpContext = httpContext;
         }
 
@@ -66,11 +67,6 @@ namespace OngProject.Core.Business
             }
         }
 
-        public Member GetById()
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<Result> Insert(MemberDTORegister memberDTO)
         {
             try
@@ -81,10 +77,8 @@ namespace OngProject.Core.Business
 
                 if (resultName.Count == 0)
                 {
-                    var aws = new S3AwsHelper();
                     var result = await _imageService.UploadFile($"{Guid.NewGuid()}_{memberDTO.File.FileName}", memberDTO.File);
 
-                    member.SoftDelete = false;
                     member.LastModified = DateTime.Now;
                     member.Image = result;
 
@@ -150,20 +144,20 @@ namespace OngProject.Core.Business
                 if (member != null)
                 {
                     if (member.SoftDelete)
-                        return Result.FailureResult("El miembro ya se encuentra eliminado del sistema");
+                        return Result.FailureResult("El miembro ya se encuentra eliminado del sistema",404);
 
                     member.SoftDelete = true;
                     member.LastModified = DateTime.Now;
-                    await _unitOfWork.SaveChangesAsync();               
+                    await _unitOfWork.SaveChangesAsync();
 
-                    return Result<string>.SuccessResult($"Miembro:({member.Id}) ha sido eliminado exitosamente.");
-                   
+                    return Result<string>.SuccessResult($"Miembro:({member.Id}) ha sido eliminado exitosamente.", 200);
+
                 }
-                return Result.FailureResult("No existe un miembro con ese Id");
+                return Result.FailureResult("No existe un miembro con ese Id",404);
             }
             catch (Exception ex)
             {
-                return Result.FailureResult($"Error al eliminar al miembro: {ex.Message}");
+                return Result.FailureResult($"Error al eliminar al miembro: {ex.Message}",500);
             }
         }
     }
