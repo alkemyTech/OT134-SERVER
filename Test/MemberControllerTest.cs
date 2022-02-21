@@ -125,7 +125,7 @@ namespace Test
             Assert.IsInstanceOfType(resultDTO.Data, typeof(MemberDTODisplay));
         }
         [TestMethod]
-        public async Task AddingAMemberWithNullNameTest()
+        public async Task AddingAMemberWithNullNameFailedTest()
         {
             // Arrange     
             var Image = CreateImage();
@@ -151,7 +151,7 @@ namespace Test
             Assert.AreEqual(400, result.StatusCode);
         }
         [TestMethod]
-        public async Task AddingAMemberWithNullImageTest()
+        public async Task AddingAMemberWithNullImageFailedTest()
         {
             // Arrange     
             var memberDTO = new MemberDTORegister()
@@ -175,7 +175,7 @@ namespace Test
             Assert.AreEqual(400, result.StatusCode);
         }
         [TestMethod]
-        public async Task AddingAnExistingMember()
+        public async Task AddingAnExistingMemberFailedTest()
         {
             // Arrange
             var Image = CreateImage();
