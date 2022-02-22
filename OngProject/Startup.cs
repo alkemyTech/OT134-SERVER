@@ -22,6 +22,7 @@ using System.Reflection;
 using System.IO;
 using System;
 using Microsoft.AspNetCore.Http;
+using OngProject.Middleware;
 
 namespace OngProject
 {
@@ -151,11 +152,11 @@ namespace OngProject
 
             app.UseRouting();
 
-
             app.UseAuthentication();
 
-            app.UseAuthorization();
+            app.UseMiddleware<RouteProtection>();
 
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
