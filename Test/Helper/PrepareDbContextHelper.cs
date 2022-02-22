@@ -24,13 +24,15 @@ namespace Test.Helper
                 SeedMembers();
                 SeedOrganization();
                 SeedSlide();
+                SeedNews();
+                SeedCategory();
                 SeedContacts();
                 _context.SaveChanges();
             }
 
             return _context;
         }
-
+        
         private static void PrepareRoles()
         {
             _context.Add(new Rol
@@ -159,6 +161,40 @@ namespace Test.Helper
                         Order = i,
                         OrganizationId = i,
                         SoftDelete = false,
+                        LastModified = DateTime.Now
+                    }
+               );
+            }
+        }
+        private static void SeedNews()
+        {
+            for (int i = 1; i < 11; i++)
+            {
+                _context.Add(
+                    new New
+                    {
+                        Id = i,
+                        Name = "New " + i,
+                        Content = "Content for New " + i,
+                        Image = "image_new " + i,
+                        LastModified = DateTime.Now,
+                        CategoryId = i,
+                    }
+               );
+            }
+        }
+      
+        private static void SeedCategory()
+        {
+            for (int i = 1; i < 11; i++)
+            {
+                _context.Add(
+                    new Category
+                    {
+                        Id = i,
+                        Name = "Category " + i,
+                        Description = "Description for Category" + i,
+                        Image = "image_category" + i,
                         LastModified = DateTime.Now
                     }
                );
