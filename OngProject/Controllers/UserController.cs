@@ -115,10 +115,10 @@ namespace OngProject.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]        
-        public async Task<IActionResult> Put([FromForm] UserUpdateDto user)
+        public async Task<IActionResult> Put(int id, [FromForm] UserUpdateDto user)
         {
-            var claimId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-            var response = await _userService.Update(Int32.Parse(claimId.Value), user );
+            //var claimId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            var response = await _userService.Update(id, user ); //Int32.Parse(claimId.Value)
             return StatusCode(response.StatusCode, response);
         }
 
