@@ -10,10 +10,10 @@ namespace Test.Helper
     {
         private static AppDbContext _context { get; set; }
 
-        public static AppDbContext MakeDbContext(bool pupulate=true)
+        public static AppDbContext MakeDbContext(bool pupulate = true)
         {
             var options = new DbContextOptionsBuilder<AppDbContext>().UseInMemoryDatabase(databaseName: "Ong").Options;
-            
+
             _context = new AppDbContext(options);
             _context.Database.EnsureDeleted();
 
@@ -22,13 +22,15 @@ namespace Test.Helper
                 PrepareRoles();
                 PrepareUsers();
                 SeedMembers();
+                SeedOrganization();
+                SeedSlide();
                 _context.SaveChanges();
-            }       
+            }
 
             return _context;
         }
 
-        private static void PrepareRoles() 
+        private static void PrepareRoles()
         {
             _context.Add(new Rol
             {
@@ -118,5 +120,48 @@ namespace Test.Helper
                 );
             }
         }
-    }
+        private static void SeedOrganization()
+        {
+            for (int i = 1; i < 11; i++)
+            {
+                _context.Add(
+                    new Organization
+                    {
+                        Id = i,
+                        Name = "Organization name " + i,
+                        Image = "Image " + i,
+                        Address = "Address " + i,
+                        Phone = int.MaxValue,
+                        Email = "name@organization.com",
+                        WelcomeText = "Welcome text " + i,
+                        AboutUsText = "About us text " + i,
+                        FacebookUrl = "Facebook url " + i,
+                        InstagramUrl = "Instagram url " + i,
+                        LinkedinUrl = "Linkedin url " + i,
+                        SoftDelete = false,
+                        LastModified = DateTime.Now
+                    }
+                );
+            }
+        }
+
+        public static void SeedSlide()
+        {
+            for (int i = 1; i < 11; i++)
+            {
+                 _context.Add(
+                     new Slides
+                    {
+                        Id = i,
+                        ImageUrl = "Image " + i,
+                        Text = "Text " + i,
+                        Order = i,
+                        OrganizationId = i,
+                        SoftDelete = false,
+                        LastModified = DateTime.Now
+                    }
+                );
+            }
+        }
+}
 }

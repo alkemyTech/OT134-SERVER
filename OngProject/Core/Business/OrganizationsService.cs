@@ -6,22 +6,27 @@ using System.Threading.Tasks;
 using OngProject.Core.Models.DTOs;
 using OngProject.Core.Models.Response;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 
 namespace OngProject.Core.Business
 {
     public class OrganizationService : IOrganizationsService
     {
+        private readonly IConfiguration _config;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IEntityMapper _mapper;
         private readonly IImageService _imageService;
+        private readonly IJwtHelper _jwtHelper;
         private readonly ISlideSerivice _slideSerivice;
 
-        public OrganizationService(IUnitOfWork unitOfWork, IEntityMapper mapper, ISlideSerivice slideSerivice, IImageService imageService)
+        public OrganizationService(IUnitOfWork unitOfWork, IConfiguration configuration, IJwtHelper jwtHelper, IEntityMapper mapper, ISlideSerivice slideSerivice, IImageService imageService)
         {
+            _config = configuration;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _slideSerivice = slideSerivice;
-            _imageService= imageService;
+            _jwtHelper = jwtHelper;
+            _imageService = imageService;
         }
 
         public void Delete(Organization organization)
