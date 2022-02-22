@@ -10,19 +10,26 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace OngProject.Core.Business
 {
     public class NewsService : INewsService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IConfiguration _config;
         private readonly IEntityMapper _mapper;
         private readonly IImageService _imageService;
         private readonly IHttpContextAccessor _httpContext;
 
-        public NewsService(IUnitOfWork unitOfWork, IEntityMapper mapper, IImageService imageService, IHttpContextAccessor httpContext)
+        public NewsService(IUnitOfWork unitOfWork,
+                          IConfiguration configuration,
+                          IEntityMapper mapper,
+                          IImageService imageService,
+                          IHttpContextAccessor httpContext)
         {
             _unitOfWork = unitOfWork;
+            _config = configuration;
             _mapper = mapper;
             _imageService = imageService;
             _httpContext = httpContext;
@@ -36,14 +43,14 @@ namespace OngProject.Core.Business
                 var totalCount = await _unitOfWork.NewsRepository.Count();
 
                 if (totalCount == 0)
-                    return Result.FailureResult("No existen noticias");
+                    return Result.FailureResult("No existen noticias", 404);
 
                 if (news.Count == 0)
                     return Result.FailureResult("paginacion invalida, no hay resultados");
-                
+
                 var newsDTOForDisplay = news
                     .Select(newEntity => _mapper.NewtoNewDtoForDisplay(newEntity));
-                
+
                 var paged = PagedList<NewDtoForDisplay>.Create(newsDTOForDisplay.ToList(), totalCount,
                                                                 paginationParams.PageNumber,
                                                                 paginationParams.PageSize);
@@ -124,7 +131,7 @@ namespace OngProject.Core.Business
                     await _imageService.AwsDeleteFile(news.Image[(news.Image.LastIndexOf("/") + 1)..]);
 
                     var imageUrl = await _imageService.UploadFile($"{Guid.NewGuid()}_{newsDTO.Image.FileName}", newsDTO.Image);
-                                       
+
                     news.Name = newsDTO.Name;
                     news.Content = newsDTO.Content;
                     news.Image = imageUrl;
@@ -137,7 +144,7 @@ namespace OngProject.Core.Business
 
                     return Result<NewDtoForDisplay>.SuccessResult(newsDisplay);
                 }
-                return Result.FailureResult("Id de noticia inexistente.");
+                return Result.FailureResult("Id de noticia inexistente.", 404);
             }
             catch (Exception ex)
             {
@@ -159,9 +166,9 @@ namespace OngProject.Core.Business
                     newEntity.LastModified = DateTime.Today;
                     await this._unitOfWork.SaveChangesAsync();
 
-                    return Result<string>.SuccessResult($"Noticia:({newEntity.Id}) ha sido eliminada exitosamente.");
+                    return Result<string>.SuccessResult($"Noticia:({newEntity.Id}) ha sido eliminada exitosamente.", 200);
                 }
-                return Result.FailureResult("id de noticia inexistente.");
+                return Result.FailureResult("id de noticia inexistente.", 404);
             }
             catch (Exception e)
             {
