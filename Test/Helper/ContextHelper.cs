@@ -20,6 +20,7 @@ namespace Test.Helper
         public static IHttpContextAccessor httpContext;
         public static ImageService ImageService;
         public static  IUserService userService;
+        public static ISlideSerivice Slide;
 
         public static void MakeContext()
         {   
@@ -27,7 +28,9 @@ namespace Test.Helper
             Config = new PrepareConfigurationHelper().Config;
             JwtHelper = new JwtHelper(Config);
             httpContext = new HttpContextAccessor();
-        }
+            Slide = new SlideService(UnitOfWork, EntityMapper, ImageService);
+            
+    }
 
         public static void MakeDbContext(bool pupulate=true)
         {
