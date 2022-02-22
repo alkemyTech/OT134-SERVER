@@ -27,6 +27,7 @@ namespace Test.Helper
                 SeedNews();
                 SeedCategory();
                 SeedContacts();
+                SeedTestimonials();
                 _context.SaveChanges();
             }
 
@@ -213,6 +214,24 @@ namespace Test.Helper
                         Phone = "Phone " + i,
                         Email = "name" + i + "@mail.com",
                         Message = "Message " + i,
+                        SoftDelete = false,
+                        LastModified = DateTime.Now
+                    }
+                );
+            }
+        }
+
+        public static void SeedTestimonials()
+        {
+            for (int i = 1; i < 11; i++)
+            {
+                _context.Add(
+                    new Testimonials
+                    {
+                        Id = i,
+                        Name = "Name testimonial " + i,
+                        Content = "Content testimonial" + i,
+                        Image = "Image testimonial " + i,
                         SoftDelete = false,
                         LastModified = DateTime.Now
                     }
