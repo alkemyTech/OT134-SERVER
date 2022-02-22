@@ -24,6 +24,7 @@ namespace Test.Helper
                 SeedMembers();
                 SeedOrganization();
                 SeedSlide();
+                SeedContacts();
                 _context.SaveChanges();
             }
 
@@ -149,8 +150,8 @@ namespace Test.Helper
         {
             for (int i = 1; i < 11; i++)
             {
-                 _context.Add(
-                     new Slides
+                _context.Add(
+                    new Slides
                     {
                         Id = i,
                         ImageUrl = "Image " + i,
@@ -160,8 +161,27 @@ namespace Test.Helper
                         SoftDelete = false,
                         LastModified = DateTime.Now
                     }
+               );
+            }
+        }
+
+        public static void SeedContacts()
+        {
+            for (int i = 1; i < 11; i++)
+            {
+                _context.Add(
+                    new Contacts
+                    {
+                        Id = i,
+                        Name = "Contact Name " + i,
+                        Phone = "Phone " + i,
+                        Email = "name" + i + "@mail.com",
+                        Message = "Message " + i,
+                        SoftDelete = false,
+                        LastModified = DateTime.Now
+                    }
                 );
             }
         }
-}
+    }
 }
