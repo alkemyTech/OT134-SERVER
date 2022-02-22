@@ -8,10 +8,10 @@ namespace OngProject.Core.Interfaces
 {
     public interface IContactService
     {
-        public Task<ICollection<ContactDTO>> GetAll();
-        public Contacts GetById();
-        public Task<Result> Insert(ContactDTO contactDto);
-        public void Update(Contacts contacts);
-        public void Delete(Contacts contacts);
+        Task<ICollection<ContactDTO>> GetAll();
+        Contacts GetById();
+        Task<Result> Insert(ContactDTO contactDto);
+        void Update(Contacts contacts);
+        void Delete(Contacts contacts);
     }
 }

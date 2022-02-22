@@ -20,7 +20,7 @@ namespace OngProject.Controllers
         }
         
         [HttpGet]
-        public async Task<IActionResult> GetAllSlides()
+        public async Task<IActionResult> GetAllContacts()
         {
             try
             {
@@ -40,9 +40,23 @@ namespace OngProject.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Post(ContactDTO contactDto)
         {
-            var response = await _contactService.Insert(contactDto);
+            /*var response = await _contactService.Insert(contactDto);
 
-            return StatusCode(response.StatusCode, response);
+            return StatusCode(response.StatusCode, response);*/
+
+            try
+            {
+                var result = await _contactService.Insert(contactDto);
+                if (result.Success)
+                {
+                    return Ok(result);
+                }
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
