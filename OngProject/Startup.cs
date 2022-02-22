@@ -152,10 +152,13 @@ namespace OngProject
 
             app.UseRouting();
 
-
             app.UseAuthentication();
             app.UseMiddleware<OwnershipMiddleware>();
-            app.UseAuthorization();            
+            app.UseAuthorization();   
+
+            app.UseMiddleware<RouteProtection>();
+
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
