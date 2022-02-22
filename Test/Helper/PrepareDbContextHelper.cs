@@ -26,6 +26,7 @@ namespace Test.Helper
                 SeedSlide();
                 SeedNews();
                 SeedCategory();
+                SeedContacts();
                 _context.SaveChanges();
             }
 
@@ -182,6 +183,7 @@ namespace Test.Helper
                );
             }
         }
+      
         private static void SeedCategory()
         {
             for (int i = 1; i < 11; i++)
@@ -199,5 +201,23 @@ namespace Test.Helper
             }
         }
 
+        public static void SeedContacts()
+        {
+            for (int i = 1; i < 11; i++)
+            {
+                _context.Add(
+                    new Contacts
+                    {
+                        Id = i,
+                        Name = "Contact Name " + i,
+                        Phone = "Phone " + i,
+                        Email = "name" + i + "@mail.com",
+                        Message = "Message " + i,
+                        SoftDelete = false,
+                        LastModified = DateTime.Now
+                    }
+                );
+            }
+        }
     }
 }

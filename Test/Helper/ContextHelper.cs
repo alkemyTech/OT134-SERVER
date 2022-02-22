@@ -30,7 +30,7 @@ namespace Test.Helper
             httpContext = new HttpContextAccessor();
             Slide = new SlideService(UnitOfWork, EntityMapper, ImageService);
             
-    }
+        }
 
         public static void MakeDbContext(bool pupulate=true)
         {

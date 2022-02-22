@@ -1,6 +1,5 @@
 ﻿using OngProject.Core.Helper;
 using OngProject.Core.Interfaces;
-using OngProject.Core.Mapper;
 using OngProject.Core.Models.DTOs;
 using OngProject.Core.Models.Response;
 using OngProject.Entities;
@@ -14,13 +13,13 @@ namespace OngProject.Core.Business
     public class ActivitiesService : IActivitiesService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly EntityMapper _mapper;
-        private readonly ImageService _imageService;
-        public ActivitiesService(IUnitOfWork unitOfWork)
+        private readonly IEntityMapper _mapper;
+        private readonly IImageService _imageService;
+        public ActivitiesService(IUnitOfWork unitOfWork, IEntityMapper mapper, IImageService imageService)
         {
             _unitOfWork = unitOfWork;
-            _mapper = new EntityMapper();
-            _imageService = new ImageService(_unitOfWork);
+            _mapper = mapper;
+            _imageService = imageService;
         }
 
         public IEnumerable<Activities> GetAll()
@@ -37,7 +36,7 @@ namespace OngProject.Core.Business
             try
             {
                 var activities = await _unitOfWork.ActivitiesRepository.GetByIdAsync(id);
-                if (activities == null) return Result.FailureResult("No se encontro el id");
+                if (activities == null) return Result.FailureResult("No se encontro el id", 404);
 
                 await _imageService.AwsDeleteFile(activities.Image[(activities.Image.LastIndexOf("/") + 1)..]);
 
