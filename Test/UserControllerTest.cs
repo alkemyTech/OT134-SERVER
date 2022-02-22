@@ -133,7 +133,7 @@ namespace Test
             userController.ControllerContext = await PrepareLoginContextHelper.GetLoginContext("User12@ong.com", "Password12");
 
             //Act
-            var response = await userController.Put(userDto);
+            var response = await userController.Put(2, userDto);
             var result = response as ObjectResult;
             var expectedResult = result.Value as Result<UserDtoForDisplay>;
 
