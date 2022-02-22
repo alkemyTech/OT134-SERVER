@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using OngProject.Core.Helper;
 using OngProject.Core.Interfaces;
 using OngProject.Core.Models.DTOs;
@@ -17,14 +18,20 @@ namespace OngProject.Core.Business
     public class TestimonialsService : ITestimonialsService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IConfiguration _config;
         private readonly IEntityMapper _mapper;
         private readonly IImageService _imageService;
         private readonly IHttpContextAccessor _httpContext;
 
-        public TestimonialsService(IUnitOfWork unitOfWork, IImageService imageService, IEntityMapper entityMapper, IHttpContextAccessor httpContext)
+        public TestimonialsService(IUnitOfWork unitOfWork,
+                          IConfiguration configuration,
+                          IEntityMapper mapper,
+                          IImageService imageService,
+                          IHttpContextAccessor httpContext)
         {
             _unitOfWork = unitOfWork;
-            _mapper = entityMapper;
+            _config = configuration;
+            _mapper = mapper;
             _imageService = imageService;
             _httpContext = httpContext;
         }
@@ -38,7 +45,7 @@ namespace OngProject.Core.Business
 
                 if (totalCount == 0)
                 {
-                    return Result.FailureResult("No existen testimonios");
+                    return Result.FailureResult("No existen testimonios", 404);
                 }
 
                 if (testimonials.Count == 0)
@@ -154,7 +161,7 @@ namespace OngProject.Core.Business
                     return Result<string>.SuccessResult("Testimonio eliminado.");
                 }
 
-                return Result.FailureResult("No existe un testimonio con ese Id");
+                return Result.FailureResult("No existe un testimonio con ese Id", 404);
             }
             catch (Exception ex)
             {
