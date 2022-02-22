@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace OngProject.Core.Models.DTOs
 {
     public class OrganizationDTOForUpload
     {
+        [Required(ErrorMessage = "The Name Is Required")]
         public string Name { get; set; }
         public IFormFile Image { get; set; }
         public string Address { get; set; }

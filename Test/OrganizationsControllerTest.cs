@@ -8,6 +8,7 @@ using OngProject.Core.Models.DTOs;
 using OngProject.Core.Models.Response;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -143,7 +144,7 @@ namespace Test
 
         [TestMethod]
 
-        public async Task PutCategorySuccesfullyTest()
+        public async Task PutOrganizationSuccesfullyTest()
         {
             //Arrange
             ContextHelper.MakeDbContext();
@@ -180,6 +181,34 @@ namespace Test
             Assert.IsNotNull(resultDTO);
             Assert.AreEqual(200, result.StatusCode);
             Assert.IsInstanceOfType(resultDTO.Data, typeof(OrganizationDTOForDisplay));
+        }
+
+        [TestMethod]
+        public async Task PutOrganizationFailRequiredName()
+        {
+            //Arrange
+            ContextHelper.MakeDbContext();
+            var Image = CreateImage();
+
+            var organizationDTO = new OrganizationDTOForUpload()
+            {
+                Name = "",
+                AboutUsText = "About us test text",
+                Address = "Adress test",
+                FacebookUrl = "FacebookUrl",
+                Email = "Email",
+                Image = Image,
+                InstagramUrl = "InstagramUrl",
+                LinkedinUrl = "LinkedinUrl",
+                Phone = 213123123,
+                WelcomeText = "Welcome text test",
+            };
+
+            //Act
+            var error = checkValidationProperties(organizationDTO).Count;
+
+            //Assert
+            Assert.AreNotEqual(0, error);
         }
 
 
@@ -234,6 +263,16 @@ namespace Test
                 ContentType = "image/png"
             };
             return image;
+        }
+
+        public IList<ValidationResult> checkValidationProperties(object model)
+        {
+            var result = new List<ValidationResult>();
+            var validationContext = new ValidationContext(model, null, null);
+            Validator.TryValidateObject(model, validationContext, result, true);
+            if (model is IValidatableObject) (model as IValidatableObject).Validate(validationContext);
+
+            return result;
         }
 
     }
