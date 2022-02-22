@@ -49,51 +49,7 @@ namespace OngProject.Controllers
 
             return StatusCode(result.StatusCode, result);            
         }
-
-        /// GET: user/5
-        /// <summary>
-        ///     Get a user information.
-        /// </summary>
-        /// <remarks>
-        ///     Get the information about the user with the ID provided.
-        /// </remarks>
-        /// <response code="200">OK. Returns user information.</response>  
-        /// <response code="400">Bad request. Invalid request received.</response>    
-        /// <response code="401">Unauthorized. Invalid JWT Token or it wasn't provided.</response>     
-        /// <response code="404">Not Found. Server couldn't find any user with the ID provided.</response> 
-        /// <response code="500">Internal Server Error.</response>
-        [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult Get(int id)
-        {
-            return Ok();
-        }
-
-        /// Post: user
-        /// <summary>
-        ///     Create a new user.
-        /// </summary>
-        /// <remarks>
-        ///     Add a new user in the database.
-        /// </remarks>
-        /// <response code="200">OK. Returns a result object alongh with the new user.</response>  
-        /// <response code="400">Bad request. User couldn't be created.</response>    
-        /// <response code="401">Unauthorized. Invalid JWT Token or it wasn't provided.</response>     
-        /// <response code="500">Internal Server Error.</response>
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public void Post([FromBody] string value)
-        {
-        }
-
-
+        
 
         /// Post: user/5
         /// <summary>
@@ -109,7 +65,7 @@ namespace OngProject.Controllers
         /// <response code="401">Unauthorized. Invalid JWT Token or it wasn't provided.</response>     
         /// <response code="404">Not Found. Server couldn't find any user with the ID provided.</response> 
         /// <response code="500">Internal Server Error.</response>
-        [HttpPut("{id}")]
+        [HttpPut()]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
