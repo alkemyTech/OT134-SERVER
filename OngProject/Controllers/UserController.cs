@@ -65,7 +65,7 @@ namespace OngProject.Controllers
         /// <response code="401">Unauthorized. Invalid JWT Token or it wasn't provided.</response>     
         /// <response code="404">Not Found. Server couldn't find any user with the ID provided.</response> 
         /// <response code="500">Internal Server Error.</response>
-        [HttpPut()]
+        [HttpPut("id")]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
