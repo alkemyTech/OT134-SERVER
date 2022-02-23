@@ -18,16 +18,17 @@ namespace OngProject.Core.Business
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IEntityMapper _entityMapper;
-        private readonly ImageService _imageService;
+        private readonly IImageService _imageService;
         private readonly IHttpContextAccessor _httpContext;
 
-        public MemberService(IUnitOfWork unitOfWork, 
-                             IEntityMapper mapper, 
-                             IHttpContextAccessor httpContext)
+        public MemberService(IUnitOfWork unitOfWork,
+                             IEntityMapper mapper,
+                             IHttpContextAccessor httpContext,
+                             IImageService imageService)
         {
             _unitOfWork = unitOfWork;
             _entityMapper = mapper;
-            _imageService = new ImageService(_unitOfWork);
+            _imageService = imageService;
             _httpContext = httpContext;
         }
 
@@ -66,11 +67,6 @@ namespace OngProject.Core.Business
             }
         }
 
-        public Member GetById()
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<Result> Insert(MemberDTORegister memberDTO)
         {
             try
@@ -81,10 +77,8 @@ namespace OngProject.Core.Business
 
                 if (resultName.Count == 0)
                 {
-                    var aws = new S3AwsHelper();
                     var result = await _imageService.UploadFile($"{Guid.NewGuid()}_{memberDTO.File.FileName}", memberDTO.File);
 
-                    member.SoftDelete = false;
                     member.LastModified = DateTime.Now;
                     member.Image = result;
 
@@ -101,12 +95,12 @@ namespace OngProject.Core.Business
                 }
                 else
                 {
-                    throw new Exception("El nombre ya existe en el sistema, intente uno diferente al ingresado.");
+                    return Result.FailureResult("El nombre ya existe en el sistema, intente uno diferente al ingresado.", 400);
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("Miembro no registrado: " + ex.Message);
+                return Result.FailureResult($"Miembro no registrado: {ex.Message}", 500);
             }
         }
 
@@ -115,7 +109,7 @@ namespace OngProject.Core.Business
             try
             {
                 var member = await _unitOfWork.MembersRepository.GetByIdAsync(id);
-                if (member == null) return Result.FailureResult("No se encontro el id");
+                if (member == null) return Result.FailureResult("No se encontro el id",404);
 
                 await _imageService.AwsDeleteFile(member.Image[(member.Image.LastIndexOf("/") + 1)..]);
 
@@ -134,9 +128,9 @@ namespace OngProject.Core.Business
                 return Result<MemberDTODisplay>.SuccessResult(memberDisplay);
 
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw new Exception(e.Message);
+                return Result.FailureResult($"Error al actualizar al miembro: {ex.Message}", 500);
             }
         }
 
@@ -150,20 +144,20 @@ namespace OngProject.Core.Business
                 if (member != null)
                 {
                     if (member.SoftDelete)
-                        return Result.FailureResult("El miembro ya se encuentra eliminado del sistema");
+                        return Result.FailureResult("El miembro ya se encuentra eliminado del sistema",404);
 
                     member.SoftDelete = true;
                     member.LastModified = DateTime.Now;
-                    await _unitOfWork.SaveChangesAsync();               
+                    await _unitOfWork.SaveChangesAsync();
 
-                    return Result<string>.SuccessResult($"Miembro:({member.Id}) ha sido eliminado exitosamente.");
-                   
+                    return Result<string>.SuccessResult($"Miembro:({member.Id}) ha sido eliminado exitosamente.", 200);
+
                 }
-                return Result.FailureResult("No existe un miembro con ese Id");
+                return Result.FailureResult("No existe un miembro con ese Id",404);
             }
             catch (Exception ex)
             {
-                return Result.FailureResult($"Error al eliminar al miembro: {ex.Message}");
+                return Result.FailureResult($"Error al eliminar al miembro: {ex.Message}",500);
             }
         }
     }

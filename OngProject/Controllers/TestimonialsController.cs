@@ -76,16 +76,8 @@ namespace OngProject.Controllers
         [ProducesResponseType(typeof(EmptyResult), StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Post([FromForm] TestimonialDTO testimonialDTO)
         {
-            try
-            {
-                var result = await _testimonialsService.Insert(testimonialDTO);
-
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var response = await _testimonialsService.Insert(testimonialDTO);
+            return StatusCode(response.StatusCode, response);
         }
 
         /// PUT: /testimonials/id
@@ -107,9 +99,9 @@ namespace OngProject.Controllers
         [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(EmptyResult), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Put(int id, [FromForm] TestimonialDTO dto)
+        public async Task<IActionResult> Put(int id, [FromForm] TestimonialDTO TestimonialDto)
         {
-            var response = await _testimonialsService.Update(id, dto);
+            var response = await _testimonialsService.Update(id, TestimonialDto);
 
             return StatusCode(response.StatusCode, response);
         }

@@ -10,7 +10,6 @@ namespace OngProject.Core.Interfaces
     public interface IMemberService
     {
         Task<Result> GetAll(PaginationParams paginationParams);
-        Member GetById();
         Task<Result> Insert(MemberDTORegister memberDTO);
         Task<Result> Update(int id, MembersDtoForUpload memberDTO);
         Task<Result> Delete(int id);

@@ -6,10 +6,7 @@ using OngProject.Core.Models.DTOs;
 using OngProject.Core.Models.Paged;
 using OngProject.Core.Models.Response;
 using Swashbuckle.AspNetCore.Annotations;
-using System;
 using System.Threading.Tasks;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace OngProject.Controllers
 {
@@ -58,20 +55,10 @@ namespace OngProject.Controllers
         [ProducesResponseType(typeof(Result), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Post([FromForm] ActivityDTOForRegister dto)
         {
-            try
-            {
-                
-                var result = await _activitiesService.Insert(dto);
+            var result = await _activitiesService.Insert(dto);
 
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-
-                return BadRequest(ex.Message);
-            }
+            return StatusCode(result.StatusCode, result);          
         }
-
 
         /// PUT: activities/Put
         /// <summary>
@@ -83,23 +70,17 @@ namespace OngProject.Controllers
         /// <response code="200">Ok. Return the new Activity updated</response>
         /// <response code="400">BadRequest.Value is empty or cant find an Activity with this Id</response>
         [HttpPut("{id}")]
-        [Authorize(Roles = "Administrator")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(Result<PagedResponse<ActivityDTOForDisplay>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(EmptyResult), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(Result), StatusCodes.Status500InternalServerError)]
-
         public async Task<IActionResult> Put(int id, [FromForm] ActivitiesDtoForUpload activitiesDto)
         {
             var result = await _activitiesService.Update(id, activitiesDto);
 
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return StatusCode(result.isError() ? 500 : 400, result);
+            return StatusCode(result.StatusCode, result);
         }
 
         /*// DELETE api/<ActivitiesController>/5
