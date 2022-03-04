@@ -30,12 +30,6 @@ namespace OngProject.Core.Mapper
                 Image=organization.Image,
                 Address = organization.Address,
                 Phone = organization.Phone,
-                Email = organization.Email,
-                WelcomeText = organization.WelcomeText,
-                AboutUsText = organization.AboutUsText,
-                FacebookUrl = organization.FacebookUrl,
-                InstagramUrl = organization.InstagramUrl,
-                LinkedinUrl = organization.LinkedinUrl
             };
             return organizationDTOForDisplay;
         }
@@ -105,6 +99,18 @@ namespace OngProject.Core.Mapper
                 OrganizationId = slideDto.OrganizationId
             };
             return slide;
+        }
+
+        public SlideDtoById SlideToSlideById(Slides slide)
+        {
+            var slideDto = new SlideDtoById
+            {
+                ImageUrl = slide.ImageUrl,
+                Order = slide.Order,
+                OrganizationId = slide.OrganizationId,
+                Text = slide.Text
+            };
+            return slideDto;
         }
 
 
@@ -277,7 +283,7 @@ namespace OngProject.Core.Mapper
                 FacebookUrl = member.FacebookUrl,
                 InstagramUrl = member.InstagramUrl,
                 LinkedinUrl = member.LinkedinUrl,
-    };
+            };
             return memberDTO;
         }
 

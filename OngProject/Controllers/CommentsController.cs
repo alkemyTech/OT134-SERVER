@@ -57,7 +57,7 @@ namespace OngProject.Controllers
         }
 
         [HttpPost]
-        public async Task<Result> Post([FromBody] CommentDtoForRegister dto)
+        public async Task<Result> Post([FromForm] CommentDtoForRegister dto)
         {
             try
             {
@@ -77,7 +77,7 @@ namespace OngProject.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] CommentDtoForDisplay commentDto)
+        public async Task<IActionResult> Put(int id, [FromForm] CommentDtoForDisplay commentDto)
         {
             var claim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
 

@@ -37,7 +37,7 @@ namespace OngProject.Core.Business
                     slide.LastModified = DateTime.Now;
                     _unitOfWork.SaveChanges();
 
-                    return Result.SuccessResult();
+                    return Result<string>.SuccessResult("Slide borrado correctamente.");
                 }
                 else
                 {
@@ -77,15 +77,13 @@ namespace OngProject.Core.Business
             {
                 Slides slide = await _unitOfWork.SlideRepository.GetByIdAsync(id);
 
-                if (slide != null && !slide.SoftDelete)
-                    return Result<Slides>.SuccessResult(slide);
-                else
-                {
-                    if (slide == null)
-                        return Result.FailureResult("No se encontro ningun Slide con Id ingresado");
-                    else
-                        return Result.FailureResult("Slide con Id ingresado ha sido eliminado previamente");
-                }
+                if (slide == null)
+                    return Result.FailureResult("No se encontro ningun Slide con Id ingresado");
+                else if (slide.SoftDelete != false)
+                    return Result.FailureResult("Slide con Id ingresado ha sido eliminado previamente");
+
+                var slideDto = _mapper.SlideToSlideById(slide);
+                return Result<SlideDtoById>.SuccessResult(slideDto);
             }
             catch(Exception ex)
             {

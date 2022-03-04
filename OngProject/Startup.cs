@@ -94,7 +94,6 @@ namespace OngProject
             services.AddScoped<IMemberService, MemberService>();
             services.AddScoped<INewsService, NewsService>();
             services.AddScoped<IOrganizationsService, OrganizationService>();
-            services.AddScoped<IRolesService, RolesService>();
             services.AddScoped<ITestimonialsService, TestimonialsService>();
             services.AddScoped<IUserService, UsersService>();
             services.AddScoped<ISlideSerivice, SlideService>();

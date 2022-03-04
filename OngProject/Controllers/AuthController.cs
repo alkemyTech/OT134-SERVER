@@ -40,7 +40,7 @@ namespace OngProject.Controllers
         [ProducesResponseType(typeof(Result), StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(typeof(Result<string>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Login([FromBody]  UserLoginDTO userLoginDto)
+        public async Task<IActionResult> Login([FromForm]  UserLoginDTO userLoginDto)
         {
             var result = await _userService.LoginAsync(userLoginDto);
             if (result.Success)

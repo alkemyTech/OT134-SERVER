@@ -38,7 +38,7 @@ namespace OngProject.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Post(ContactDTO contactDto)
+        public async Task<IActionResult> Post([FromForm] ContactDTO contactDto)
         {
             /*var response = await _contactService.Insert(contactDto);
 
