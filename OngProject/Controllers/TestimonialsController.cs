@@ -51,12 +51,6 @@ namespace OngProject.Controllers
             return StatusCode(result.StatusCode, result);
         }
 
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
-        {
-            return Ok();
-        }
-
         /// POST: /testimonials
         /// <summary>
         ///     To add a new Testimonial.

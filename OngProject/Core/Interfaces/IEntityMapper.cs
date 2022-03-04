@@ -13,6 +13,7 @@ namespace OngProject.Core.Interfaces
         UserDtoForDisplay UserToUserDtoForDisplay(User user);
         SlideDtoForDisplay SlideToSlideDtoForDisplay(Slides slides);
         Slides SlideDtoForUploadToSlide(SlideDtoForUpload slideDto);
+        SlideDtoById SlideToSlideById(Slides slide);
         ContactDTO ContactToContactDTO(Contacts contacts);
         Contacts ContactDTOToContact(ContactDTO contactsDto);
         CommentDtoForDisplay CommentToCommentDtoForDisplay(Comment comment);

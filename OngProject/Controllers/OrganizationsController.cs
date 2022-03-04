@@ -38,13 +38,6 @@ namespace OngProject.Controllers
             }
         }
 
-        // GET api/<OrganizationsController>/5
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
-        {
-            return Ok();
-        }
-
         // POST api/<OrganizationsController>
         [HttpPost]
         [Authorize(Roles = "Administrator")]
@@ -85,10 +78,5 @@ namespace OngProject.Controllers
             }
         }
 
-        // DELETE api/<OrganizationsController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }

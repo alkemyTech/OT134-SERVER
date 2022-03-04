@@ -153,9 +153,7 @@ namespace OngProject.Core.Business
 
                     await _unitOfWork.SaveChangesAsync();
 
-                    var commentDisplay = _mapper.CommentToCommentDtoForDisplay(result);
-
-                    return Result<CommentDtoForDisplay>.SuccessResult(commentDisplay);
+                    return Result<string>.SuccessResult("Comentario eliminado correctamente");
                 }
             }
             catch (Exception ex)
